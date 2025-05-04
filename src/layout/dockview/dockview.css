@@ -1284,7 +1284,7 @@
 .dv-tab {
 	-webkit-user-drag: element;
 	outline: none;
-	padding: 0.25rem 0.5rem;
+	/* padding: 0.25rem 0.5rem; */
 	cursor: pointer;
 	position: relative;
 	box-sizing: border-box;

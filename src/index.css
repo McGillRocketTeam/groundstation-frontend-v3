@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'DM Mono', monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -42,7 +42,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Custom Colors */
-  --color-mrt: var(--mrt-red)
+  --color-mrt: var(--mrt-red);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--destructive);
 }
 
 :root {
@@ -78,7 +81,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
   --mrt-red: #9f1d22;
+  --success: oklch(62.7% 0.194 149.214);
+  --warning: oklch(62.7% 0.194 149.214);
 }
 
 .dark {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { IDockviewPanelProps } from "dockview";
+import { IDockviewPanelProps, AddPanelOptions } from "dockview";
 import { componentSchemas } from "./schemas";
 
 export type ComponentKey = keyof typeof componentSchemas;
@@ -22,4 +22,4 @@ export type AddPanelConfig<T extends ComponentKey> = {
     direction: "left" | "right" | "above" | "below";
     referencePanel: string;
   };
-};
+} & AddPanelOptions;

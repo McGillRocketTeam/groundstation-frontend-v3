@@ -7,6 +7,7 @@ import {
   ComponentKey,
   AddPanelConfig,
 } from "@/cards";
+import tabComponents from "./tab";
 
 export default function App() {
   const onReady = (event: DockviewReadyEvent) => {
@@ -14,12 +15,13 @@ export default function App() {
       config: AddPanelConfig<T>,
     ) => {
       componentSchemas[config.component].parse(config.params);
-      event.api.addPanel(config);
+      event.api.addPanel({ ...config, tabComponent: "default" });
     };
 
     addTypeSafePanel({
       id: "panel_1",
-      component: "default",
+      title: "asdf",
+      component: "command",
       params: { custom: "asdf" },
     });
 
@@ -51,6 +53,7 @@ export default function App() {
         onReady={onReady}
         // @ts-expect-error Allow for typesafe cards
         components={components}
+        tabComponents={tabComponents}
       />
     </div>
   );
