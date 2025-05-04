@@ -21,7 +21,7 @@ export default function App() {
 
     addTypeSafePanel({
       id: "panel_1",
-      title: "asdf",
+      title: "Command History",
       component: "command",
       params: { custom: "asdf" },
     });
@@ -30,6 +30,7 @@ export default function App() {
       id: "panel_2",
       component: "counter",
       params: { initialCount: 0, label: "Clicks" },
+      title: "Counter",
       position: {
         direction: "right",
         referencePanel: "panel_1",
@@ -39,6 +40,7 @@ export default function App() {
     addTypeSafePanel({
       id: "panel_3",
       component: "chart",
+      title: "Random Chart",
       params: { data: [1, 2, 3], title: "My Chart" },
       position: {
         direction: "below",

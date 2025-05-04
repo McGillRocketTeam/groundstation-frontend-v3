@@ -58,7 +58,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
   const form = useForm<z.infer<ReturnType<typeof getFormSchema>>>({
     resolver: zodResolver(getFormSchema(selectedComponent)),
     defaultValues: {
-      id: "",
+      id: crypto.randomUUID(),
     },
   });
 

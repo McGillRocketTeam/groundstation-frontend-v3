@@ -94,7 +94,7 @@ export const CommandCard = (props: IDockviewPanelProps<CommandCardParams>) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Command Name</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead className="w-10 text-center">Q</TableHead>
               <TableHead className="w-10 text-center">R</TableHead>
               <TableHead className="w-10 text-center">S</TableHead>
