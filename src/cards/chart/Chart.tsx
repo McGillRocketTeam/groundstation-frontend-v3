@@ -74,10 +74,8 @@ const ScrollingChart: React.FC = () => {
       .attr("class", "x-axis")
       .attr("transform", `translate(0,${chartHeight})`);
 
-    const yAxis = g
-      .append("g")
-      .attr("class", "y-axis")
-      .call(d3.axisLeft(yScale));
+    // Y-axis
+    g.append("g").attr("class", "y-axis").call(d3.axisLeft(yScale));
 
     // Create group for the line with clip path
     const lineGroup = g.append("g").attr("clip-path", "url(#clip)");
