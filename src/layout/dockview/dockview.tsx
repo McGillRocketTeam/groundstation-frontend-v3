@@ -8,6 +8,7 @@ import {
   AddPanelConfig,
 } from "@/cards";
 import tabComponents from "./tab";
+import RightComponent from "./right-component";
 
 export default function App() {
   const onReady = (event: DockviewReadyEvent) => {
@@ -53,6 +54,8 @@ export default function App() {
         onReady={onReady}
         // @ts-expect-error Allow for typesafe cards
         components={components}
+        rightHeaderActionsComponent={RightComponent}
+        defaultTabComponent={tabComponents.default}
         tabComponents={tabComponents}
       />
     </div>

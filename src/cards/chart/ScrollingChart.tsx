@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { DataPoint, Margin } from "./types";
-import { useResizeObserver } from "./hooks";
+import { useResizeObserver } from "@/hooks/use-resize-observer";
 
-const ScrollingChart: React.FC = () => {
+function ScrollingChart({ parameters }: { parameters: string[] }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   // @ts-expect-error Weird TS annoyance with refs
   const dimensions = useResizeObserver(wrapperRef);
+
+  // const data = useRef<DataPoint[]>([]);
 
   useEffect(() => {
     if (!dimensions || !svgRef.current) return;
@@ -103,7 +105,6 @@ const ScrollingChart: React.FC = () => {
           value: Math.random() * 100,
         };
         data.push(newData);
-        data = data.slice(-30);
         lastDataTime = now;
       }
 
@@ -142,6 +143,6 @@ const ScrollingChart: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ScrollingChart;

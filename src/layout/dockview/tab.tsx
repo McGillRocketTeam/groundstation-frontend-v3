@@ -29,7 +29,14 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
           </ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem className="text-destructive">
+        <ContextMenuItem
+          onClick={() => {
+            const panel = props.containerApi.getPanel(props.api.id);
+            console.log(panel);
+            if (panel) props.containerApi.removePanel(panel);
+          }}
+          className="text-destructive"
+        >
           Delete
           <ContextMenuShortcut>
             <TrashIcon className="text-destructive" />
