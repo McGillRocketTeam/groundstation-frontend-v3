@@ -49,6 +49,7 @@ export default function App() {
       <DockviewReact
         theme={themeLight}
         onReady={onReady}
+        // @ts-expect-error Allow for typesafe cards
         components={components}
       />
     </div>
