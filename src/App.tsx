@@ -1,9 +1,13 @@
 import DockViewLayout from "@/layout/dockview/dockview";
+import "@fontsource/dm-mono/300.css";
+import "@fontsource/dm-mono/400.css";
+import "@fontsource/dm-mono/500.css";
+import Header from "@/components/header";
 
 function App() {
   return (
-    <div className="flex h-screen flex-col">
-      <header className="border-border border-b p-4">MCGILL ROCKET TEAM</header>
+    <div className="flex h-screen flex-col font-mono">
+      <Header />
       <DockViewLayout />
     </div>
   );

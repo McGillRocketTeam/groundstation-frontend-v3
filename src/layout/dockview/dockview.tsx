@@ -1,61 +1,46 @@
-import { Button } from "@/components/ui/button";
 import "./dockview.css";
 import { themeLight } from "dockview";
-
+import { DockviewReact, DockviewReadyEvent } from "dockview";
 import {
-  DockviewReact,
-  DockviewReadyEvent,
-  IDockviewPanelProps,
-} from "dockview";
+  components,
+  componentSchemas,
+  ComponentKey,
+  AddPanelConfig,
+} from "@/cards";
 
-const Default = (props: IDockviewPanelProps<CardParamters>) => {
-  return (
-    <div className="grid h-full place-items-center">
-      <Button>{props.params.custom}</Button>
-    </div>
-  );
-};
-
-const components = {
-  default: Default,
-};
-
-type CardParamters = {
-  custom: string;
-};
-
-export default function DockViewLayout() {
+export default function App() {
   const onReady = (event: DockviewReadyEvent) => {
-    event.api.addPanel<CardParamters>({
+    const addTypeSafePanel = <T extends ComponentKey>(
+      config: AddPanelConfig<T>,
+    ) => {
+      componentSchemas[config.component].parse(config.params);
+      event.api.addPanel(config);
+    };
+
+    addTypeSafePanel({
       id: "panel_1",
       component: "default",
       params: { custom: "asdf" },
     });
 
-    event.api.addPanel({
+    addTypeSafePanel({
       id: "panel_2",
-      component: "default",
+      component: "counter",
+      params: { initialCount: 0, label: "Clicks" },
       position: {
         direction: "right",
         referencePanel: "panel_1",
       },
     });
 
-    event.api.addPanel({
+    addTypeSafePanel({
       id: "panel_3",
-      component: "default",
+      component: "chart",
+      params: { data: [1, 2, 3], title: "My Chart" },
       position: {
         direction: "below",
         referencePanel: "panel_1",
       },
-    });
-    event.api.addPanel({
-      id: "panel_4",
-      component: "default",
-    });
-    event.api.addPanel({
-      id: "panel_5",
-      component: "default",
     });
   };
 
