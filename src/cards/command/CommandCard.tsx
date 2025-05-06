@@ -119,7 +119,7 @@ export const CommandCard = (props: IDockviewPanelProps<CommandCardParams>) => {
                         <div className="text-muted-foreground">
                           {formatCmdDate(cmd.generationTime)}
                         </div>
-                        <div className="font-mono">{cmd.commandName}</div>
+                        <div>{cmd.commandName}</div>
                       </TableCell>
 
                       <TableCell className="w-10">
@@ -195,7 +195,7 @@ export const CommandCard = (props: IDockviewPanelProps<CommandCardParams>) => {
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     className="p-0"
                   >
-                    <ScrollArea className="h-[28rem]">
+                    <ScrollArea className="">
                       <div className="p-4">
                         <CommandDetail cmd={cmd} />
                       </div>

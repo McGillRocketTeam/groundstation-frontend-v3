@@ -9,6 +9,7 @@ import {
 } from "@/cards";
 import tabComponents from "./tab";
 import RightComponent from "./right-component";
+import { QualifiedParameterName } from "@/lib/schemas";
 
 export default function App() {
   const onReady = (event: DockviewReadyEvent) => {
@@ -28,9 +29,17 @@ export default function App() {
 
     addTypeSafePanel({
       id: "panel_2",
-      component: "counter",
-      params: { initialCount: 0, label: "Clicks" },
-      title: "Counter",
+      component: "parameterTable",
+      params: {
+        parameters: [
+          QualifiedParameterName.parse("/FC1/FlightComputer/battery_voltage"),
+          QualifiedParameterName.parse("/FC1/FlightComputer/flight_stage"),
+          QualifiedParameterName.parse(
+            "/FC1/FlightComputer/drogueEmatch_armed_SW",
+          ),
+        ],
+      },
+      title: "Parameter Table",
       position: {
         direction: "right",
         referencePanel: "panel_1",

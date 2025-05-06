@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/AddCardForm.tsx
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +24,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { componentSchemas, ComponentKey, AddPanelConfig } from "@/cards";
+import { QualifiedParameterName } from "@/lib/schemas";
+import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -91,33 +94,58 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                 {key.replace(/([A-Z])/g, " $1").trim()}
               </FormLabel>
               <FormControl>
-                {value instanceof z.ZodNumber ? (
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                ) : value instanceof z.ZodEnum ? (
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={`Select ${key}`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(value as z.ZodEnum<any>)._def.values.map(
-                        (v: string) => (
-                          <SelectItem key={v} value={v}>
-                            {v}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <Input {...field} />
-                )}
+                {(() => {
+                  // I have the following branded string and i want to see if its an instance of that
+                  // z.ZodArray<z.ZodBranded<z.ZodString, "QualifiedParameterName">, "many">
+                  if (
+                    value instanceof z.ZodArray &&
+                    value.element instanceof z.ZodBranded &&
+                    value.element._def.type instanceof z.ZodString &&
+                    value.element.description === "QualifiedParameterName"
+                  ) {
+                    return (
+                      <ParameterArraySelector
+                        onValueChange={(value) => {
+                          field.onChange(
+                            value.map((v) =>
+                              QualifiedParameterName.parse(v.qualifiedName),
+                            ),
+                          );
+                        }}
+                      />
+                    );
+                  } else if (value instanceof z.ZodNumber) {
+                    return (
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    );
+                  } else if (value instanceof z.ZodEnum) {
+                    return (
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={`Select ${key}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {(value as z.ZodEnum<any>)._def.values.map(
+                            (v: string) => (
+                              <SelectItem key={v} value={v}>
+                                {v}
+                              </SelectItem>
+                            ),
+                          )}
+                        </SelectContent>
+                      </Select>
+                    );
+                  } else {
+                    return <Input {...field} />;
+                  }
+                })()}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -186,7 +214,11 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
         {selectedComponent &&
           !isEmptyObjectSchema(componentSchemas[selectedComponent]) && (
             <div className="space-y-4">
-              <h3 className="font-medium">Parameters</h3>
+              <h3 className="font-medium">
+                {componentSchemas[selectedComponent].description ??
+                  selectedComponent}{" "}
+                Configuration
+              </h3>
               {renderSchemaFields(componentSchemas[selectedComponent], [
                 "params",
               ])}

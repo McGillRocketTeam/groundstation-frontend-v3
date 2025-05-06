@@ -45,6 +45,14 @@ export default function Header() {
 
 function YAMCSIndicator() {
   const [time, setTime] = useState<Time | undefined>();
+  const [connected, setConnected] = useState<boolean | undefined>();
+
+  useEffect(() => {
+    const subscription = yamcs.connected$.subscribe((value) =>
+      setConnected(value),
+    );
+    return subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const listener = (serverTime: Time) => {
@@ -68,7 +76,13 @@ function YAMCSIndicator() {
       {time && (
         <div className="text-right text-xs">
           <div>{new Date(time.value).toLocaleString()}</div>
-          <div className="text-success">{"YAMCS Connected"}</div>
+          {connected === false ? (
+            <div className="text-destructive text-xs">
+              {"YAMCS Disconnected"}
+            </div>
+          ) : (
+            <div className="text-success">{"YAMCS Connected"}</div>
+          )}
         </div>
       )}
     </>

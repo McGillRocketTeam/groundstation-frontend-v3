@@ -1826,6 +1826,24 @@ export default class YamcsClient implements HttpHandler {
     return (await response.json()) as ParametersPage;
   }
 
+  async getParametersBatch(
+    instance: string,
+    options: {
+      id: NamedObjectId[];
+    },
+  ) {
+    const url = `${this.apiUrl}/mdb/${instance}/parameters:batchGet`;
+    const response = await this.doFetch(url, {
+      method: "POST",
+      body: JSON.stringify(options),
+    });
+
+    return (await response.json()).response as {
+      id: NamedObjectId;
+      parameter: Parameter;
+    }[];
+  }
+
   async getParameter(instance: string, qualifiedName: string) {
     const url = `${this.apiUrl}/mdb/${instance}/parameters${qualifiedName}`;
     const response = await this.doFetch(url);

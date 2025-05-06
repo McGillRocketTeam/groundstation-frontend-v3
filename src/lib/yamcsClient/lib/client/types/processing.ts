@@ -71,6 +71,7 @@ export interface SubscribeParametersData {
 
 export interface SubscribedParameterInfo {
   parameter: string;
+  enumValues?: { value: string; label: string }[];
   units?: string;
 }
 
