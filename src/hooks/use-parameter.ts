@@ -45,8 +45,6 @@ export function useParameterSubscription<
         }
 
         if (isMounted) setInfo(paramInfo);
-
-        console.log("info", info);
       }
 
       if (msg.values && mappingRef.current) {
