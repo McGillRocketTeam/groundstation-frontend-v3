@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { DataPoint, Margin } from "./types";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
+import { useChartData } from "./use-chart-data";
 
 function ScrollingChart({ parameters }: { parameters: string[] }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  // @ts-expect-error Weird TS annoyance with refs
+  const { data, pruneData } = useChartData(100);
   const dimensions = useResizeObserver(wrapperRef);
-
-  // const data = useRef<DataPoint[]>([]);
 
   useEffect(() => {
     if (!dimensions || !svgRef.current) return;
 
     const margin: Margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const duration = 1000;
+    const windowSize = 30000; // 30 seconds
     const { width, height } = dimensions;
     const chartWidth = Math.max(0, width - margin.left - margin.right);
     const chartHeight = Math.max(0, height - margin.top - margin.bottom);
@@ -49,26 +49,23 @@ function ScrollingChart({ parameters }: { parameters: string[] }) {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Initialize data array
-    let data: DataPoint[] = Array.from({ length: 30 }, (_, i) => ({
-      time: Date.now() - (30 - i) * 1000,
-      value: Math.random() * 100,
-    }));
-
     // Create scales
     const xScale = d3
       .scaleTime()
-      .domain([Date.now() - 30000, Date.now()])
+      .domain([Date.now() - windowSize, Date.now()])
       .range([0, chartWidth]);
 
-    const yScale = d3.scaleLinear().domain([0, 100]).range([chartHeight, 0]);
+    const yRange = d3.extent(data.map((d) => d.value)) as [number, number];
+    yRange[0] = yRange[0] * 1;
+    yRange[1] = yRange[1] * 1.0;
+    const yScale = d3.scaleLinear().domain(yRange).range([chartHeight, 0]);
 
     // Create line generator
     const line = d3
       .line<DataPoint>()
       .x((d) => xScale(d.time))
       .y((d) => yScale(d.value))
-      .defined((d) => !isNaN(d.value)); // Handle NaN values
+      .defined((d) => !isNaN(d.value));
 
     // Add axes
     const xAxis = g
@@ -77,7 +74,11 @@ function ScrollingChart({ parameters }: { parameters: string[] }) {
       .attr("transform", `translate(0,${chartHeight})`);
 
     // Y-axis
-    g.append("g").attr("class", "y-axis").call(d3.axisLeft(yScale));
+    const yTickSpacing = 50; // px per tick (adjust as needed)
+    const yTickCount = Math.max(2, Math.floor(chartHeight / yTickSpacing));
+    g.append("g")
+      .attr("class", "y-axis")
+      .call(d3.axisLeft(yScale).ticks(yTickCount));
 
     // Create group for the line with clip path
     const lineGroup = g.append("g").attr("clip-path", "url(#clip)");
@@ -98,21 +99,16 @@ function ScrollingChart({ parameters }: { parameters: string[] }) {
       const now = Date.now();
       const deltaTime = now - lastDataTime;
 
-      // Add new data point every second
       if (deltaTime >= duration) {
-        const newData: DataPoint = {
-          time: now,
-          value: Math.random() * 100,
-        };
-        data.push(newData);
+        pruneData(windowSize);
         lastDataTime = now;
       }
 
       // Update scales continuously
-      xScale.domain([now - 30000, now]);
+      xScale.domain([now - windowSize, now]);
 
       // Update line
-      path.attr("d", line(data));
+      path.datum(data).attr("d", line);
 
       // Update x-axis
       xAxis.call(d3.axisBottom(xScale));
@@ -130,7 +126,7 @@ function ScrollingChart({ parameters }: { parameters: string[] }) {
         cancelAnimationFrame(frameId);
       }
     };
-  }, [dimensions]);
+  }, [dimensions, data, pruneData]);
 
   return (
     <div ref={wrapperRef} className="grow">

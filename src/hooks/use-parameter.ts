@@ -30,7 +30,6 @@ export function useParameterSubscription<
     mappingRef.current = null;
 
     function listener(msg: SubscribeParametersData) {
-      console.log(msg);
       // on first message, store mapping and info
       if (msg.mapping && msg.info) {
         mappingRef.current = msg.mapping;

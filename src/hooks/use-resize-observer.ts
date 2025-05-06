@@ -6,12 +6,12 @@ interface Dimensions {
 }
 
 export const useResizeObserver = (
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
 ): Dimensions | null => {
   const [dimensions, setDimensions] = useState<Dimensions | null>(null);
 
   useEffect(() => {
-    const observeTarget = ref.current;
+    const observeTarget = ref?.current;
     if (!observeTarget) return;
 
     const resizeObserver = new ResizeObserver((entries) => {

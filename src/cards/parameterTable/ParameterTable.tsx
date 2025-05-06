@@ -21,7 +21,7 @@ export const ParameterTableCard = ({
             </div>
           </div>
           <div className="w-full text-right whitespace-nowrap">
-            {values[parameter] && (
+            {values[parameter] ? (
               <>
                 {values[parameter].engValue.type === "ENUMERATED" ? (
                   <span>
@@ -43,6 +43,8 @@ export const ParameterTableCard = ({
                   </span>
                 )}
               </>
+            ) : (
+              <span className="text-muted-foreground">UNAVAILABLE</span>
             )}
           </div>
         </div>

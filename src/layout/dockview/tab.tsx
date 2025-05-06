@@ -32,7 +32,6 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
         <ContextMenuItem
           onClick={() => {
             const panel = props.containerApi.getPanel(props.api.id);
-            console.log(panel);
             if (panel) props.containerApi.removePanel(panel);
           }}
           className="text-destructive"
