@@ -196,7 +196,7 @@ export const CommandCard = (props: IDockviewPanelProps<CommandCardParams>) => {
                     className="p-0"
                   >
                     <ScrollArea className="">
-                      <div className="p-4">
+                      <div className="p-2">
                         <CommandDetail cmd={cmd} />
                       </div>
                     </ScrollArea>

@@ -4,6 +4,7 @@ import { chartSchema } from "./chart/schema";
 import { commandSchema } from "./command/schema";
 import { parameterTableSchema } from "./parameterTable/schema";
 import { packetSchema } from "./packet/schema";
+import { connectedDevicesSchema } from "./connectedDevices/schema";
 
 export const componentSchemas = {
   default: defaultSchema,
@@ -12,4 +13,5 @@ export const componentSchemas = {
   chart: chartSchema,
   packet: packetSchema,
   parameterTable: parameterTableSchema,
+  connectedDevices: connectedDevicesSchema,
 } as const;

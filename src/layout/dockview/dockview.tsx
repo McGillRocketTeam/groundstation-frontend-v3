@@ -31,6 +31,12 @@ export default function App() {
       component: "command",
       params: { custom: "asdf" },
     });
+    addTypeSafePanel({
+      id: "panel_6",
+      title: "Connected Devices",
+      component: "connectedDevices",
+      params: {},
+    });
 
     addTypeSafePanel({
       id: "panel_2",
