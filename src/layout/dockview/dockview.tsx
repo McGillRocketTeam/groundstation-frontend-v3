@@ -19,15 +19,10 @@ export default function App() {
       componentSchemas[config.component].parse(config.params);
       event.api.addPanel({ ...config, tabComponent: "default" });
     };
-    addTypeSafePanel({
-      id: "panel_5",
-      title: "Packet Viewer",
-      component: "packet",
-      params: { container: "/FC1/FlightComputer/FCPacket" },
-    });
+
     addTypeSafePanel({
       id: "panel_1",
-      title: "Command History",
+      title: "Commands",
       component: "command",
       params: { custom: "asdf" },
     });
@@ -36,6 +31,12 @@ export default function App() {
       title: "Connected Devices",
       component: "connectedDevices",
       params: {},
+    });
+    addTypeSafePanel({
+      id: "panel_5",
+      title: "Packets",
+      component: "packetHistory",
+      params: { container: "/FC1/FlightComputer/FCPacket" },
     });
 
     addTypeSafePanel({

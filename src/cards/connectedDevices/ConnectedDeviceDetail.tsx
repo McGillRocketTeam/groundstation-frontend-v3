@@ -16,6 +16,8 @@ export default function ConnectedDeviceDetail({ link }: { link: Link }) {
       <div>
         <dt className="font-semibold">Link</dt>
         <dd>{link.name}</dd>
+      </div>
+      <div>
         <dt className="font-semibold">Class</dt>
         <dd>{link.type}</dd>
       </div>
