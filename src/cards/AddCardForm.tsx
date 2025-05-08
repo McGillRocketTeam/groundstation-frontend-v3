@@ -53,9 +53,12 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
   // Dynamically create the form schema based on the selected component
   const getFormSchema = (component: ComponentKey | null) => {
     if (!component) return basePanelSchema;
-    return basePanelSchema.extend({
-      params: componentSchemas[component],
-    });
+    const schema = componentSchemas[component];
+    // if schema is an empty object, don’t add `params`
+    if (isEmptyObjectSchema(schema)) {
+      return basePanelSchema;
+    }
+    return basePanelSchema.extend({ params: schema });
   };
 
   const form = useForm<z.infer<ReturnType<typeof getFormSchema>>>({

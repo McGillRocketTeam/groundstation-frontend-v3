@@ -6,6 +6,7 @@ import { CommandCard } from "./command/CommandCard";
 import { ParameterTableCard } from "./parameterTable/ParameterTable";
 import { ConnectedDevicesCard } from "./connectedDevices/ConnectedDevicesCard";
 import { PacketHistoryCard } from "./packetHistory/PacketHistoryCard";
+import { PIDCard } from "./pid/PIDCard";
 
 export * from "./types";
 export * from "./schemas";
@@ -17,5 +18,6 @@ export const components: ComponentMap = {
   chart: ChartCard,
   packetHistory: PacketHistoryCard,
   parameterTable: ParameterTableCard,
+  pid: PIDCard,
   connectedDevices: ConnectedDevicesCard,
 };
