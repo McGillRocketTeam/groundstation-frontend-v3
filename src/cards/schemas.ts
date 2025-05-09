@@ -6,9 +6,11 @@ import { parameterTableSchema } from "./parameterTable/schema";
 import { connectedDevicesSchema } from "./connectedDevices/schema";
 import { packetHistorySchema } from "./packetHistory/schema";
 import { pidSchema } from "./pid/schema";
+import { booleanTableSchema } from "./booleanTable/schema";
 
 export const componentSchemas = {
   default: defaultSchema,
+  booleanTable: booleanTableSchema,
   command: commandSchema,
   counter: counterSchema,
   chart: chartSchema,

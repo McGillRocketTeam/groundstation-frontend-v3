@@ -8,12 +8,14 @@ import { ConnectedDevicesCard } from "./connectedDevices/ConnectedDevicesCard";
 import { PacketHistoryCard } from "./packetHistory/PacketHistoryCard";
 import { PIDCard } from "./pid/PIDCard";
 import { withWrapper } from "./CardWrapper";
+import { BooleanTableCard } from "./booleanTable/BooleanTableCard";
 
 export * from "./types";
 export * from "./schemas";
 
 const internalComponents: ComponentMap = {
   default: DefaultCard,
+  booleanTable: BooleanTableCard,
   command: CommandCard,
   counter: CounterCard,
   chart: ChartCard,

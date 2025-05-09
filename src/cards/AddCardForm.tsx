@@ -26,6 +26,13 @@ import { Button } from "@/components/ui/button";
 import { componentSchemas, ComponentKey, AddPanelConfig } from "@/cards";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -98,8 +105,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
               </FormLabel>
               <FormControl>
                 {(() => {
-                  // I have the following branded string and i want to see if its an instance of that
-                  // z.ZodArray<z.ZodBranded<z.ZodString, "QualifiedParameterName">, "many">
+                  // Parameter Array Selector
                   if (
                     value instanceof z.ZodArray &&
                     value.element instanceof z.ZodBranded &&
@@ -117,6 +123,55 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                         }}
                       />
                     );
+                    // Array of Dropdowns
+                  } else if (
+                    value instanceof z.ZodArray &&
+                    value.element instanceof z.ZodEnum &&
+                    value.element.description === "BooleanParameter"
+                  ) {
+                    return (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-invalid={
+                              form.getFieldState(field.name).error
+                                ? true
+                                : false
+                            }
+                            variant="outline"
+                            className="w-full aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                          >
+                            Select Booleans
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          {(value.element as z.ZodEnum<any>)._def.values.map(
+                            (v: string) => (
+                              <DropdownMenuCheckboxItem
+                                key={v}
+                                checked={field.value?.includes(v)}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    if (field.value)
+                                      field.onChange([...field.value, v]);
+                                    else field.onChange([v]);
+                                  } else {
+                                    field.onChange(
+                                      field.value?.filter(
+                                        (item: string) => item !== v,
+                                      ),
+                                    );
+                                  }
+                                }}
+                              >
+                                {v}
+                              </DropdownMenuCheckboxItem>
+                            ),
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    );
+                    // Number Input
                   } else if (value instanceof z.ZodNumber) {
                     return (
                       <Input
@@ -125,6 +180,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                         onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     );
+                    // Basic Dropdowns
                   } else if (value instanceof z.ZodEnum) {
                     return (
                       <Select
@@ -145,6 +201,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                         </SelectContent>
                       </Select>
                     );
+                    // Default Input
                   } else {
                     return <Input {...field} />;
                   }
@@ -188,11 +245,17 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                   <SelectValue placeholder="Select component type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(componentSchemas).map(([key, schema]) => (
-                    <SelectItem key={key} value={key}>
-                      {schema.description ?? key}
-                    </SelectItem>
-                  ))}
+                  {Object.entries(componentSchemas)
+                    .sort(([key1, schema1], [key2, schema2]) =>
+                      (schema1.description ?? key1).localeCompare(
+                        schema2.description ?? key2,
+                      ),
+                    )
+                    .map(([key, schema]) => (
+                      <SelectItem key={key} value={key}>
+                        {schema.description ?? key}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
