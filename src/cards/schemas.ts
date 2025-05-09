@@ -1,4 +1,3 @@
-import { defaultSchema } from "./default/schema";
 import { counterSchema } from "./counter/schema";
 import { chartSchema } from "./chart/schema";
 import { commandSchema } from "./command/schema";
@@ -9,7 +8,6 @@ import { pidSchema } from "./pid/schema";
 import { booleanTableSchema } from "./booleanTable/schema";
 
 export const componentSchemas = {
-  default: defaultSchema,
   booleanTable: booleanTableSchema,
   command: commandSchema,
   counter: counterSchema,

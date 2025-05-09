@@ -10,7 +10,7 @@ import {
 
 export function useParameterSubscription<
   const T extends readonly QualifiedParameterNameType[],
->(parameters: T) {
+>(parameters: T | undefined) {
   // State for values and info, mapped by branded parameter name
   const [values, setValues] = useState<
     Record<T[number], ParameterValue | undefined>
@@ -23,6 +23,7 @@ export function useParameterSubscription<
   const mappingRef = useRef<Record<number, NamedObjectId> | null>(null);
 
   useEffect(() => {
+    if (!parameters) return;
     let isMounted = true;
 
     setValues({} as Record<T[number], ParameterValue | undefined>);

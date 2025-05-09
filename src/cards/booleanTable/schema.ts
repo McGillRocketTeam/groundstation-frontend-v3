@@ -20,6 +20,6 @@ export const booleanTableSchema = z
       )
       .nonempty({ message: "Must pick at least one parameter." }),
   })
-  .describe("Boolean Status");
+  .describe("Boolean Table");
 
 export type BooleanCardParams = z.infer<typeof booleanTableSchema>;

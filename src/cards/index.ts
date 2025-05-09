@@ -1,5 +1,4 @@
 import { ComponentMap } from "./types";
-import { DefaultCard } from "./default/DefaultCard";
 import { CounterCard } from "./counter/CounterCard";
 import { ChartCard } from "./chart/ChartCard";
 import { CommandCard } from "./command/CommandCard";
@@ -14,7 +13,6 @@ export * from "./types";
 export * from "./schemas";
 
 const internalComponents: ComponentMap = {
-  default: DefaultCard,
   booleanTable: BooleanTableCard,
   command: CommandCard,
   counter: CounterCard,

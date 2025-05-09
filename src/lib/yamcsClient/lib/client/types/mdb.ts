@@ -1,3 +1,4 @@
+import { QualifiedParameterNameType } from "@/lib/schemas";
 import { ParameterValue } from "./monitoring";
 
 export interface MissionDatabase {
@@ -14,7 +15,7 @@ export interface MissionDatabase {
 
 export interface NameDescription {
   name: string;
-  qualifiedName: string;
+  qualifiedName: QualifiedParameterNameType;
   alias?: NamedObjectId[];
   shortDescription?: string;
   longDescription?: string;
