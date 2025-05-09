@@ -7,11 +7,12 @@ import { ParameterTableCard } from "./parameterTable/ParameterTable";
 import { ConnectedDevicesCard } from "./connectedDevices/ConnectedDevicesCard";
 import { PacketHistoryCard } from "./packetHistory/PacketHistoryCard";
 import { PIDCard } from "./pid/PIDCard";
+import { withWrapper } from "./CardWrapper";
 
 export * from "./types";
 export * from "./schemas";
 
-export const components: ComponentMap = {
+const internalComponents: ComponentMap = {
   default: DefaultCard,
   command: CommandCard,
   counter: CounterCard,
@@ -21,3 +22,11 @@ export const components: ComponentMap = {
   pid: PIDCard,
   connectedDevices: ConnectedDevicesCard,
 };
+
+export const components = Object.fromEntries(
+  Object.entries(internalComponents).map(([key, Comp]) => [
+    key,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    withWrapper(Comp as any),
+  ]),
+);

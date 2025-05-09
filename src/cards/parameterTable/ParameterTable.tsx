@@ -6,6 +6,7 @@ import { extractValue } from "@/lib/utils";
 export const ParameterTableCard = ({
   params,
 }: IDockviewPanelProps<ParameterTableCardParams>) => {
+  throw new Error("Testing Errors");
   const { values, info } = useParameterSubscription(params.parameters);
 
   return (
