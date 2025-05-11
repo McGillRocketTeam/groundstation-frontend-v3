@@ -3,6 +3,7 @@ import { tap } from "rxjs/operators";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import { FrameLossListener } from "./FrameLossListener";
 import { WebSocketCall } from "./WebSocketCall";
+import hash from "object-hash";
 
 export type ClientMessage = {
   type: string;

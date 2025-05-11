@@ -1,5 +1,5 @@
 import "./dockview.css";
-import { DockviewApi, SerializedDockview, themeLight } from "dockview";
+import { DockviewApi, SerializedDockview } from "dockview";
 import { DockviewReact, DockviewReadyEvent } from "dockview";
 import {
   components,
@@ -112,7 +112,7 @@ export default function App() {
   return (
     <div className="grow">
       <DockviewReact
-        theme={themeLight}
+        className="dockview-theme-custom"
         onReady={onReady}
         components={components}
         rightHeaderActionsComponent={RightComponent}
