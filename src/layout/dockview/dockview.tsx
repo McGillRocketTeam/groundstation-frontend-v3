@@ -11,8 +11,9 @@ import tabComponents from "./tab";
 import RightComponent from "./right-component";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { useEffect, useState } from "react";
+import { initDockviewContainer } from "./initDockviewContainer";
 
-export default function App() {
+export default function DockviewLayout() {
   const [api, setApi] = useState<DockviewApi>();
 
   function addDefaultCards(
@@ -70,6 +71,12 @@ export default function App() {
     });
   }
 
+  // Initialize the container size
+  useEffect(() => {
+    const cleanup = initDockviewContainer("dockview-container");
+    return cleanup;
+  }, []);
+
   // used for persisting state
   // triggers autosave
   useEffect(() => {
@@ -110,15 +117,17 @@ export default function App() {
   };
 
   return (
-    <div className="grow">
-      <DockviewReact
-        className="dockview-theme-custom"
-        onReady={onReady}
-        components={components}
-        rightHeaderActionsComponent={RightComponent}
-        defaultTabComponent={tabComponents.default}
-        tabComponents={tabComponents}
-      />
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <div id="dockview-container">
+        <DockviewReact
+          className="dockview-theme-custom"
+          onReady={onReady}
+          components={components}
+          rightHeaderActionsComponent={RightComponent}
+          defaultTabComponent={tabComponents.default}
+          tabComponents={tabComponents}
+        />
+      </div>
     </div>
   );
 }
