@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import { MultiSelect } from "@/components/ui/multi-select";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -122,53 +123,21 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                         }}
                       />
                     );
-                    // Array of Dropdowns
+                    // Array of Booleans
                   } else if (
                     value instanceof z.ZodArray &&
                     value.element instanceof z.ZodEnum &&
                     value.element.description === "BooleanParameter"
                   ) {
                     return (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-invalid={
-                              form.getFieldState(field.name).error
-                                ? true
-                                : false
-                            }
-                            variant="outline"
-                            className="w-full aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                          >
-                            Select Booleans
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          {(value.element as z.ZodEnum<any>)._def.values.map(
-                            (v: string) => (
-                              <DropdownMenuCheckboxItem
-                                key={v}
-                                checked={field.value?.includes(v)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    if (field.value)
-                                      field.onChange([...field.value, v]);
-                                    else field.onChange([v]);
-                                  } else {
-                                    field.onChange(
-                                      field.value?.filter(
-                                        (item: string) => item !== v,
-                                      ),
-                                    );
-                                  }
-                                }}
-                              >
-                                {v}
-                              </DropdownMenuCheckboxItem>
-                            ),
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <MultiSelect
+                        options={
+                          (value.element as z.ZodEnum<any>)._def
+                            .values as string[]
+                        }
+                        selected={field.value || []}
+                        onChange={field.onChange}
+                      />
                     );
                     // Number Input
                   } else if (value instanceof z.ZodNumber) {
