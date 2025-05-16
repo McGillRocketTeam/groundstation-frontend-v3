@@ -56,7 +56,7 @@ export class StackFormatter {
       rootEl.appendChild(stepEl);
     }
 
-    let xmlString = new XMLSerializer().serializeToString(rootEl);
+    const xmlString = new XMLSerializer().serializeToString(rootEl);
     return this.formatXml(xmlString);
   }
 
@@ -119,7 +119,7 @@ export class StackFormatter {
   }
 
   private getExtraOptionsJSON(extra: { [key: string]: Value }): any {
-    let extraOptions: { id: string; value?: string | number | boolean }[] = [];
+    const extraOptions: { id: string; value?: string | number | boolean }[] = [];
     for (const id in extra) {
       const value = this.getValue(extra[id]);
       extraOptions.push({
@@ -131,7 +131,7 @@ export class StackFormatter {
   }
 
   private getCommandArgumentsJSON(args: { [key: string]: any }) {
-    let commandArguments: { name: string; value: any }[] = [];
+    const commandArguments: { name: string; value: any }[] = [];
     for (const argName in args) {
       commandArguments.push({
         name: argName,

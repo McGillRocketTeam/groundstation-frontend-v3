@@ -7,10 +7,11 @@ import { useChartData } from "./use-chart-data";
 function ScrollingChart({ parameters }: { parameters: string[] }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const { data, pruneData } = useChartData(100);
+  const { data, pruneData } = useChartData();
   const dimensions = useResizeObserver(wrapperRef);
 
   useEffect(() => {
+    console.log(parameters);
     if (!dimensions || !svgRef.current) return;
 
     const margin: Margin = { top: 20, right: 20, bottom: 30, left: 40 };

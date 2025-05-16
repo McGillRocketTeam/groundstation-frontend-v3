@@ -5,7 +5,7 @@ import { useParameterSubscription } from "@/hooks/use-parameter";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { extractValue } from "@/lib/utils";
 
-export function useChartData(initialDataPoints = 30) {
+export function useChartData() {
   const [data, setData] = useState<DataPoint[]>([]);
 
   const addDataPoint = useCallback((newPoint?: DataPoint) => {

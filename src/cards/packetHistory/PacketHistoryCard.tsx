@@ -1,5 +1,3 @@
-import { IDockviewPanelProps } from "dockview-react";
-import { PacketHistoryCardParams } from "./schema";
 import { useEffect, useState } from "react";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { Statistics, TmStatistics } from "@/lib/yamcsClient/lib/client";
@@ -12,12 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export const PacketHistoryCard = (
-  props: IDockviewPanelProps<PacketHistoryCardParams>,
-) => {
+export const PacketHistoryCard = () => {
   const [packets, setPackets] = useState<TmStatistics[]>([]);
   const listener = (time: Statistics) => {
-    setPackets((prior) => time.tmstats);
+    setPackets(time.tmstats);
   };
   useEffect(() => {
     const subscription = yamcs.createTMStatisticsSubscription(

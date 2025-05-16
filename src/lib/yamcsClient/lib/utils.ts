@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Instance,
   Parameter,
@@ -232,13 +233,14 @@ export function convertValue(value: Value) {
     case "ENUMERATED":
     case "STRING":
       return value.stringValue;
-    case "ARRAY":
+    case "ARRAY": {
       const arrayValue: any[] = [];
       for (const item of value.arrayValue || []) {
         arrayValue.push(convertValue(item));
       }
       return arrayValue;
-    case "AGGREGATE":
+    }
+    case "AGGREGATE": {
       const aggregate: Map<string, any> = new Map<string, any>();
       const membersLength = value.aggregateValue?.value.length || 0;
       for (let i = 0; i < membersLength; i++) {
@@ -249,6 +251,7 @@ export function convertValue(value: Value) {
         aggregate.set(memberName, memberValue);
       }
       return aggregate;
+    }
     default:
       throw new Error(`Unexpected value type ${value.type}`);
   }
@@ -509,8 +512,10 @@ export function getMemberPath(parameter: Parameter): string | null {
     for (let i = 0; i < parameter.path.length; i++) {
       const el = parameter.path[i];
       if (el.startsWith("[")) {
+        // @ts-expect-error this is from original YAMCS, idk
         result += el;
       } else {
+        // @ts-expect-error this is from original YAMCS, idk
         result += "." + el;
       }
     }
@@ -687,7 +692,11 @@ export function objectCompareFn(...fields: string[]) {
     let rc = 0;
     for (let i = 0; i < fields.length; i++) {
       const field = fields[i];
-      let aField = (a.hasOwnProperty(field) ? (a as any)[field] : null) ?? null;
+      let aField =
+        (Object.prototype.hasOwnProperty.call(a, field)
+          ? (a as any)[field]
+          : null) ?? null;
+      // eslint-disable-next-line no-prototype-builtins
       let bField = (b.hasOwnProperty(field) ? (b as any)[field] : null) ?? null;
       if (typeof aField === "string") {
         aField = aField.toLowerCase();

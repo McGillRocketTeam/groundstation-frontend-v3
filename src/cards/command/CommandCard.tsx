@@ -1,5 +1,3 @@
-import { IDockviewPanelProps } from "dockview";
-import { CommandCardParams } from "./schema";
 import { CommandHistoryRecord, yamcs } from "@/lib/yamcsClient/api";
 import {
   Table,
@@ -26,8 +24,8 @@ import { useEffect, useState } from "react";
 import { CommandHistoryEntry } from "@/lib/yamcsClient/lib/client";
 import CommandDetail from "./CommandDetail";
 
-export const CommandCard = (props: IDockviewPanelProps<CommandCardParams>) => {
-  const [searchText, setSearchText] = useState("");
+export const CommandCard = () => {
+  const [searchText] = useState("");
   const [historyRecords, setHistoryRecords] = useState<CommandHistoryRecord[]>(
     [],
   );
