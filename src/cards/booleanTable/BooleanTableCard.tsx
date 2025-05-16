@@ -46,8 +46,8 @@ export const BooleanTableCard = (
           armedSW: includes("armed_SW"),
           continuityHW: includes("continuity_HW"),
           energizedSW: includes("energized_SW"),
-          energizedCurrentHW: includes("energizedCurrent_HW	"),
-          energizedGateHW: includes("energizedGate_HW	"),
+          energizedCurrentHW: includes("energizedCurrent_HW"),
+          energizedGateHW: includes("energizedGate_HW"),
         };
       });
 
@@ -76,9 +76,13 @@ export const BooleanTableCard = (
         </TableRow>
         <TableRow className="border-b-2 text-sm">
           <TableHead>Parameter</TableHead>
-          <TableHead className="w-[3.25rem] border">SOFTWARE</TableHead>
-          <TableHead className="w-[3.25rem] border">CURRENT</TableHead>
-          <TableHead className="w-[3.25rem] border">GATE</TableHead>
+          <TableHead className="w-[4.5rem] border text-center">
+            SOFTWARE
+          </TableHead>
+          <TableHead className="w-[4.5rem] border text-center">
+            CURRENT
+          </TableHead>
+          <TableHead className="w-[4.5rem] border text-center">GATE</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -106,7 +110,7 @@ function BoolValue({ value }: { value: ParameterValue | undefined }) {
     return (
       <div
         data-state={value.engValue.booleanValue}
-        className="data-[state=true]:bg-green-700 bg-red-700 p-1 text-white min-w-[3.25rem] text-center"
+        className="data-[state=true]:bg-green-700 bg-red-700 p-1 text-white min-w-[4.5rem]"
       >
         {value.engValue.booleanValue.toString().toLocaleUpperCase()}
       </div>

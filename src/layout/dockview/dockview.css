@@ -18,7 +18,7 @@
 	--dv-active-sash-transition-delay: 0.5s;
 
 	--dv-group-view-background-color: var(--background);
-	--dv-tabs-and-actions-container-background-color: var(--card);
+	--dv-tabs-and-actions-container-background-color: var(--color-muted);
 
 	--dv-activegroup-visiblepanel-tab-background-color: var(--background);
 	--dv-activegroup-hiddenpanel-tab-background-color: var(--muted);
