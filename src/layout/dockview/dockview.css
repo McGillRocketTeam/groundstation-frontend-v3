@@ -1,3 +1,14 @@
+#dockview-container {
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+#dockview-container>div {
+	flex: 1;
+}
+
 /* Custom Dockview Theme */
 .dockview-theme-custom {
 	--dv-paneview-active-outline-color: var(--ring);

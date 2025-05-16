@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import {
-  DotFilledIcon,
-  EnterFullScreenIcon,
-  ExitFullScreenIcon,
-} from "@radix-ui/react-icons";
+import { EnterFullScreenIcon, ExitFullScreenIcon } from "@radix-ui/react-icons";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { Time } from "@/lib/yamcsClient/lib/client";
+import { Link } from "react-router";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function Header() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -31,7 +29,12 @@ export default function Header() {
 
   return (
     <header className="border-border flex flex-row items-center justify-between border-b p-2">
-      <h1 className="text-mrt">MCGILL ROCKET TEAM</h1>
+      <div className="flex flex-row items-center gap-2">
+        <SidebarTrigger />
+        <Link to="/">
+          <h1 className="text-mrt">Home Dashboard</h1>
+        </Link>
+      </div>
 
       <div className="flex flex-row items-center gap-2">
         <YAMCSIndicator />

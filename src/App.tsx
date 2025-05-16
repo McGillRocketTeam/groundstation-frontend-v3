@@ -1,12 +1,18 @@
 import DockViewLayout from "@/layout/dockview/dockview";
-import Header from "./components/Header";
+import { BrowserRouter, Route, Routes } from "react-router";
+import RouterLayout from "./layout/RouterLayout";
 
 function App() {
   return (
-    <div className="flex h-screen flex-col">
-      <Header />
-      <DockViewLayout />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Default Route */}
+        <Route element={<RouterLayout />}>
+          <Route index element={<DockViewLayout />} />
+          <Route path="settings" element={<div>Hello Settings</div>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
