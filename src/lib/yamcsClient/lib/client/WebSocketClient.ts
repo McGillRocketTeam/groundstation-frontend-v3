@@ -69,7 +69,7 @@ export class WebSocketClient {
    * be received. If we cannot read sufficiently fast, Yamcs will close the
    * entire connection (shared with other subscriptions).
    */
-  createSubscription<O extends Object, D>(
+  createSubscription<O extends object, D>(
     type: string,
     options: O,
     observer: (data: D) => void,
@@ -89,7 +89,7 @@ export class WebSocketClient {
       // @ts-ignore
       return existingWebSocketSub;
     }
-    let websocketSub = this.doCreateSubscription(
+    const websocketSub = this.doCreateSubscription(
       type,
       false,
       options,

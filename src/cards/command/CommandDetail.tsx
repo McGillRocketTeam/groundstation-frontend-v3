@@ -7,13 +7,11 @@ import {
 import { AcknowledgementIcon } from "./AcknowledgementIcon";
 import { cn, extractValue } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-// import { useNotifications } from "./hooks/NotificationProvider";
 
 export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
-  const [showDialog, setShowDialog] = useState(false);
+  // const [showDialog, setShowDialog] = useState(false);
   const commandQuery = useQuery({
     queryKey: [cmd.commandName],
     queryFn: () => yamcs.getCommand("gs_backend", cmd.commandName),
@@ -21,6 +19,8 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
 
   // const { addNotification } = useNotifications();
 
+  // @ts-expect-error will use this later
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleConfirmCmd = async (
     cmdName: string,
     cmdArgs: { [key: string]: string },
@@ -129,7 +129,7 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
         disabled={commandQuery.isLoading || !commandQuery.data}
         variant="destructive"
         size="sm"
-        onClick={() => setShowDialog(true)}
+        // onClick={() => setShowDialog(true)}
       >
         Resend Command
       </Button>

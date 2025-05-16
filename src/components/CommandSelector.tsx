@@ -3,6 +3,21 @@ import { useEffect, useState } from "react";
 import { yamcs } from "../lib/yamcsClient/api.ts";
 import { Command } from "../lib/yamcsClient/lib/client";
 import { cn } from "../lib/utils.ts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table.tsx";
+import { Card } from "./ui/card.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog.tsx";
 
 type CommandTree = {
   [key: string]: CommandTree | Command;
@@ -70,6 +85,7 @@ export default function CmdSelector({
       return (
         <>
           {Object.keys(currentLevel).map((key) => {
+            // @ts-expect-error ignore any
             const value = currentLevel[key];
             {
               /*I feel like this is not the best check. But it works for now*/
@@ -213,7 +229,7 @@ export default function CmdSelector({
 export function SendCommandDialog({
   command,
   onClose,
-  handleConfirm,
+  // handleConfirm,
 }: {
   command: Command;
   onClose: () => void;
@@ -226,13 +242,13 @@ export function SendCommandDialog({
         <DialogHeader>
           <DialogTitle>Send Command: {command.name}</DialogTitle>
         </DialogHeader>
-        <CommandForm
-          command={command}
-          onSubmit={(args) => {
-            handleConfirm(command.qualifiedName, args);
-            onClose();
-          }}
-        />
+        {/* <CommandForm */}
+        {/*   command={command} */}
+        {/*   onSubmit={(args) => { */}
+        {/*     handleConfirm(command.qualifiedName, args); */}
+        {/*     onClose(); */}
+        {/*   }} */}
+        {/* /> */}
       </DialogContent>
     </Dialog>
   );

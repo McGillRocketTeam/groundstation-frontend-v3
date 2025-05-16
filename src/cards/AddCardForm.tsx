@@ -26,12 +26,6 @@ import { Button } from "@/components/ui/button";
 import { componentSchemas, ComponentKey, AddPanelConfig } from "@/cards";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
 import { MultiSelect } from "@/components/ui/multi-select";
 
 // Create a schema for the base panel configuration
