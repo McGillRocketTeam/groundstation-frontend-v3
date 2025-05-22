@@ -23,7 +23,12 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { componentSchemas, ComponentKey, AddPanelConfig } from "@/cards";
+import {
+  componentSchemas,
+  ComponentKey,
+  AddPanelConfig,
+  ComponentParams,
+} from "@/cards";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -43,13 +48,45 @@ const basePanelSchema = z.object({
     .optional(),
 });
 
-type AddCardFormProps = {
-  onSubmit: <T extends ComponentKey>(config: AddPanelConfig<T>) => void;
-};
+export interface AddCardFormProps {
+  onSubmit: <T extends ComponentKey>(
+    config: AddPanelConfig<T>,
+    close: () => void,
+  ) => void;
+  defaultValues?: ComponentParams[ComponentKey];
+  close: () => void;
+}
 
-export function AddCardForm({ onSubmit }: AddCardFormProps) {
+export function AddCardForm({
+  onSubmit,
+  defaultValues,
+  close,
+}: AddCardFormProps) {
   const [selectedComponent, setSelectedComponent] =
-    useState<ComponentKey | null>(null);
+    useState<ComponentKey | null>(() => {
+      console.log(defaultValues);
+      if (!defaultValues) return null;
+
+      // Try to find a matching component schema
+      const matchingComponent = Object.entries(componentSchemas).find(
+        ([_, schema]) => {
+          if (!(schema instanceof ZodObject)) return false;
+
+          // Get the expected keys from the schema
+          const schemaKeys = new Set(Object.keys(schema.shape));
+          // Get the keys from defaultValues
+          const valueKeys = new Set(Object.keys(defaultValues));
+
+          // Check if the keys match
+          return (
+            [...schemaKeys].every((key) => valueKeys.has(key)) &&
+            [...valueKeys].every((key) => schemaKeys.has(key))
+          );
+        },
+      );
+
+      return matchingComponent ? (matchingComponent[0] as ComponentKey) : null;
+    });
 
   // Dynamically create the form schema based on the selected component
   const getFormSchema = (component: ComponentKey | null) => {
@@ -66,6 +103,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
     resolver: zodResolver(getFormSchema(selectedComponent)),
     defaultValues: {
       id: crypto.randomUUID(),
+      ...defaultValues,
     },
   });
 
@@ -182,10 +220,13 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
       <form
         onSubmit={form.handleSubmit((data) => {
           if (selectedComponent) {
-            onSubmit({
-              ...data,
-              component: selectedComponent,
-            } as AddPanelConfig<typeof selectedComponent>);
+            onSubmit(
+              {
+                ...data,
+                component: selectedComponent,
+              } as AddPanelConfig<typeof selectedComponent>,
+              close,
+            );
           }
         })}
         className="space-y-4"

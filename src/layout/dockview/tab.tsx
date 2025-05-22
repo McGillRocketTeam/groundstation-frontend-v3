@@ -14,6 +14,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
+import AddCardDialog from "@/components/AddCardDialog";
 
 const tabComponents = {
   default: DefaultTab,
@@ -57,12 +58,21 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
           </ContextMenuItem>
         )}
         <ContextMenuSeparator />
-        <ContextMenuItem>
-          Edit
-          <ContextMenuShortcut>
-            <Pencil1Icon />
-          </ContextMenuShortcut>
-        </ContextMenuItem>
+        <AddCardDialog
+          asChild
+          defaultValues={props.params}
+          onSubmit={(panel, close) => {
+            props.api.updateParameters(panel.params);
+            close();
+          }}
+        >
+          <ContextMenuItem>
+            Edit
+            <ContextMenuShortcut>
+              <Pencil1Icon />
+            </ContextMenuShortcut>
+          </ContextMenuItem>
+        </AddCardDialog>
         <ContextMenuItem
           onClick={() => {
             const panel = props.containerApi.getPanel(props.api.id);
