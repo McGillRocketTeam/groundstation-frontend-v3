@@ -15,6 +15,7 @@ import {
 } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import AddCardDialog from "@/components/AddCardDialog";
+import { ComponentKey } from "@/cards";
 
 const tabComponents = {
   default: DefaultTab,
@@ -35,7 +36,7 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
   }, [props.containerApi]);
 
   return (
-    <ContextMenu>
+    <ContextMenu modal={false}>
       <ContextMenuTrigger>
         <div className="flex h-full w-full flex-row items-center justify-center gap-2 px-2">
           {props.api.title}
@@ -60,13 +61,16 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
         <ContextMenuSeparator />
         <AddCardDialog
           asChild
-          defaultValues={props.params}
-          onSubmit={(panel, close) => {
+          defaultValues={{
+            component: props.api.component as ComponentKey,
+            title: props.api.title ?? "",
+            values: props.params,
+          }}
+          onSubmit={(panel) => {
             props.api.updateParameters(panel.params);
-            close();
           }}
         >
-          <ContextMenuItem>
+          <ContextMenuItem onSelect={(e) => e.preventDefault()}>
             Edit
             <ContextMenuShortcut>
               <Pencil1Icon />

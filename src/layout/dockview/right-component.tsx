@@ -7,13 +7,12 @@ export default function RightComponent(props: IDockviewHeaderActionsProps) {
   return (
     <AddCardDialog
       asChild
-      onSubmit={(panel, close) => {
+      onSubmit={(panel) => {
         // @ts-expect-error not sure why ts is mad
         props.containerApi.addPanel({
           ...panel,
           position: { referenceGroup: props.group },
         });
-        close();
       }}
     >
       <Button

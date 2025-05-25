@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z, ZodObject } from "zod";
+import { boolean, z, ZodObject } from "zod";
 import {
   Form,
   FormControl,
@@ -32,6 +32,7 @@ import {
 import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Separator } from "@/components/ui/separator";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -48,48 +49,29 @@ const basePanelSchema = z.object({
     .optional(),
 });
 
-export interface AddCardFormProps {
-  onSubmit: <T extends ComponentKey>(
-    config: AddPanelConfig<T>,
-    close: () => void,
-  ) => void;
-  defaultValues?: ComponentParams[ComponentKey];
+interface DefaultValueProps<K extends ComponentKey> {
+  component: K;
+  title: string;
+  values: ComponentParams[K];
+}
+
+export interface AddCardFormProps<K extends ComponentKey> {
+  onSubmit: <T extends ComponentKey>(config: AddPanelConfig<T>) => void;
+  defaultValues?: DefaultValueProps<K>;
   close: () => void;
 }
 
-export function AddCardForm({
+export function AddCardForm<K extends ComponentKey>({
   onSubmit,
   defaultValues,
   close,
-}: AddCardFormProps) {
-  const [selectedComponent, setSelectedComponent] =
-    useState<ComponentKey | null>(() => {
-      console.log(defaultValues);
-      if (!defaultValues) return null;
-
-      // Try to find a matching component schema
-      const matchingComponent = Object.entries(componentSchemas).find(
-        ([_, schema]) => {
-          if (!(schema instanceof ZodObject)) return false;
-
-          // Get the expected keys from the schema
-          const schemaKeys = new Set(Object.keys(schema.shape));
-          // Get the keys from defaultValues
-          const valueKeys = new Set(Object.keys(defaultValues));
-
-          // Check if the keys match
-          return (
-            [...schemaKeys].every((key) => valueKeys.has(key)) &&
-            [...valueKeys].every((key) => schemaKeys.has(key))
-          );
-        },
-      );
-
-      return matchingComponent ? (matchingComponent[0] as ComponentKey) : null;
-    });
+}: AddCardFormProps<K>) {
+  const [selectedComponent, setSelectedComponent] = useState<
+    ComponentKey | undefined
+  >(defaultValues?.component);
 
   // Dynamically create the form schema based on the selected component
-  const getFormSchema = (component: ComponentKey | null) => {
+  const getFormSchema = (component: ComponentKey | undefined) => {
     if (!component) return basePanelSchema;
     const schema = componentSchemas[component];
     // if schema is an empty object, don’t add `params`
@@ -100,11 +82,13 @@ export function AddCardForm({
   };
 
   const form = useForm<z.infer<ReturnType<typeof getFormSchema>>>({
-    resolver: zodResolver(getFormSchema(selectedComponent)),
+    resolver: zodResolver(getFormSchema("booleanTable")),
     defaultValues: {
       id: crypto.randomUUID(),
-      ...defaultValues,
-    },
+      component: defaultValues?.component,
+      title: defaultValues?.title,
+      params: { ...defaultValues?.values },
+    } as any as z.infer<ReturnType<typeof getFormSchema>>,
   });
 
   // Render form fields based on the schema
@@ -218,15 +202,15 @@ export function AddCardForm({
   return (
     <Form {...form}>
       <form
+        id="AddCardForm"
         onSubmit={form.handleSubmit((data) => {
+          console.log(selectedComponent);
           if (selectedComponent) {
-            onSubmit(
-              {
-                ...data,
-                component: selectedComponent,
-              } as AddPanelConfig<typeof selectedComponent>,
-              close,
-            );
+            onSubmit({
+              ...data,
+              component: selectedComponent,
+            } as AddPanelConfig<typeof selectedComponent>);
+            close();
           }
         })}
         className="space-y-4"
@@ -238,6 +222,7 @@ export function AddCardForm({
             <FormItem>
               <FormLabel>Component Type</FormLabel>
               <Select
+                value={field.value}
                 onValueChange={(value: ComponentKey) => {
                   field.onChange(value);
                   setSelectedComponent(value);
@@ -280,6 +265,8 @@ export function AddCardForm({
           )}
         />
 
+        <Separator />
+
         {selectedComponent &&
           !isEmptyObjectSchema(componentSchemas[selectedComponent]) && (
             <div className="space-y-4">
@@ -293,10 +280,6 @@ export function AddCardForm({
               ])}
             </div>
           )}
-
-        <div className="flex w-full items-end justify-end">
-          <Button type="submit">Add Panel</Button>
-        </div>
       </form>
     </Form>
   );
