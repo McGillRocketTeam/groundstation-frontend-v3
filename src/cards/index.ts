@@ -8,6 +8,7 @@ import { PacketHistoryCard } from "./packetHistory/PacketHistoryCard";
 import { PIDCard } from "./pid/PIDCard";
 import { withWrapper } from "./CardWrapper";
 import { BooleanTableCard } from "./booleanTable/BooleanTableCard";
+import { SerialTerminalCard } from "./serialTerminal/SerialTerminal";
 
 export * from "./types";
 export * from "./schemas";
@@ -21,6 +22,7 @@ const internalComponents: ComponentMap = {
   parameterTable: ParameterTableCard,
   pid: PIDCard,
   connectedDevices: ConnectedDevicesCard,
+  serialTerminal: SerialTerminalCard,
 };
 
 export const components = Object.fromEntries(

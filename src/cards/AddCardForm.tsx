@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { boolean, z, ZodObject } from "zod";
+import { z, ZodObject } from "zod";
 import {
   Form,
   FormControl,
@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   componentSchemas,
   ComponentKey,
@@ -33,6 +32,8 @@ import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
+import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
+import { yamcs } from "@/lib/yamcsClient/api";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -82,7 +83,7 @@ export function AddCardForm<K extends ComponentKey>({
   };
 
   const form = useForm<z.infer<ReturnType<typeof getFormSchema>>>({
-    resolver: zodResolver(getFormSchema("booleanTable")),
+    resolver: zodResolver(getFormSchema(selectedComponent)),
     defaultValues: {
       id: crypto.randomUUID(),
       component: defaultValues?.component,
@@ -137,6 +138,24 @@ export function AddCardForm<K extends ComponentKey>({
                             ),
                           );
                         }}
+                      />
+                    );
+                    // Array of Data Links
+                  } else if (
+                    value instanceof z.ZodArray &&
+                    value.element instanceof z.ZodBranded &&
+                    value.element._def.type instanceof z.ZodString &&
+                    value.element.description === "QualifiedDataLinkName"
+                  ) {
+                    // i wantt to fetch some data in here to be used as select options
+                    return (
+                      <AsyncMultiSelect
+                        optionsFn={async () => {
+                          const links = await yamcs.getLinks("gs_backend");
+                          return links.map((link) => link.name);
+                        }}
+                        selected={field.value || []}
+                        onChange={field.onChange}
                       />
                     );
                     // Array of Booleans
@@ -204,7 +223,6 @@ export function AddCardForm<K extends ComponentKey>({
       <form
         id="AddCardForm"
         onSubmit={form.handleSubmit((data) => {
-          console.log(selectedComponent);
           if (selectedComponent) {
             onSubmit({
               ...data,

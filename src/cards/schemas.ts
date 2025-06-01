@@ -6,6 +6,7 @@ import { connectedDevicesSchema } from "./connectedDevices/schema";
 import { packetHistorySchema } from "./packetHistory/schema";
 import { pidSchema } from "./pid/schema";
 import { booleanTableSchema } from "./booleanTable/schema";
+import { serialTerminalSchema } from "./serialTerminal/schema";
 
 export const componentSchemas = {
   booleanTable: booleanTableSchema,
@@ -16,4 +17,5 @@ export const componentSchemas = {
   parameterTable: parameterTableSchema,
   pid: pidSchema,
   connectedDevices: connectedDevicesSchema,
+  serialTerminal: serialTerminalSchema,
 } as const;
