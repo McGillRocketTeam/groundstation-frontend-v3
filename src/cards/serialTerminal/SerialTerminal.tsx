@@ -25,7 +25,7 @@ export const SerialTerminalCard = ({
   const [autoScroll, setAutoScroll] = useState(true);
   const [newMessagesCount, setNewMessagesCount] = useState(0);
 
-  const [activeLinks, setActiveLinks] = useState<Record<string, boolean>>(
+  const [activeLinks] = useState<Record<string, boolean>>(
     params.connections.reduce(
       (acc, currentString) => {
         acc[currentString] = true;
