@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import {
   DotsHorizontalIcon,
   GearIcon,
@@ -22,6 +22,7 @@ import {
 } from "@radix-ui/react-icons";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -47,7 +48,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={false}>
+                <SidebarMenuButton asChild isActive={location.pathname == "/"}>
                   <Link
                     className="flex flex-row justify-between items-center"
                     to="/"
@@ -62,10 +63,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>{" "}
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenuButton asChild>
+        <SidebarMenuButton isActive={location.pathname == "/settings"} asChild>
           <Link className="flex flex-row items-center gap-2" to="settings">
             <GearIcon />
             Settings

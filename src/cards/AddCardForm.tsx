@@ -22,11 +22,18 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { componentSchemas, ComponentKey, AddPanelConfig } from "@/cards";
+import {
+  componentSchemas,
+  ComponentKey,
+  AddPanelConfig,
+  ComponentParams,
+} from "@/cards";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Separator } from "@/components/ui/separator";
+import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
+import { yamcs } from "@/lib/yamcsClient/api";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -43,16 +50,29 @@ const basePanelSchema = z.object({
     .optional(),
 });
 
-type AddCardFormProps = {
-  onSubmit: <T extends ComponentKey>(config: AddPanelConfig<T>) => void;
-};
+interface DefaultValueProps<K extends ComponentKey> {
+  component: K;
+  title: string;
+  values: ComponentParams[K];
+}
 
-export function AddCardForm({ onSubmit }: AddCardFormProps) {
-  const [selectedComponent, setSelectedComponent] =
-    useState<ComponentKey | null>(null);
+export interface AddCardFormProps<K extends ComponentKey> {
+  onSubmit: <T extends ComponentKey>(config: AddPanelConfig<T>) => void;
+  defaultValues?: DefaultValueProps<K>;
+  close: () => void;
+}
+
+export function AddCardForm<K extends ComponentKey>({
+  onSubmit,
+  defaultValues,
+  close,
+}: AddCardFormProps<K>) {
+  const [selectedComponent, setSelectedComponent] = useState<
+    ComponentKey | undefined
+  >(defaultValues?.component);
 
   // Dynamically create the form schema based on the selected component
-  const getFormSchema = (component: ComponentKey | null) => {
+  const getFormSchema = (component: ComponentKey | undefined) => {
     if (!component) return basePanelSchema;
     const schema = componentSchemas[component];
     // if schema is an empty object, don’t add `params`
@@ -66,7 +86,10 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
     resolver: zodResolver(getFormSchema(selectedComponent)),
     defaultValues: {
       id: crypto.randomUUID(),
-    },
+      component: defaultValues?.component,
+      title: defaultValues?.title,
+      params: { ...defaultValues?.values },
+    } as any as z.infer<ReturnType<typeof getFormSchema>>,
   });
 
   // Render form fields based on the schema
@@ -115,6 +138,24 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
                             ),
                           );
                         }}
+                      />
+                    );
+                    // Array of Data Links
+                  } else if (
+                    value instanceof z.ZodArray &&
+                    value.element instanceof z.ZodBranded &&
+                    value.element._def.type instanceof z.ZodString &&
+                    value.element.description === "QualifiedDataLinkName"
+                  ) {
+                    // i wantt to fetch some data in here to be used as select options
+                    return (
+                      <AsyncMultiSelect
+                        optionsFn={async () => {
+                          const links = await yamcs.getLinks("gs_backend");
+                          return links.map((link) => link.name);
+                        }}
+                        selected={field.value || []}
+                        onChange={field.onChange}
                       />
                     );
                     // Array of Booleans
@@ -180,12 +221,14 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
   return (
     <Form {...form}>
       <form
+        id="AddCardForm"
         onSubmit={form.handleSubmit((data) => {
           if (selectedComponent) {
             onSubmit({
               ...data,
               component: selectedComponent,
             } as AddPanelConfig<typeof selectedComponent>);
+            close();
           }
         })}
         className="space-y-4"
@@ -197,6 +240,7 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
             <FormItem>
               <FormLabel>Component Type</FormLabel>
               <Select
+                value={field.value}
                 onValueChange={(value: ComponentKey) => {
                   field.onChange(value);
                   setSelectedComponent(value);
@@ -239,6 +283,8 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
           )}
         />
 
+        <Separator />
+
         {selectedComponent &&
           !isEmptyObjectSchema(componentSchemas[selectedComponent]) && (
             <div className="space-y-4">
@@ -252,10 +298,6 @@ export function AddCardForm({ onSubmit }: AddCardFormProps) {
               ])}
             </div>
           )}
-
-        <div className="flex w-full items-end justify-end">
-          <Button type="submit">Add Panel</Button>
-        </div>
       </form>
     </Form>
   );

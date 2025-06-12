@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
-import { yamcs } from "@/lib/yamcsClient/api";
-import { Statistics, TmStatistics } from "@/lib/yamcsClient/lib/client";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+// import { useEffect, useState } from "react";
+// import { yamcs } from "@/lib/yamcsClient/api";
+// import { Statistics, TmStatistics } from "@/lib/yamcsClient/lib/client";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+//
+export const PacketHistoryCard = () => {
+  return <div className="grid place-items-center h-full">Work in Progress</div>;
+};
 
+/*
 export const PacketHistoryCard = () => {
   const [packets, setPackets] = useState<TmStatistics[]>([]);
   const listener = (time: Statistics) => {
-    setPackets(time.tmstats);
+    // setPackets(time.tmstats);
   };
+
   useEffect(() => {
     const subscription = yamcs.createTMStatisticsSubscription(
       {
@@ -56,3 +62,4 @@ export const PacketHistoryCard = () => {
     </Table>
   );
 };
+*/
