@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ArrowDownIcon } from "@radix-ui/react-icons";
 
 interface OutputLine {
   id: string;
@@ -136,16 +138,16 @@ export const SerialTerminalCard = ({
         ))}
         {!autoScroll && newMessagesCount > 0 && (
           <div className="absolute right-4 bottom-4 z-10">
-            <button
+            <Button
               onClick={() => {
                 setAutoScroll(true);
                 setNewMessagesCount(0);
                 messagesEndRef.current?.scrollIntoView();
               }}
-              className="bg-blue-500 text-white px-3 py-1 rounded shadow"
+              size="sm"
             >
-              {newMessagesCount.toLocaleString()} New Messages
-            </button>
+              {newMessagesCount.toLocaleString()} New Messages <ArrowDownIcon />
+            </Button>
           </div>
         )}
         <div ref={messagesEndRef} />
