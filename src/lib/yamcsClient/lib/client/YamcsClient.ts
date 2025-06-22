@@ -99,6 +99,9 @@ import {
   LinkSubscription,
   ListInstancesOptions,
   SubscribeLinksRequest,
+  SerialTerminalSubscription,
+  SubscribeSerialTerminalRequest,
+  SerialEvent,
 } from "./types/management";
 import {
   Algorithm,
@@ -1031,6 +1034,19 @@ export default class YamcsClient implements HttpHandler {
   ): LinkSubscription {
     return <LinkSubscription>(
       this.webSocketClient!.createSubscription("links", options, observer)
+    );
+  }
+
+  createSerialTerminalSubscription(
+    options: SubscribeSerialTerminalRequest,
+    observer: (serialEvent: SerialEvent) => void,
+  ): SerialTerminalSubscription {
+    return <SerialTerminalSubscription>(
+      this.webSocketClient!.createSubscription(
+        "serial_terminal",
+        options,
+        observer,
+      )
     );
   }
 

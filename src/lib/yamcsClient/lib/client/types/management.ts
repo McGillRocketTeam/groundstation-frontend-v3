@@ -13,6 +13,11 @@ export interface CreateInstanceRequest {
   labels?: { [key: string]: string };
 }
 
+export interface SerialEvent {
+  link: string;
+  message: string;
+}
+
 export interface LinkEvent {
   type: string;
   links: Link[];
@@ -48,7 +53,16 @@ export interface SubscribeLinksRequest {
   instance: string;
 }
 
+export interface SubscribeSerialTerminalRequest {
+  dataLinks: string[];
+}
+
 export type LinkStatus = "OK" | "UNAVAIL" | "DISABLED" | "FAILED";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type InstancesSubscription = WebSocketCall<{}, Instance>;
 export type LinkSubscription = WebSocketCall<SubscribeLinksRequest, LinkEvent>;
+export type SerialTerminalSubscription = WebSocketCall<
+  SubscribeSerialTerminalRequest,
+  SerialEvent
+>;
