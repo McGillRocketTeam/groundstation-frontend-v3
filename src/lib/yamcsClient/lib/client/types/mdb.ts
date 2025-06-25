@@ -143,7 +143,7 @@ export interface EnumerationAlarm {
 }
 
 export interface DataEncoding {
-  type: string;
+  type: "BINARY" | "BOOLEAN" | "FLOAT" | "INTEGER" | "STRING";
   littleEndian: boolean;
   sizeInBits: number;
   encoding: string;

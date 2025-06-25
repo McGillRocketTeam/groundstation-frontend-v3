@@ -20,7 +20,7 @@ export interface AutoForm {
   fields: AutoFormField[];
 }
 
-type AutoFormField =
+export type AutoFormField =
   | TextAutoFormField
   | NumberAutoFormField
   | DropdownAutoFormField;
@@ -106,6 +106,22 @@ export function AutoForm<T extends AutoForm>({
                             value={field.value}
                             onValueChange={field.onChange}
                             options={autoField.options}
+                          />
+                        );
+                      case "number":
+                        // right now this number still gets sent to the form
+                        // as a string, how can we cast it before sending it?
+                        return (
+                          <Input
+                            {...field}
+                            type="number"
+                            onChange={(e) => {
+                              const parsed =
+                                e.target.value === ""
+                                  ? undefined
+                                  : Number(e.target.value);
+                              field.onChange(parsed);
+                            }}
                           />
                         );
                       default:

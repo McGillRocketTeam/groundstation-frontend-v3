@@ -3,60 +3,32 @@ import { CommandButtonTableCardParams } from "./schema";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { useQuery } from "@tanstack/react-query";
 import { AutoForm } from "@/form/AutoForm";
-import { z } from "zod";
+import { commandToAutoForm } from "@/lib/yamcsCommands/command-schema-parser";
 
 export const CommandButtonTableCard = ({
   params,
 }: IDockviewPanelProps<CommandButtonTableCardParams>) => {
-  // const { data } = useQuery({
-  //   queryKey: ["yamcs:commands"],
-  //   queryFn: async () => await yamcs.getCommands("gs_backend"),
-  // });
-  //
-  // if (!data) {
-  //   return (
-  //     <div className="grid w-full h-full place-items-center">
-  //       No Commands Found
-  //     </div>
-  //   );
-  // }
-  //
-  // return (
-  //   <div className="overflow-y-scroll w-full h-full">
-  //     <pre>{JSON.stringify(data.commands, undefined, 2)}</pre>
-  //   </div>
-  // );
-  //
+  const { data } = useQuery({
+    queryKey: ["yamcs:commands"],
+    queryFn: async () =>
+      await yamcs.getCommand("gs_backend", "/LabJackT7/write_digital_pin"),
+    // await yamcs.getCommands("gs_backend"),
+  });
+
+  if (!data) {
+    return (
+      <div className="grid w-full h-full place-items-center">
+        No Commands Found
+      </div>
+    );
+  }
+
   return (
-    <AutoForm
-      autoForm={{
-        fields: [
-          {
-            id: "name",
-            name: "Name",
-            element: "text",
-            schema: z.string(),
-          },
-          {
-            id: "age",
-            name: "Age",
-            element: "dropdown",
-            schema: z.number(),
-            hint: "Test hint",
-            options: [
-              {
-                name: "20",
-                value: 20,
-              },
-              {
-                name: "25",
-                value: 25,
-              },
-            ],
-          },
-        ] as const,
-      }}
-      onSubmit={(values) => console.log(values)}
-    />
+    <div className="overflow-y-scroll w-full h-full p-4">
+      <AutoForm
+        autoForm={commandToAutoForm(data)!}
+        onSubmit={(values) => console.log(values)}
+      />
+    </div>
   );
 };
