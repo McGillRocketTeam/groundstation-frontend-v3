@@ -12,7 +12,6 @@ import RightComponent from "./right-component";
 import { QualifiedParameterName } from "@/lib/schemas";
 import { useEffect, useState } from "react";
 import { initDockviewContainer } from "./initDockviewContainer";
-import { Button } from "@/components/ui/button";
 
 export default function DockviewLayout() {
   const [api, setApi] = useState<DockviewApi>();
@@ -121,13 +120,6 @@ export default function DockviewLayout() {
     <>
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <div id="dockview-container">
-          <Button
-            onClick={() => {
-              console.log(api?.toJSON());
-            }}
-          >
-            LOG
-          </Button>
           <DockviewReact
             className="dockview-theme-custom"
             onReady={onReady}

@@ -5,6 +5,11 @@ export const QualifiedParameterName = z
   .brand<"QualifiedParameterName">()
   .describe("QualifiedParameterName");
 
+export const QualifiedCommandName = z
+  .string()
+  .brand<"QualifiedCommandName">()
+  .describe("QualifiedCommandName");
+
 export const QualifiedDataLinkName = z
   .string()
   .brand<"QualifiedDataLinkName">()
