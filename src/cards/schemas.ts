@@ -7,10 +7,12 @@ import { pidSchema } from "./pid/schema";
 import { booleanTableSchema } from "./booleanTable/schema";
 import { serialTerminalSchema } from "./serialTerminal/schema";
 import { commandButtonTableSchema } from "./commandButtonTable/schema";
+import { commandButtonSchema } from "./commandButton/schema";
 
 export const componentSchemas = {
   booleanTable: booleanTableSchema,
   command: commandSchema,
+  commandButton: commandButtonSchema,
   commandButtonTable: commandButtonTableSchema,
   chart: chartSchema,
   packetHistory: packetHistorySchema,

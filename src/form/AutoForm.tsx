@@ -69,6 +69,7 @@ export function AutoForm<T extends AutoForm>({
   autoForm: T;
   onSubmit: (values: ExtractAutoFormResult<T>) => void;
 }) {
+  const id = crypto.randomUUID();
   const formSchema = extractAutoFormSchema(autoForm);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,15 +79,19 @@ export function AutoForm<T extends AutoForm>({
   return (
     <Form {...form}>
       <form
-        onSubmit={
+        id={id}
+        onSubmit={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
           // @ts-expect-error we lose a bit of type information when converting
           // to schema for the form but it's ok here
-          form.handleSubmit(onSubmit)
-        }
+          form.handleSubmit(onSubmit)();
+        }}
         className="space-y-8"
       >
         {autoForm.fields.map((autoField) => (
           <FormField
+            key={autoField.id}
             control={form.control}
             name={autoField.id}
             render={({ field }) => (
@@ -137,7 +142,9 @@ export function AutoForm<T extends AutoForm>({
             )}
           />
         ))}
-        <Button type="submit">Submit</Button>
+        <Button form={id} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

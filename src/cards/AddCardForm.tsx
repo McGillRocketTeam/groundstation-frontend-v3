@@ -34,6 +34,7 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
 import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
 import { yamcs } from "@/lib/yamcsClient/api";
+import { CommandButtonArraySelector } from "@/components/form/CommandButtonArraySelector";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -122,8 +123,29 @@ export function AddCardForm<K extends ComponentKey>({
               </FormLabel>
               <FormControl>
                 {(() => {
-                  // Parameter Array Selector
+                  // Command Button  Selector
                   if (
+                    value instanceof z.ZodObject &&
+                    value.description === "CommandConfiguration"
+                  ) {
+                    return <div>HELLO WORLD</div>;
+                  }
+                  // Command Button Array Selector
+                  else if (
+                    value instanceof z.ZodArray &&
+                    value.element.description === "CommandConfiguration"
+                  ) {
+                    return (
+                      <CommandButtonArraySelector
+                        commands={field.value}
+                        onCommandsChange={(value) => {
+                          field.onChange(value);
+                        }}
+                      />
+                    );
+                  }
+                  // Parameter Array Selector
+                  else if (
                     value instanceof z.ZodArray &&
                     value.element instanceof z.ZodBranded &&
                     value.element._def.type instanceof z.ZodString &&
@@ -147,7 +169,6 @@ export function AddCardForm<K extends ComponentKey>({
                     value.element._def.type instanceof z.ZodString &&
                     value.element.description === "QualifiedDataLinkName"
                   ) {
-                    // i wantt to fetch some data in here to be used as select options
                     return (
                       <AsyncMultiSelect
                         optionsFn={async () => {
