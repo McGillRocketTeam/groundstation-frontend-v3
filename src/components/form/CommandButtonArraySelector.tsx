@@ -81,7 +81,7 @@ export function CommandButtonArraySelector({
             <TableRow>
               <TableHead>Label</TableHead>
               <TableHead>Command</TableHead>
-              <TableHead className="text-right">Delay</TableHead>
+              <TableHead className="text-right">Delay (s)</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -140,11 +140,23 @@ export function CommandButtonArraySelector({
                   )}
                 </TableCell>
                 <TableCell className="text-right align-top">
-                  {command.confirmationTime ? (
-                    <span>{command.confirmationTime.toLocaleString()}s</span>
-                  ) : (
-                    <span>None</span>
-                  )}
+                  <input
+                    className="focus:outline-none w-full text-right"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    placeholder="None"
+                    value={command.confirmationTime ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const confirmationTime =
+                        value === "" ? undefined : parseFloat(value);
+                      const updatedCommands = commands.map((cmd, i) =>
+                        i === index ? { ...cmd, confirmationTime } : cmd,
+                      );
+                      onCommandsChange(updatedCommands);
+                    }}
+                  />
                 </TableCell>
                 <TableCell className="grid place-items-center">
                   <button

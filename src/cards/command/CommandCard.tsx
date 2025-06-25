@@ -35,6 +35,7 @@ export const CommandCard = () => {
 
   useEffect(() => {
     const listener = (entry: CommandHistoryEntry) => {
+      console.log("GOT ENTRY", entry);
       setHistoryRecords((prevRecords) => {
         const existingIndex = prevRecords.findIndex((r) => r.id === entry.id);
         if (existingIndex === -1) {
@@ -83,6 +84,7 @@ export const CommandCard = () => {
     );
 
     return () => {
+      console.log("UNSUBBING");
       subscription.removeMessageListener(listener);
     };
   }, []);

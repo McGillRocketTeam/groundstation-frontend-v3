@@ -8,7 +8,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { yamcs } from "@/lib/yamcsClient/api";
-import { SerialEvent } from "@/lib/yamcsClient/lib/client";
+import {
+  SerialEvent,
+  SerialTerminalSubscription,
+} from "@/lib/yamcsClient/lib/client";
 
 interface OutputLine {
   id: string;
