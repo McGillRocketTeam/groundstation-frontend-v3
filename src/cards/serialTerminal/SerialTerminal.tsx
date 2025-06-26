@@ -154,7 +154,7 @@ export const SerialTerminalCard = ({
     <div className="flex flex-col h-full">
       <div className="shrink-0 p-2 flex flex-row gap-4">
         {Object.keys(activeLinks).map((link) => (
-          <div className="flex items-start gap-1">
+          <div key={link} className="flex items-start gap-1">
             <Checkbox checked={activeLinks[link]} id={`${link}-toggle`} />
             <Label htmlFor={`${link}-toggle`}>{link}</Label>
           </div>
