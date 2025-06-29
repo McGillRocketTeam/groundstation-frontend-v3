@@ -15,4 +15,14 @@ export const QualifiedDataLinkName = z
   .brand<"QualifiedDataLinkName">()
   .describe("QualifiedDataLinkName");
 
+export const commandConfigurationSchema = z
+  .object({
+    qualifiedName: QualifiedParameterName,
+    label: z.string(),
+    confirmationTime: z.number().optional(),
+    arguments: z.record(z.string(), z.any()).optional(),
+  })
+  .describe("CommandConfiguration");
+
+export type CommandConfiguration = z.infer<typeof commandConfigurationSchema>;
 export type QualifiedParameterNameType = z.infer<typeof QualifiedParameterName>;

@@ -1,4 +1,4 @@
-import { CommandConfiguration } from "@/cards/commandButton/schema";
+import { CommandConfiguration } from "@/lib/schemas";
 import { Combobox } from "@/form/components/combobox";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { useQuery } from "@tanstack/react-query";
@@ -6,9 +6,6 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Command } from "@/lib/yamcsClient/lib/client";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { AutoForm } from "@/form/AutoForm";
-import { commandToAutoForm } from "@/lib/yamcsCommands/command-schema-parser";
-import { z } from "zod";
 
 export function CommandButtonSelector({
   // children,

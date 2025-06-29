@@ -2,7 +2,7 @@ import { IDockviewPanelProps } from "dockview-react";
 import { CommandButtonTableCardParams } from "./schema";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { CommandConfiguration } from "../commandButton/schema";
+import { CommandConfiguration } from "@/lib/schemas";
 import { useState, useRef, useCallback } from "react";
 import { cn, getPairedQualifiedName } from "@/lib/utils";
 import { yamcs } from "@/lib/yamcsClient/api";

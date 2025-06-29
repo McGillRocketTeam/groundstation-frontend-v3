@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { commandConfigurationSchema } from "../commandButton/schema";
+import { commandConfigurationSchema } from "@/lib/schemas";
 
 export const commandButtonTableSchema = z
   .object({ commands: z.array(commandConfigurationSchema) })
