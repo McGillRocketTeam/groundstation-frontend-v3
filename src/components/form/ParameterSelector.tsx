@@ -16,6 +16,7 @@ import {
 import { yamcs } from "@/lib/yamcsClient/api";
 import { ReactNode, useState } from "react";
 import { Parameter } from "@/lib/yamcsClient/lib/client";
+import { anonymizeParameter } from "@/lib/yamcsCommands/format-command-name";
 
 type ParameterSelectorProps = {
   children: ReactNode;
@@ -34,7 +35,9 @@ export function ParameterSelector({
   const { data } = useQuery({
     queryKey: ["parameters"],
     queryFn: async () => {
-      return await yamcs.getParameters("gs_backend", { limit: 1000 });
+      return (
+        await yamcs.getParameters("gs_backend", { limit: 1000 })
+      ).parameters?.filter((p) => !p.qualifiedName.includes("903"));
     },
   });
 
@@ -43,7 +46,7 @@ export function ParameterSelector({
 
   // Filter parameters
   const filteredParameters =
-    data?.parameters?.filter((p) => !excluded.has(p.qualifiedName)) ?? [];
+    data?.filter((p) => !excluded.has(p.qualifiedName)) ?? [];
 
   return (
     <Popover modal open={open} onOpenChange={setOpen}>
@@ -63,7 +66,7 @@ export function ParameterSelector({
                     setOpen(false);
                   }}
                 >
-                  {parameter.qualifiedName}
+                  {anonymizeParameter(parameter.qualifiedName)}
                 </CommandItem>
               ))}
             </CommandGroup>
