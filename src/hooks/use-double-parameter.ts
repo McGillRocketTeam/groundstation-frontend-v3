@@ -5,6 +5,7 @@ import {
   SubscribedParameterInfo,
 } from "@/lib/yamcsClient/lib/client";
 import { useParameterSubscription } from "./use-parameter";
+import { getPairedQualifiedName } from "@/lib/utils";
 
 // Type helpers to determine if a parameter is a FlightComputer parameter
 type IsFlightComputerParam<T extends string> =
@@ -38,18 +39,6 @@ type ParameterInfoResult<T extends string> =
 export function useDoubleParameterSubscription<
   const T extends readonly QualifiedParameterNameType[],
 >(parameters: T | undefined) {
-  // Helper function to get the paired parameter
-  const getPairedParameter = (param: string): string | null => {
-    if (!param.includes("/FlightComputer/")) return null;
-
-    if (param.includes("/FC433/")) {
-      return param.replace("/FC433/", "/FC903/");
-    } else if (param.includes("/FC903/")) {
-      return param.replace("/FC903/", "/FC433/");
-    }
-    return null;
-  };
-
   // Generate the full subscription list including pairs
   const subscriptionParameters = useMemo(() => {
     if (!parameters) return undefined;
@@ -61,7 +50,7 @@ export function useDoubleParameterSubscription<
       paramSet.add(param);
 
       // Only add the pair if it's not already in the input
-      const paired = getPairedParameter(param);
+      const paired = getPairedQualifiedName(param);
       if (paired && !inputParams.has(paired as QualifiedParameterNameType)) {
         paramSet.add(paired);
       }

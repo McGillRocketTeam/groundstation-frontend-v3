@@ -6,6 +6,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Helper function to get the paired parameter
+export function getPairedQualifiedName(param: string): string | null {
+  if (!param.includes("/FlightComputer/")) return null;
+
+  if (param.includes("/FC433/")) {
+    return param.replace("/FC433/", "/FC903/");
+  } else if (param.includes("/FC903/")) {
+    return param.replace("/FC903/", "/FC433/");
+  }
+  return null;
+}
+
 export function extractValue(value: Value) {
   switch (value.type) {
     case "AGGREGATE":

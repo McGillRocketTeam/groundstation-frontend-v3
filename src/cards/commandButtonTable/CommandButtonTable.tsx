@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { CommandConfiguration } from "../commandButton/schema";
 import { useState, useRef, useCallback } from "react";
-import { cn } from "@/lib/utils";
+import { cn, getPairedQualifiedName } from "@/lib/utils";
 import { yamcs } from "@/lib/yamcsClient/api";
 
 export const CommandButtonTableCard = ({
@@ -16,8 +16,15 @@ export const CommandButtonTableCard = ({
   const timersRef = useRef<Record<string, NodeJS.Timeout>>({});
   const intervalsRef = useRef<Record<string, NodeJS.Timeout>>({});
 
-  function sendCommand(command: CommandConfiguration) {
-    console.log(command.arguments);
+  async function sendCommand(command: CommandConfiguration) {
+    // Issue to the mirroring flight computer, if this is an FC Command
+    const pairedComamnd = getPairedQualifiedName(command.qualifiedName);
+    if (pairedComamnd) {
+      await yamcs.issueCommand("gs_backend", "realtime", pairedComamnd, {
+        args: command.arguments,
+      });
+    }
+
     yamcs.issueCommand("gs_backend", "realtime", command.qualifiedName, {
       args: command.arguments,
     });
