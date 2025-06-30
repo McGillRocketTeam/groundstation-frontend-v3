@@ -1,54 +1,30 @@
-# React + TypeScript + Vite
+<p align="center">
+<img width="453.5" height="106" src="https://github.com/user-attachments/assets/492e0801-303b-44c7-af09-7ca4deaad613">
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+# Ground Station GUI — Version 3
+This is a basic React application built with Vite. It is a single page app that is served by the ground station computer, which also runs the backend server. It communicates with the backend via the [Yamcs HTTP API](https://docs.yamcs.org/yamcs-http-api/).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Card Architecture
+The UI is made up of cards that can be configured by the user to meet their needs. For this reason, the entire UI is very modular, focusing on the functionality of individual cards. The general structure of a card is the following, with one folder per card:
+```
+cards/exampleCard/
+        ├── ExampleCard.tsx
+        └── schema.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`ExampleCard.tsx` defines the markup that will be used to actually render the card — this is all of the react functionality. 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+`schema.ts` is what defines the input parameters for the card. Usually cards will need some sort of input, i.e. a parameter to display or command to send. Here, you can define a js object with [Zod](https://zod.dev/) and it will then be used to generate both a form for creating the card and the necessary types for the React component.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Getting Started
+
+```bash
+git clone https://github.com/McGillRocketTeam/groundstation-frontend-v3
+cd groundstation-frontend-v3
+npm install
+npm run dev
 ```
+This will get the frontend React app running but most functionality will not work without running [the backend](https://github.com/McGillRocketTeam/groundstation-backend-2025) as well.
