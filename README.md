@@ -1,5 +1,5 @@
 <p align="center">
-<img width="453.5" height="106" src="https://github.com/user-attachments/assets/492e0801-303b-44c7-af09-7ca4deaad613">
+<img width="453.5" height="106" src="public/av-logo.svg">
 </p>
 
 ---
