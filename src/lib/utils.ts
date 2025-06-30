@@ -50,3 +50,36 @@ export function extractValue(value: Value) {
       return Number(value.uint64Value);
   }
 }
+
+export function extractNumberValue(value: Value) {
+  switch (value.type) {
+    case "AGGREGATE":
+      return null;
+    case "ARRAY":
+      return null;
+    case "BINARY":
+      return null;
+    case "BOOLEAN":
+      return null;
+    case "DOUBLE":
+      return value.doubleValue;
+    case "ENUMERATED":
+      return null;
+    case "FLOAT":
+      return value.floatValue;
+    case "NONE":
+      return null;
+    case "SINT32":
+      return value.sint32Value;
+    case "SINT64":
+      return value.sint64Value;
+    case "STRING":
+      return null;
+    case "TIMESTAMP":
+      return null;
+    case "UINT32":
+      return value.uint32Value;
+    case "UINT64":
+      return value.uint64Value;
+  }
+}

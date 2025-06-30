@@ -67,7 +67,7 @@ export function ParameterArraySelector({
         <TableRow>
           <TableCell className="p-0" colSpan={3}>
             <ParameterSelector
-              filterOut={selectedParameters}
+              filterOut={selectedParameters.map((p) => p.qualifiedName)}
               onSelect={(p) => setSelectedParameters((prior) => [...prior, p])}
               asChild
             >

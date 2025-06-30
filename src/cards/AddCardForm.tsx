@@ -35,6 +35,8 @@ import { Separator } from "@/components/ui/separator";
 import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { CommandButtonArraySelector } from "@/components/form/CommandButtonArraySelector";
+import { ChartSeriesSelector } from "@/components/form/ChartSeriesSelector";
+import { Switch } from "@/components/ui/switch";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -162,6 +164,18 @@ export function AddCardForm<K extends ComponentKey>({
                         }}
                       />
                     );
+                  } else if (
+                    value instanceof z.ZodArray &&
+                    value.element.description === "ChartSeries"
+                  ) {
+                    return (
+                      <ChartSeriesSelector
+                        series={field.value}
+                        onSeriesChange={(value) => {
+                          field.onChange(value);
+                        }}
+                      />
+                    );
                     // Array of Data Links
                   } else if (
                     value instanceof z.ZodArray &&
@@ -196,11 +210,19 @@ export function AddCardForm<K extends ComponentKey>({
                       />
                     );
                     // Number Input
-                  } else if (value instanceof z.ZodNumber) {
+                  } else if (
+                    value instanceof z.ZodNumber ||
+                    (value instanceof z.ZodDefault &&
+                      value._def.innerType instanceof z.ZodNumber)
+                  ) {
                     return (
                       <Input
                         type="number"
                         {...field}
+                        defaultValue={
+                          value instanceof z.ZodDefault &&
+                          value._def.defaultValue()
+                        }
                         onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     );
@@ -224,6 +246,24 @@ export function AddCardForm<K extends ComponentKey>({
                           )}
                         </SelectContent>
                       </Select>
+                    );
+                    // Boolean Input
+                  } else if (
+                    value instanceof z.ZodBoolean ||
+                    (value instanceof z.ZodDefault &&
+                      value._def.innerType instanceof z.ZodBoolean)
+                  ) {
+                    return (
+                      <div>
+                        <Switch
+                          defaultChecked={
+                            value instanceof z.ZodDefault &&
+                            value._def.defaultValue()
+                          }
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
                     );
                     // Default Input
                   } else {
