@@ -21,7 +21,7 @@ import { anonymizeParameter } from "@/lib/yamcsCommands/format-command-name";
 type ParameterSelectorProps = {
   children: ReactNode;
   onSelect: (parameter: Parameter) => void;
-  filterOut?: Parameter[];
+  filterOut?: string[];
   asChild?: boolean;
 };
 
@@ -37,12 +37,12 @@ export function ParameterSelector({
     queryFn: async () => {
       return (
         await yamcs.getParameters("gs_backend", { limit: 1000 })
-      ).parameters?.filter((p) => !p.qualifiedName.includes("903"));
+      ).parameters?.filter((p) => !p.qualifiedName.includes("433"));
     },
   });
 
   // Create a Set for fast lookup of excluded qualifiedNames
-  const excluded = new Set(filterOut.map((p) => p.qualifiedName));
+  const excluded = new Set(filterOut);
 
   // Filter parameters
   const filteredParameters =

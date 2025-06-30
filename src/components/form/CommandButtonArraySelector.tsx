@@ -1,4 +1,4 @@
-import { CommandConfiguration } from "@/cards/commandButton/schema";
+import { CommandConfiguration } from "@/lib/schemas";
 import {
   Table,
   TableBody,
