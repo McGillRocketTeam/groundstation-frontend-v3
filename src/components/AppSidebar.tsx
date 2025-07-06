@@ -53,10 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     className="flex flex-row justify-between items-center"
                     to="/"
                   >
-                    <div className="flex flex-row items-center gap-2">
-                      <HomeIcon />
-                      Home
-                    </div>
+                    <div className="flex flex-row items-center gap-2">Home</div>
                     <DotsHorizontalIcon />
                   </Link>
                 </SidebarMenuButton>
@@ -68,7 +65,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarMenuButton isActive={location.pathname == "/settings"} asChild>
           <Link className="flex flex-row items-center gap-2" to="settings">
-            <GearIcon />
             Settings
           </Link>
         </SidebarMenuButton>

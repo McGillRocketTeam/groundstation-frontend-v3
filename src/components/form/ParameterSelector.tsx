@@ -22,6 +22,7 @@ type ParameterSelectorProps = {
   children: ReactNode;
   onSelect: (parameter: Parameter) => void;
   filterOut?: string[];
+  filter?: (value: Parameter, index: number, array: Parameter[]) => unknown;
   asChild?: boolean;
 };
 
@@ -29,6 +30,7 @@ export function ParameterSelector({
   children,
   onSelect,
   filterOut = [],
+  filter,
   asChild,
 }: ParameterSelectorProps) {
   const [open, setOpen] = useState(false);
@@ -45,8 +47,11 @@ export function ParameterSelector({
   const excluded = new Set(filterOut);
 
   // Filter parameters
-  const filteredParameters =
-    data?.filter((p) => !excluded.has(p.qualifiedName)) ?? [];
+  let filteredParameters = data?.filter((p) => !excluded.has(p.qualifiedName));
+
+  if (filter) {
+    filteredParameters = filteredParameters?.filter(filter);
+  }
 
   return (
     <Popover modal open={open} onOpenChange={setOpen}>
@@ -57,7 +62,7 @@ export function ParameterSelector({
           <CommandList>
             <CommandEmpty>No parameter found.</CommandEmpty>
             <CommandGroup>
-              {filteredParameters.map((parameter) => (
+              {(filteredParameters ?? []).map((parameter) => (
                 <CommandItem
                   key={parameter.qualifiedName}
                   value={parameter.qualifiedName}

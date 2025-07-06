@@ -19,3 +19,11 @@ export function formatCommandName(name: string) {
 export function anonymizeParameter(name: string) {
   return name.includes("FlightComputer") ? name.substring(6) : name;
 }
+
+export function getSiblingParameter(name: string) {
+  if (!name.includes("/FlightComputer/")) return undefined;
+
+  return name.includes("FC433")
+    ? name.replace("433", "903")
+    : name.replace("903", "433");
+}
