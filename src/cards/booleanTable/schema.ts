@@ -6,15 +6,7 @@ export const booleanTableSchema = z
       .array(
         z
           .enum([
-            "drogueEmatch",
-            "drogueValve",
-            "main",
-            "nitroFill",
-            "mov",
-            "fdovNC",
-            "fdovNO",
-            "vent",
-            "pressurant",
+            "run_armed"
           ])
           .describe("BooleanParameter"),
       )
