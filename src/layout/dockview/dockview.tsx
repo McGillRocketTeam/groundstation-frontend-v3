@@ -47,9 +47,11 @@ export default function DockviewLayout() {
     if (dashboard) {
       event.api.fromJSON(dashboard.dockview);
     } else {
-      console.error(
-        `Dashboard not found for slug ${location.pathname.substring(1)}`,
-      );
+      event.api.addPanel({
+        id: "default",
+        component: "pid",
+      });
+      console.error(`Dashboard not found for slug ${location.pathname}`);
     }
   };
 
