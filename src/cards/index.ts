@@ -9,6 +9,7 @@ import { withWrapper } from "./CardWrapper";
 import { BooleanTableCard } from "./booleanTable/BooleanTableCard";
 import { SerialTerminalCard } from "./serialTerminal/SerialTerminal";
 import { CommandButtonTableCard } from "./commandButtonTable/CommandButtonTable";
+import { MapCard } from "./map/MapCard";
 
 export * from "./types";
 export * from "./schemas";
@@ -18,6 +19,7 @@ const internalComponents: ComponentMap = {
   command: CommandCard,
   commandButtonTable: CommandButtonTableCard,
   chart: ChartCard,
+  map: MapCard,
   packetHistory: PacketHistoryCard,
   parameterTable: ParameterTableCard,
   pid: PIDCard,
