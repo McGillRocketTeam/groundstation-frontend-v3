@@ -58,7 +58,7 @@ export function useDygraphs(
 
   const debouncedProcessRealtimeDelivery = debounce(
     processRealtimeDelivery,
-    100,
+    10,
   );
 
   /**
@@ -390,7 +390,6 @@ export function useDygraphs(
     }
 
     const listener = (data: SubscribeParametersData) => {
-      // console.log("Listener received data from YAMCS subscription:", data);
 
       if (data.mapping) {
         idMapping.current = {
@@ -407,7 +406,8 @@ export function useDygraphs(
       }
 
       try {
-        debouncedProcessRealtimeDelivery(data.values);
+        processRealtimeDelivery(data.values)
+        // debouncedProcessRealtimeDelivery(data.values);
       } catch (error) {
         console.error("Error in processRealtimeDelivery:", error);
       }
