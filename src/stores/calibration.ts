@@ -4,7 +4,7 @@ import { Value } from "@/lib/yamcsClient/lib/client";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-interface Calibration {
+export interface Calibration {
   name: string;
   multiplier: number;
   offset: number;

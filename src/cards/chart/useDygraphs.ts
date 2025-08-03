@@ -13,7 +13,6 @@ import {
 import { CustomBarsValue, DySample, DySeries } from "./dygraphs";
 import { extractNumberValue } from "@/lib/utils";
 import { chartStore } from "@/stores/chart";
-import { debounce } from "lodash";
 
 const YAMCS_INSTANCE = "gs_backend";
 
@@ -56,10 +55,10 @@ export function useDygraphs(
   //const subscription = useRef<ParameterSubscription | null>(null);
   const realtimeView = useRef<boolean>(true);
 
-  const debouncedProcessRealtimeDelivery = debounce(
-    processRealtimeDelivery,
-    10,
-  );
+  // const debouncedProcessRealtimeDelivery = debounce(
+  //   processRealtimeDelivery,
+  //   10,
+  // );
 
   /**
    *  Adjusts x by zoomInPercentage
