@@ -9,6 +9,7 @@ import { cn, extractValue } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import CommandName from "@/components/command/CommandName";
 
 export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
   // const [showDialog, setShowDialog] = useState(false);
@@ -47,7 +48,10 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
     <div className="flex flex-col gap-4 text-sm">
       <div>
         <div className="font-semibold">Command</div>
-        <div>{cmd.commandName}</div>
+
+        <CommandName name={cmd.commandName} />
+
+        {/* Parameter Tree */}
         {cmd.userAssignments.length > 0 && (
           <div className="grid grid-cols-[1fr_1fr] pl-2">
             {cmd.userAssignments.map((assignment, index) => {
@@ -131,7 +135,7 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
         size="sm"
         // onClick={() => setShowDialog(true)}
       >
-        Resend Command
+        Resend Command (TODO)
       </Button>
     </div>
   );

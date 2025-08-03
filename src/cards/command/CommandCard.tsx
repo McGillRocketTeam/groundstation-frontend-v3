@@ -23,6 +23,7 @@ import { AcknowledgementIcon } from "./AcknowledgementIcon";
 import { useEffect, useState } from "react";
 import { CommandHistoryEntry } from "@/lib/yamcsClient/lib/client";
 import CommandDetail from "./CommandDetail";
+import CommandName from "@/components/command/CommandName";
 
 export const CommandCard = () => {
   const [searchText] = useState("");
@@ -82,6 +83,7 @@ export const CommandCard = () => {
     );
 
     return () => {
+      console.log("UNSUBBING");
       subscription.removeMessageListener(listener);
     };
   }, []);
@@ -117,7 +119,7 @@ export const CommandCard = () => {
                         <div className="text-muted-foreground">
                           {formatCmdDate(cmd.generationTime)}
                         </div>
-                        <div>{cmd.commandName}</div>
+                        <CommandName name={cmd.commandName} />
                       </TableCell>
 
                       <TableCell className="w-10">

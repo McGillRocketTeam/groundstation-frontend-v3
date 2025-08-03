@@ -143,7 +143,7 @@ export interface EnumerationAlarm {
 }
 
 export interface DataEncoding {
-  type: string;
+  type: "BINARY" | "BOOLEAN" | "FLOAT" | "INTEGER" | "STRING";
   littleEndian: boolean;
   sizeInBits: number;
   encoding: string;
@@ -184,7 +184,7 @@ export interface JavaExpressionCalibrator {
 export interface Command extends NameDescription {
   baseCommand?: Command;
   abstract: boolean;
-  argument: Argument[];
+  argument?: Argument[];
   argumentAssignment: ArgumentAssignment[];
   significance: Significance;
   effectiveSignificance: Significance;
@@ -225,23 +225,37 @@ export interface Argument {
   type: ArgumentType;
 }
 
-export interface ArgumentType {
-  engType: string;
+// TODO: There are many more argument types that can be defined, but they are not
+// used in the current command strucutre
+// See the docs here: https://docs.yamcs.org/yamcs-http-api/mdb/get-command/
+export type ArgumentType =
+  | EnumerationArgumentType
+  | IntegerArgumentType
+  | FloatArgumentType;
+
+interface BaseArgumentType {
+  name: string;
   dataEncoding: DataEncoding;
   unitSet: UnitInfo[];
+}
+
+interface EnumerationArgumentType extends BaseArgumentType {
+  engType: "enumeration";
   enumValue: EnumValue[];
+}
+
+interface IntegerArgumentType extends BaseArgumentType {
+  engType: "integer";
   signed?: boolean;
-  rangeMin?: number;
-  rangeMax?: number;
-  minChars?: number;
-  maxChars?: number;
-  minBytes?: number;
-  maxBytes?: number;
-  member?: ArgumentMember[];
-  zeroStringValue?: string;
-  oneStringValue?: string;
-  dimensions?: ArgumentDimension[];
-  elementType?: ArgumentType;
+  rangeMin: number;
+  rangeMax: number;
+}
+
+interface FloatArgumentType extends BaseArgumentType {
+  engType: "float";
+  signed?: boolean;
+  rangeMin: number;
+  rangeMax: number;
 }
 
 export interface ArgumentDimension {

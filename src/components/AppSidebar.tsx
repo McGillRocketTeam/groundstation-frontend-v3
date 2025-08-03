@@ -5,6 +5,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -16,13 +17,16 @@ import {
 import { Link, useLocation } from "react-router";
 import {
   DotsHorizontalIcon,
-  GearIcon,
-  HomeIcon,
   LayersIcon,
+  PlusIcon,
 } from "@radix-ui/react-icons";
+import { getDashboardList, saveDashboard } from "@/lib/dashboard-persistance";
+import { Dialog } from "./ui/dialog";
+import { Orientation } from "dockview-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
+  const dashboards = getDashboardList();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -45,22 +49,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Dashboards</SidebarGroupLabel>
+          <SidebarGroupAction>
+            <button onClick={() => {}}>
+              <PlusIcon className="size-3" />
+            </button>
+          </SidebarGroupAction>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={location.pathname == "/"}>
-                  <Link
-                    className="flex flex-row justify-between items-center"
-                    to="/"
+              {dashboards?.map((dashboard) => (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname == "/"}
                   >
-                    <div className="flex flex-row items-center gap-2">
-                      <HomeIcon />
-                      Home
-                    </div>
-                    <DotsHorizontalIcon />
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+                    <Link
+                      className="flex flex-row justify-between items-center"
+                      to={`/${dashboard.slug}`}
+                    >
+                      <div className="flex flex-row items-center gap-2">
+                        {dashboard.name}
+                      </div>
+                      <DotsHorizontalIcon />
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -68,7 +81,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarMenuButton isActive={location.pathname == "/settings"} asChild>
           <Link className="flex flex-row items-center gap-2" to="settings">
-            <GearIcon />
             Settings
           </Link>
         </SidebarMenuButton>

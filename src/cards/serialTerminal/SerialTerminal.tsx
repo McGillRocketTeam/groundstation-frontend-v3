@@ -7,6 +7,11 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
+import { yamcs } from "@/lib/yamcsClient/api";
+import {
+  SerialEvent,
+  SerialTerminalSubscription,
+} from "@/lib/yamcsClient/lib/client";
 
 interface OutputLine {
   id: string;
@@ -25,6 +30,9 @@ export const SerialTerminalCard = ({
   const [autoScroll, setAutoScroll] = useState(true);
   const [newMessagesCount, setNewMessagesCount] = useState(0);
 
+  const wsRef = useRef<SerialTerminalSubscription | null>(null);
+
+  // Keep track of the active links
   const [activeLinks] = useState<Record<string, boolean>>(
     params.connections.reduce(
       (acc, currentString) => {
@@ -35,6 +43,43 @@ export const SerialTerminalCard = ({
     ),
   );
 
+  // Update the subscription when any links change
+  useEffect(() => {
+    if (wsRef.current) {
+      wsRef.current.removeMessageListener(listener);
+    }
+    if (Object.keys(activeLinks).length > 0) {
+      const links: string[] = [];
+      for (const activeLink in activeLinks) {
+        if (activeLinks[activeLink]) {
+          links.push(activeLink);
+        }
+      }
+
+      wsRef.current = yamcs.createSerialTerminalSubscription(
+        { dataLinks: links },
+        listener,
+      );
+    }
+
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.removeMessageListener(listener);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeLinks]);
+
+  // The callback for when there is a new serial event
+  const listener = (data: SerialEvent) => {
+    addToOutput({
+      source: data.link,
+      text: data.message.trim(),
+      timestamp: new Date(),
+    });
+  };
+
+  // Used for inserting a new message into the terminal
   const addToOutput = useCallback(
     (line: Omit<OutputLine, "id">) => {
       if (line.text === "clear") {
@@ -56,20 +101,6 @@ export const SerialTerminalCard = ({
     },
     [autoScroll],
   );
-
-  // Print to output for testing
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      addToOutput({
-        source: "fc-903",
-        text: Math.random().toString(36),
-        timestamp: new Date(),
-      });
-    }, 200);
-
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [addToOutput]);
 
   // Scroll to bottom when output changes
   useEffect(() => {
@@ -123,7 +154,7 @@ export const SerialTerminalCard = ({
     <div className="flex flex-col h-full">
       <div className="shrink-0 p-2 flex flex-row gap-4">
         {Object.keys(activeLinks).map((link) => (
-          <div className="flex items-start gap-1">
+          <div key={link} className="flex items-start gap-1">
             <Checkbox checked={activeLinks[link]} id={`${link}-toggle`} />
             <Label htmlFor={`${link}-toggle`}>{link}</Label>
           </div>

@@ -16,11 +16,13 @@ import {
 import { yamcs } from "@/lib/yamcsClient/api";
 import { ReactNode, useState } from "react";
 import { Parameter } from "@/lib/yamcsClient/lib/client";
+import { anonymizeParameter } from "@/lib/yamcsCommands/format-command-name";
 
 type ParameterSelectorProps = {
   children: ReactNode;
   onSelect: (parameter: Parameter) => void;
-  filterOut?: Parameter[];
+  filterOut?: string[];
+  filter?: (value: Parameter, index: number, array: Parameter[]) => unknown;
   asChild?: boolean;
 };
 
@@ -28,22 +30,28 @@ export function ParameterSelector({
   children,
   onSelect,
   filterOut = [],
+  filter,
   asChild,
 }: ParameterSelectorProps) {
   const [open, setOpen] = useState(false);
   const { data } = useQuery({
     queryKey: ["parameters"],
     queryFn: async () => {
-      return await yamcs.getParameters("gs_backend", { limit: 1000 });
+      return (
+        await yamcs.getParameters("gs_backend", { limit: 1000 })
+      ).parameters?.filter((p) => !p.qualifiedName.includes("433"));
     },
   });
 
   // Create a Set for fast lookup of excluded qualifiedNames
-  const excluded = new Set(filterOut.map((p) => p.qualifiedName));
+  const excluded = new Set(filterOut);
 
   // Filter parameters
-  const filteredParameters =
-    data?.parameters?.filter((p) => !excluded.has(p.qualifiedName)) ?? [];
+  let filteredParameters = data?.filter((p) => !excluded.has(p.qualifiedName));
+
+  if (filter) {
+    filteredParameters = filteredParameters?.filter(filter);
+  }
 
   return (
     <Popover modal open={open} onOpenChange={setOpen}>
@@ -54,7 +62,7 @@ export function ParameterSelector({
           <CommandList>
             <CommandEmpty>No parameter found.</CommandEmpty>
             <CommandGroup>
-              {filteredParameters.map((parameter) => (
+              {(filteredParameters ?? []).map((parameter) => (
                 <CommandItem
                   key={parameter.qualifiedName}
                   value={parameter.qualifiedName}
@@ -63,7 +71,7 @@ export function ParameterSelector({
                     setOpen(false);
                   }}
                 >
-                  {parameter.qualifiedName}
+                  {anonymizeParameter(parameter.qualifiedName)}
                 </CommandItem>
               ))}
             </CommandGroup>
