@@ -36,7 +36,7 @@ export const ConnectedDevicesCard = () => {
   }, []);
 
   return (
-    <div>
+    <div className="grid h-full">
       {links ? (
         <Table>
           <TableHeader>

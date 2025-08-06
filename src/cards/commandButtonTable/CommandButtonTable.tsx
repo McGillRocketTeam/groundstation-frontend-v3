@@ -6,6 +6,7 @@ import { CommandConfiguration } from "@/lib/schemas";
 import { useState, useRef, useCallback } from "react";
 import { cn, getPairedQualifiedName } from "@/lib/utils";
 import { yamcs } from "@/lib/yamcsClient/api";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const CommandButtonTableCard = ({
   params,
@@ -98,60 +99,64 @@ export const CommandButtonTableCard = ({
   );
 
   return (
-    <Table>
-      <TableBody>
-        {params.commands.map((command) => {
-          const key = getCommandKey(command);
-          const holdingState = holdingStates[key];
-          const hasConfirmation = !!command.confirmationTime;
+    <div className="grid h-full">
+      <Table className="overflow-y-scroll">
+        <TableBody>
+          {params.commands.map((command) => {
+            const key = getCommandKey(command);
+            const holdingState = holdingStates[key];
+            const hasConfirmation = !!command.confirmationTime;
 
-          return (
-            <TableRow key={key}>
-              <TableCell>{command.label}</TableCell>
-              <TableCell className="w-20">
-                <Button
-                  className={cn(
-                    "relative overflow-hidden",
-                    holdingState?.isHolding &&
-                      "bg-transparent hover:bg-transparent focus:bg-transparent",
-                  )}
-                  onClick={
-                    hasConfirmation ? undefined : () => sendCommand(command)
-                  }
-                  onMouseDown={
-                    hasConfirmation ? () => handleMouseDown(command) : undefined
-                  }
-                  onMouseUp={
-                    hasConfirmation ? () => handleMouseUp(command) : undefined
-                  }
-                  onMouseLeave={
-                    hasConfirmation ? () => handleMouseUp(command) : undefined
-                  }
-                >
-                  {hasConfirmation && holdingState?.isHolding && (
-                    <>
-                      <div className="absolute inset-0 bg-primary" />
-                      <div
-                        className="absolute inset-0 bg-destructive transition-all duration-75"
-                        style={{
-                          width: `${holdingState.progress}%`,
-                        }}
-                      />
-                    </>
-                  )}
-                  <span className="relative z-10">
-                    {hasConfirmation
-                      ? holdingState?.isHolding
-                        ? `HOLD`
-                        : `SEND`
-                      : "SEND"}
-                  </span>
-                </Button>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+            return (
+              <TableRow key={key}>
+                <TableCell>{command.label}</TableCell>
+                <TableCell className="w-20">
+                  <Button
+                    className={cn(
+                      "relative overflow-hidden",
+                      holdingState?.isHolding &&
+                        "bg-transparent hover:bg-transparent focus:bg-transparent",
+                    )}
+                    onClick={
+                      hasConfirmation ? undefined : () => sendCommand(command)
+                    }
+                    onMouseDown={
+                      hasConfirmation
+                        ? () => handleMouseDown(command)
+                        : undefined
+                    }
+                    onMouseUp={
+                      hasConfirmation ? () => handleMouseUp(command) : undefined
+                    }
+                    onMouseLeave={
+                      hasConfirmation ? () => handleMouseUp(command) : undefined
+                    }
+                  >
+                    {hasConfirmation && holdingState?.isHolding && (
+                      <>
+                        <div className="absolute inset-0 bg-primary" />
+                        <div
+                          className="absolute inset-0 bg-destructive transition-all duration-75"
+                          style={{
+                            width: `${holdingState.progress}%`,
+                          }}
+                        />
+                      </>
+                    )}
+                    <span className="relative z-10">
+                      {hasConfirmation
+                        ? holdingState?.isHolding
+                          ? `HOLD`
+                          : `SEND`
+                        : "SEND"}
+                    </span>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
