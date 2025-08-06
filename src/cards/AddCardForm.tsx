@@ -155,6 +155,7 @@ export function AddCardForm<K extends ComponentKey>({
                   ) {
                     return (
                       <ParameterArraySelector
+                        value={field.value}
                         onValueChange={(value) => {
                           field.onChange(
                             value.map((v) =>

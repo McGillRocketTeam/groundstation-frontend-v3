@@ -12,13 +12,35 @@ import { Parameter } from "@/lib/yamcsClient/lib/client";
 import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { ParameterSelector } from "./ParameterSelector";
+import { yamcs } from "@/lib/yamcsClient/api";
 
 export function ParameterArraySelector({
+  value,
   onValueChange,
 }: {
+  value: string[];
   onValueChange: (value: Parameter[]) => void;
 }) {
   const [selectedParameters, setSelectedParameters] = useState<Parameter[]>([]);
+
+  useEffect(() => {
+    async function fetchOriginalParams() {
+      if (value !== undefined && value.length > 0) {
+        const originalParameters = await yamcs.getParametersBatch(
+          "gs_backend",
+          {
+            id: value.map((param) => ({ name: param })),
+          },
+        );
+
+        if (selectedParameters.length == 0) {
+          setSelectedParameters(originalParameters.map((obj) => obj.parameter));
+        }
+      }
+    }
+
+    fetchOriginalParams();
+  }, []);
 
   useEffect(() => {
     onValueChange(selectedParameters);
