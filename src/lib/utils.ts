@@ -8,12 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 
 // Helper function to get the paired parameter
 export function getPairedQualifiedName(param: string): string | null {
-  if (!param.includes("/FlightComputer/")) return null;
+  if (!param.includes("/FlightComputer/") || !param.includes("/GSRadio/")) return null;
 
-  if (param.includes("/FC433/")) {
-    return param.replace("/FC433/", "/FC903/");
-  } else if (param.includes("/FC903/")) {
-    return param.replace("/FC903/", "/FC433/");
+  if (param.includes("433")) {
+    return param.replace("433", "903");
+  } else if (param.includes("903")) {
+    return param.replace("903", "433");
   }
   return null;
 }
