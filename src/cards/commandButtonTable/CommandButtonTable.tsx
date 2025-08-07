@@ -6,7 +6,6 @@ import { CommandConfiguration } from "@/lib/schemas";
 import { useState, useRef, useCallback } from "react";
 import { cn, getPairedQualifiedName } from "@/lib/utils";
 import { yamcs } from "@/lib/yamcsClient/api";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const CommandButtonTableCard = ({
   params,
@@ -20,6 +19,7 @@ export const CommandButtonTableCard = ({
   async function sendCommand(command: CommandConfiguration) {
     // Issue to the mirroring flight computer, if this is an FC Command
     const pairedComamnd = getPairedQualifiedName(command.qualifiedName);
+    console.log("Paired Command", pairedComamnd)
     if (pairedComamnd) {
       await yamcs.issueCommand("gs_backend", "realtime", pairedComamnd, {
         args: command.arguments,
