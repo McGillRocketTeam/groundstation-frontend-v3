@@ -36,10 +36,10 @@ export const ConnectedDevicesCard = () => {
   }, []);
 
   return (
-    <div>
+    <div className="grid h-full">
       {links ? (
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background">
             <TableRow>
               <TableHead className="w-4" />
               <TableHead>Name</TableHead>

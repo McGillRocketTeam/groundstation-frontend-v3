@@ -18,7 +18,6 @@ import { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ParameterSelector } from "../form/ParameterSelector";
 import { QualifiedParameterNameType } from "@/lib/schemas";
-import ParameterName from "../parameter/ParameterName";
 import {
   anonymizeParameter,
   getSiblingParameter,

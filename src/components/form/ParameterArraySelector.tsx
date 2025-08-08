@@ -12,13 +12,50 @@ import { Parameter } from "@/lib/yamcsClient/lib/client";
 import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { ParameterSelector } from "./ParameterSelector";
+import { yamcs } from "@/lib/yamcsClient/api";
+import { LegacyParameterType } from "@/cards/parameterTable/schema";
+
+type UserModifiedParameter = { 
+  friendlyName: string, 
+  parameter: Parameter 
+};
 
 export function ParameterArraySelector({
+  value,
   onValueChange,
 }: {
-  onValueChange: (value: Parameter[]) => void;
+  value: LegacyParameterType[];
+  onValueChange: (value: UserModifiedParameter[]) => void;
 }) {
-  const [selectedParameters, setSelectedParameters] = useState<Parameter[]>([]);
+  const [selectedParameters, setSelectedParameters] = useState<UserModifiedParameter[]>([]);
+
+
+  // Parameters are not stored locally with meta information.
+  // If there is existing parameters we must their fetch this 
+  // metadata on load from the api.
+  useEffect(() => {
+    async function fetchOriginalParams() {
+      if (value !== undefined && value.length > 0) {
+        const originalParameters = await yamcs.getParametersBatch(
+          "gs_backend",
+          {
+            id: value.map((param) => ({ name: typeof param === "string" ? param : param.qualifiedName })),
+          },
+        );
+
+        // If the initial data is empty but we know it can be updated
+        if (selectedParameters.length == 0) {
+          const newSelectedParameters: UserModifiedParameter[] = originalParameters.map((obj, index) => ({
+            friendlyName: typeof value[index] === "string" ? value[index] : value[index].friendlyName,
+            parameter: obj.parameter
+          }))
+          setSelectedParameters(newSelectedParameters);
+        }
+      }
+    }
+
+    fetchOriginalParams();
+  }, []);
 
   useEffect(() => {
     onValueChange(selectedParameters);
@@ -37,18 +74,29 @@ export function ParameterArraySelector({
         </TableHeader>
       )}
       <TableBody>
-        {selectedParameters.map((parameter) => (
-          <TableRow key={parameter.qualifiedName}>
-            <TableCell>{parameter.qualifiedName}</TableCell>
+        {selectedParameters.map((param, index) => (
+          <TableRow key={param.parameter.qualifiedName}>
+                  <input
+                    className="focus:outline-none w-full p-2"
+                    value={param.friendlyName}
+                    onChange={(e) => {
+                      const newLabel = e.target.value;
+                      const updatedParams = selectedParameters.map((param, i) =>
+                        i === index ? { ...param, friendlyName: newLabel } : param,
+                      );
+                      setSelectedParameters(updatedParams);
+                    }}
+                    // ref={isLastRow ? lastInputRef : null}
+                  />
             <TableCell className="text-center">
-              {parameter.type?.unitSet?.map((u) => u.unit).join("/")}
+              {param.parameter.type?.unitSet?.map((u) => u.unit).join("/")}
             </TableCell>
             <TableCell className="w-10 p-0" colSpan={3}>
               <button
                 onClick={() =>
                   setSelectedParameters((prior) =>
                     prior.filter(
-                      (p) => p.qualifiedName !== parameter.qualifiedName,
+                      (p) => p.parameter.qualifiedName !== param.parameter.qualifiedName,
                     ),
                   )
                 }
@@ -67,8 +115,13 @@ export function ParameterArraySelector({
         <TableRow>
           <TableCell className="p-0" colSpan={3}>
             <ParameterSelector
-              filterOut={selectedParameters.map((p) => p.qualifiedName)}
-              onSelect={(p) => setSelectedParameters((prior) => [...prior, p])}
+              filterOut={selectedParameters.map((p) => p.parameter.qualifiedName)}
+              onSelect={(p) => setSelectedParameters((prior) => [
+                  ...prior, {
+                    friendlyName: p.qualifiedName,
+                    parameter: p
+                  }]
+              )}
               asChild
             >
               <button

@@ -149,16 +149,18 @@ export function AddCardForm<K extends ComponentKey>({
                   // Parameter Array Selector
                   else if (
                     value instanceof z.ZodArray &&
-                    value.element instanceof z.ZodBranded &&
-                    value.element._def.type instanceof z.ZodString &&
-                    value.element.description === "QualifiedParameterName"
+                    value.element instanceof z.ZodUnion  &&
+                    value.element.description === "LocalParameter"
                   ) {
                     return (
                       <ParameterArraySelector
+                        value={field.value}
                         onValueChange={(value) => {
                           field.onChange(
-                            value.map((v) =>
-                              QualifiedParameterName.parse(v.qualifiedName),
+                            value.map((v) => ({
+                              friendlyName: v.friendlyName,
+                              qualifiedName: v.parameter.qualifiedName
+                            })
                             ),
                           );
                         }}
@@ -233,7 +235,7 @@ export function AddCardForm<K extends ComponentKey>({
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder={`Select ${key}`} />
                         </SelectTrigger>
                         <SelectContent>
