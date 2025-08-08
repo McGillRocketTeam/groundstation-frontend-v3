@@ -53,7 +53,7 @@ export const ChartCard = ({
                 }
 
                 return (
-                  <div key={series.name}>
+                  <div key={series.parameter}>
                     <span
                       className="font-semibold"
                       style={{ color: series.color }}
