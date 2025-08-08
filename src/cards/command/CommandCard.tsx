@@ -113,7 +113,7 @@ export const CommandCard = () => {
                   <PopoverTrigger asChild>
                     <TableRow
                       data-new={newRowIds.has(cmd.id)}
-                      className="data-[state=open]:bg-background-tertiary cursor-pointer text-sm data-[new=true]:animate-pulse data-[new=true]:bg-amber-200"
+                      className="data-[state=open]:bg-background-tertiary cursor-pointer text-sm data-[new=true]:animate-pulse data-[new=true]:bg-amber-200 dark:data-[new=true]:bg-amber-800/75"
                     >
                       <TableCell className="space-y-1">
                         <div className="text-muted-foreground">

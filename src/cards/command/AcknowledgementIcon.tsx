@@ -11,11 +11,11 @@ export function AcknowledgementIcon({
   status: string | undefined;
 }) {
   if (status) {
-    if (status === "OK") return <CheckCircledIcon className="text-success" />;
+    if (status === "OK") return <CheckCircledIcon className="text-green-700" />;
     else if (status === "none") {
       return <CircleIcon className="text-muted-foreground" />;
     } else {
-      return <CrossCircledIcon className="text-error" />;
+      return <CrossCircledIcon className="text-red-700" />;
     }
   } else {
     return <MinusIcon className="text-muted-foreground" />;
