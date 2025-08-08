@@ -28,7 +28,6 @@ import {
   AddPanelConfig,
   ComponentParams,
 } from "@/cards";
-import { QualifiedParameterName } from "@/lib/schemas";
 import { ParameterArraySelector } from "@/components/form/ParameterArraySelector";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator";
@@ -37,6 +36,10 @@ import { yamcs } from "@/lib/yamcsClient/api";
 import { CommandButtonArraySelector } from "@/components/form/CommandButtonArraySelector";
 import { ChartSeriesSelector } from "@/components/form/ChartSeriesSelector";
 import { Switch } from "@/components/ui/switch";
+import { ParameterSelector } from "@/components/form/ParameterSelector";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { anonymizeParameter } from "@/lib/yamcsCommands/format-command-name";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -166,6 +169,20 @@ export function AddCardForm<K extends ComponentKey>({
                         }}
                       />
                     );
+                  } else if (
+                    value instanceof z.ZodBranded && 
+                    value.description === "QualifiedParameterName"
+                  ) {
+                    return (
+                      <ParameterSelector 
+                        filterOut={[field.value] as string[]}
+                        onSelect={(selection) => field.onChange(selection.qualifiedName)}
+                      >
+                        <div className={cn(buttonVariants({ variant: "outline" }), "w-full justify-start")}>
+                          {field.value ? anonymizeParameter(field.value) : "Nothing Selected"}
+                        </div>
+                      </ParameterSelector>
+                    )
                   } else if (
                     value instanceof z.ZodArray &&
                     value.element.description === "ChartSeries"
