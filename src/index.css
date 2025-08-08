@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-body:is(.dark) {
+html:is(.dark) {
 	color-scheme: dark;
 }
 
