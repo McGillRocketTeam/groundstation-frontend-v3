@@ -19,7 +19,7 @@ export const chartSchema = z
       .describe(
         "The amount of historical time to show on the chart in seconds.",
       )
-      .default(60),
+      .default(180),
     series: z.array(chartSeriesSchema).min(1),
   })
   .describe("Parameter Chart");

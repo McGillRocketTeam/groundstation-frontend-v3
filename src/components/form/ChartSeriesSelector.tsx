@@ -78,6 +78,7 @@ export function ChartSeriesSelector({
       {series.length > 0 && (
         <TableHeader>
           <TableRow>
+            <TableHead>Name</TableHead>
             <TableHead>Parameter</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Color</TableHead>
@@ -88,9 +89,23 @@ export function ChartSeriesSelector({
       <TableBody>
         {series.map((seriesRow, index) => (
           <TableRow key={seriesRow.parameter}>
+            <TableCell>
+                  <input
+                    className="focus:outline-none w-full "
+                    value={seriesRow.name}
+                    onChange={(e) => {
+                      const newLabel = e.target.value;
+                      const updatedSeries = series.map((seriesItem, i) =>
+                        i === index ? { ...seriesItem, name: newLabel } : seriesItem,
+                      );
+                      onSeriesChange(updatedSeries);
+                    }}
+                    // ref={isLastRow ? lastInputRef : null}
+                  />
+            </TableCell>
             <TableCell>{seriesRow.parameter}</TableCell>
             <TableCell>{capitalize(seriesRow.type)}</TableCell>
-            <TableCell className="grid place-items-center w-full">
+            <TableCell className="items-center justify-center">
               <Popover modal={true}>
                 <PopoverTrigger asChild>
                   <button
@@ -139,8 +154,9 @@ export function ChartSeriesSelector({
       </TableBody>
       <TableFooter className={cn(series.length === 0 && "border-t-0")}>
         <TableRow>
-          <TableCell className="p-0" colSpan={4}>
+          <TableCell className="p-0" colSpan={5}>
             <ParameterSelector
+              disablePairs={false}
               filterOut={series.map((s) => s.parameter)}
               onSelect={(parameter) => createSeries(parameter)}
               asChild
