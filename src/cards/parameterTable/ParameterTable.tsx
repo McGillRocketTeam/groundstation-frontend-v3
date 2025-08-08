@@ -9,6 +9,7 @@ import {
 } from "@/lib/yamcsClient/lib/client";
 import { useParameterSubscription } from "@/hooks/use-parameter";
 import { QualifiedParameterNameType } from "@/lib/schemas";
+import { BoolValue } from "../booleanTable/BooleanTableCard";
 
 // Helper component to render a single parameter value
 const ParameterValueCell = ({
@@ -122,6 +123,10 @@ function ParameterValueDisplay({ value, info }: { value?: ParameterValue, info?:
           `UNDEF ${extractValue(value.rawValue)}`}
       </span>
     );
+  }
+
+  if (value.engValue.type === "BOOLEAN") {
+    return <BoolValue value={value} /> 
   }
 
   return (

@@ -105,12 +105,12 @@ export const BooleanTableCard = (
   );
 };
 
-function BoolValue({ value }: { value: ParameterValue | undefined }) {
+export function BoolValue({ value }: { value: ParameterValue | undefined }) {
   if (typeof value?.engValue.booleanValue !== "undefined") {
     return (
       <div
         data-state={value.engValue.booleanValue}
-        className="data-[state=true]:bg-green-700 bg-red-700 p-1 text-white min-w-[4.5rem]"
+        className="data-[state=true]:bg-green-700 bg-red-700 p-1 text-white min-w-[4.5rem] text-center"
       >
         {value.engValue.booleanValue.toString().toLocaleUpperCase()}
       </div>
