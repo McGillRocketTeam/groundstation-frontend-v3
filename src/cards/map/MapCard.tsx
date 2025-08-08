@@ -7,9 +7,12 @@ import {
 } from "@vis.gl/react-maplibre";
 
 import ControlPanel from "./ControlPanel";
-
 import type { Terrain, Sky } from "@vis.gl/react-maplibre";
 import Pin from "./Pin";
+import { useParameterSubscription } from "@/hooks/use-parameter";
+import type { IDockviewPanelProps } from "dockview-react";
+import { MapCardParams } from "./schema";
+import { extractNumberValue,  } from "@/lib/utils";
 
 const sky: Sky = {
   "sky-color": "#80ccff",
@@ -22,9 +25,19 @@ const sky: Sky = {
 
 const terrain: Terrain = { source: "terrain-dem", exaggeration: 1.5 };
 
-export const MapCard = () => {
+export const MapCard = ({
+  params,
+}: IDockviewPanelProps<MapCardParams>) => {
+  const { values } = useParameterSubscription([params.latitudeParameter, params.longitudeParameter])
+
   return (
     <>
+      <div>
+        {values[params.latitudeParameter] && extractNumberValue(values[params.latitudeParameter]!.engValue)}
+      </div>
+      <div>
+        {values[params.longitudeParameter] && extractNumberValue(values[params.longitudeParameter]!.engValue)}
+      </div>
       <Map
         initialViewState={{
           latitude: 48.47614,
@@ -57,11 +70,11 @@ export const MapCard = () => {
 
         <Marker
           key={`marker-rocket`}
-          latitude={48.47614}
-          longitude={81.32903}
+          latitude={45.5060}
+          longitude={73.5783}
           anchor="bottom"
         >
-          <Pin />
+          <div>HELLOW ORLD</div>
         </Marker>
 
         <TerrainControl {...terrain} position="top-left" />
