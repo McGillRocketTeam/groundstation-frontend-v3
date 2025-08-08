@@ -28,8 +28,8 @@ export const MapCard = ({
       </div>
       <Map
         initialViewState={{
-          latitude: 48.47614,
-          longitude: -81.32903,
+          latitude: params.groundStationLatitude ?? 48.47614,
+          longitude: params.groundStationLongitude ?? -81.32903,
           zoom: 12,
         }}
         maxPitch={85}
