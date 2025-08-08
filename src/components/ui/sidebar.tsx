@@ -281,7 +281,7 @@ function SidebarTrigger({
           fillRule="evenodd"
           clipRule="evenodd"
           d="M5 1H13.5C13.7761 1 14 1.22386 14 1.5V11.5C14 11.7761 13.7761 12 13.5 12H5V1ZM4 1H1.5C1.22386 1 1 1.22386 1 1.5V11.5C1 11.7761 1.22386 12 1.5 12H4V1ZM0 1.5C0 0.67157 0.671573 0 1.5 0H13.5C14.3284 0 15 0.67157 15 1.5V11.5C15 12.3284 14.3284 13 13.5 13H1.5C0.671573 13 0 12.3284 0 11.5V1.5Z"
-          fill="black"
+          fill="currentColor"
         />
       </svg>
       <span className="sr-only">Toggle Sidebar</span>

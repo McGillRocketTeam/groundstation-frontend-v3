@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html:is(.dark) {
+	color-scheme: dark;
+}
+
 @theme inline {
 	--font-sans: 'Roboto Mono Variable', serif;
 	--font-display: 'Univers LT Std', sans;
