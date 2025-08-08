@@ -10,6 +10,7 @@ import { useParameterSubscription } from "@/hooks/use-parameter";
 import type { IDockviewPanelProps } from "dockview-react";
 import { MapCardParams } from "./schema";
 import { extractNumberValue,  } from "@/lib/utils";
+import House from "./House";
 
 export const MapCard = ({
   params,
@@ -34,6 +35,15 @@ export const MapCard = ({
         maxPitch={85}
         mapStyle="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
       >
+        {params.groundStationLatitude && params.groundStationLongitude && (
+          <Marker
+            latitude={params.groundStationLatitude}
+            longitude={params.groundStationLongitude}
+            anchor="bottom"
+          >
+            <House />
+          </Marker>
+        )}
         {(values[params.longitudeParameter] && values[params.latitudeParameter]) ? (
           <Marker
             key={`marker-rocket`}
@@ -45,12 +55,12 @@ export const MapCard = ({
           </Marker>
         ) : (
           <Marker
-            key={`marker-rocket`}
+            key={`marker-rocket-default`}
             latitude={48.47614}
             longitude={-81.32903}
             anchor="bottom"
           >
-            <Pin />
+            <Pin size={30} />
           </Marker>
         )}
       </Map>
