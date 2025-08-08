@@ -24,7 +24,6 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { Button } from "../ui/button";
 import { GripVertical } from "lucide-react";
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers"
 
@@ -103,13 +102,14 @@ export function ParameterArraySelector({
           <TableHeader>
             <TableRow>
               <TableHead />
+              <TableHead>Name</TableHead>
               <TableHead>Parameter</TableHead>
               <TableHead className="text-center">Units</TableHead>
               <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
         )}
-        <TableBody>                
+        <TableBody>
           <SortableContext items={selectedParameters.map((r) => r.parameter.qualifiedName)} strategy={verticalListSortingStrategy}>
             {selectedParameters.map((param, index) => (
               <CustomTableRow 
@@ -135,7 +135,7 @@ export function ParameterArraySelector({
           className={cn(selectedParameters.length === 0 && "border-t-0")}
         >
           <TableRow>
-            <TableCell className="p-0" colSpan={4}>
+            <TableCell className="p-0" colSpan={5}>
               <ParameterSelector
                 filterOut={selectedParameters.map((p) => p.parameter.qualifiedName)}
                 onSelect={(p) => setSelectedParameters((prior) => [
@@ -214,6 +214,7 @@ function CustomTableRow({
           // ref={isLastRow ? lastInputRef : null}
         />
       </TableCell>
+      <TableCell>{param.parameter.qualifiedName}</TableCell>
       <TableCell className="text-center">
         {param.parameter.type?.unitSet?.map((u) => u.unit).join("/")}
       </TableCell>
