@@ -71,7 +71,7 @@ export const MapCard = ({
             longitude={-81.32903}
             anchor="bottom"
           >
-            <Pin size={30} />
+            <Pin />
           </Marker>
         )}
 
