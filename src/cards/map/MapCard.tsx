@@ -1,6 +1,9 @@
 import {
-    Layer,
+  Layer,
+  LngLat,
   Map,
+  MapLayerMouseEvent,
+  MapRef,
   Marker,
   Source,
 } from "@vis.gl/react-maplibre";
@@ -10,11 +13,11 @@ import Pin from "./Pin";
 import { useParameterSubscription } from "@/hooks/use-parameter";
 import type { IDockviewPanelProps } from "dockview-react";
 import { MapCardParams } from "./schema";
-import { extractNumberValue, getPairedQualifiedName, } from "@/lib/utils";
+import { convertLatLngToUserReadableString, extractNumberValue, getPairedQualifiedName, } from "@/lib/utils";
 import House from "./House";
 import { useTheme } from "@/components/ThemeProvider";
 import { QualifiedParameterNameType } from "@/lib/schemas";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Coordinate {
   longitude: number;
@@ -35,6 +38,8 @@ export const MapCard = ({
     pairedLongitude,
   ])
   const { theme } = useTheme()
+
+  const mapRef = useRef<MapRef>(null);
 
   // State to store the history of the first pin's location
   const [pin1History, setPin1History] = useState<Coordinate[]>([]);
@@ -57,11 +62,11 @@ export const MapCard = ({
       ]);
     }
   }, [
-      values[params.latitudeParameter],
-      values[params.longitudeParameter],
-      params.latitudeParameter,
-      params.longitudeParameter,
-    ]);
+    values[params.latitudeParameter],
+    values[params.longitudeParameter],
+    params.latitudeParameter,
+    params.longitudeParameter,
+  ]);
 
   // Effect to update the history of the second pin
   useEffect(() => {
@@ -75,14 +80,14 @@ export const MapCard = ({
       ]);
     }
   }, [
-      values[pairedLatitude],
-      values[pairedLongitude],
-      pairedLatitude,
-      pairedLongitude,
-    ]);
+    values[pairedLatitude],
+    values[pairedLongitude],
+    pairedLatitude,
+    pairedLongitude,
+  ]);
 
   // Create GeoJSON for the first pin's trajectory
-  const pin1TrajectoryGeoJSON = {
+  const pin1TrajectoryGeoJSON: GeoJSON.Feature = {
     type: "Feature",
     properties: {},
     geometry: {
@@ -92,7 +97,7 @@ export const MapCard = ({
   };
 
   // Create GeoJSON for the second pin's trajectory
-  const pin2TrajectoryGeoJSON = {
+  const pin2TrajectoryGeoJSON: GeoJSON.Feature = {
     type: "Feature",
     properties: {},
     geometry: {
@@ -101,11 +106,79 @@ export const MapCard = ({
     },
   };
 
+  const [mouseLocation, setMouseLocation] = useState<LngLat>()
+
+  const handleMouseMove = (e: MapLayerMouseEvent) => {
+    setMouseLocation(e.lngLat)
+  }
+
+  const copyMouseCoordinates = async () => {
+    if (mouseLocation) {
+      const type = "text/plain";
+      const clipboardItemData = {
+        [type]: `${mouseLocation.lat}, ${mouseLocation.lng}`,
+      };
+      const clipboardItem = new ClipboardItem(clipboardItemData);
+      await navigator.clipboard.write([clipboardItem])
+    }
+  }
+
+  const zoomTo = (latitude: number | null | undefined, longitude?: number | null | undefined) => {
+    if (!latitude || !longitude) return;
+    mapRef?.current?.flyTo({ center: [latitude, longitude], duration: 1000 })
+  }
+
   return (
     <>
-      <div className="relative">
-        <div className="absolute top-4 right-4 bg-background">Hello World</div>
+      <div className="relative grid w-full h-full">
+        <div className="absolute top-4 right-4 bg-background z-50 p-2 border grid grid-cols-[auto_1fr_1fr] gap-2 gap-x-4 items-center">
+          <div className="grid grid-cols-subgrid col-span-full border-b text-xs text-muted-foreground">
+            <button className="w-4" />
+            <div>Latitude</div>
+            <div>Longitude</div>
+          </div>
+
+          {/* Ground Station */}
+          <button className="size-4 bg-[#ef4444] mr-2" onClick={() =>
+            zoomTo(
+              params.groundStationLatitude, params.groundStationLongitude
+            )
+          }>
+            <House />
+          </button>
+          <div>{params.groundStationLatitude ?? "UNDEF"}</div>
+          <div>{params.groundStationLongitude ?? "UNDEF"}</div>
+
+          {/* Primary Parameter */}
+          <button className="size-4 bg-[#ef4444] mr-2" onClick={() =>
+            zoomTo(
+              extractNumberValue(values[params.latitudeParameter]?.engValue),
+              extractNumberValue(values[params.longitudeParameter]?.engValue)
+            )
+          }
+          />
+          <div>{extractNumberValue(values[params.latitudeParameter]?.engValue) ?? "UNDEF"}</div>
+          <div>{extractNumberValue(values[params.longitudeParameter]?.engValue) ?? "UNDEF"}</div>
+
+          {/* Alternate Parameter */}
+          <button className="size-4 bg-[#0ea5e9] mr-2" onClick={() =>
+            zoomTo(
+              extractNumberValue(values[pairedLatitude]?.engValue),
+              extractNumberValue(values[pairedLongitude]?.engValue)
+            )
+          }
+          />
+          <div>{extractNumberValue(values[pairedLatitude]?.engValue) ?? "UNDEF"}</div>
+          <div>{extractNumberValue(values[pairedLongitude]?.engValue) ?? "UNDEF"}</div>
+        </div>
+        {mouseLocation && (
+          <div className="absolute top-4 left-4 bg-background z-50 p-2 border text-sm">
+            <div className="text-muted-foreground text-xs">Mouse Location</div>
+            {convertLatLngToUserReadableString(mouseLocation.lat, mouseLocation.lng)}
+          </div>
+        )}
         <Map
+          ref={mapRef}
           initialViewState={{
             latitude: params.groundStationLatitude ?? 48.47614,
             longitude: params.groundStationLongitude ?? -81.32903,
@@ -113,6 +186,7 @@ export const MapCard = ({
           }}
           maxPitch={85}
           mapStyle={theme === "dark" ? "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" : "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"}
+          onMouseMove={handleMouseMove}
         >
 
           {pin1History.length > 1 && (
@@ -126,6 +200,28 @@ export const MapCard = ({
                 id="pin1-trajectory-line"
                 type="line"
                 source="pin1-trajectory"
+                layout={{
+                  "line-join": "round",
+                  "line-cap": "round",
+                }}
+                paint={{
+                  "line-color": "#facc15", // Yellow color for the first pin's line
+                  "line-width": 3,
+                }}
+              />
+            </>
+          )}
+          {pin2History.length > 1 && (
+            <>
+              <Source
+                id="pin2-trajectory"
+                type="geojson"
+                data={pin2TrajectoryGeoJSON}
+              />
+              <Layer
+                id="pin1-trajectory-line"
+                type="line"
+                source="pin2-trajectory"
                 layout={{
                   "line-join": "round",
                   "line-cap": "round",
@@ -153,18 +249,18 @@ export const MapCard = ({
               longitude={extractNumberValue(values[params.longitudeParameter]!.engValue) ?? -81.32903}
               anchor="bottom"
             >
-              <Pin />
+              <Pin color="#ef4444" />
             </Marker>
           ) : (
-              <Marker
-                key={`marker-rocket-default-1`}
-                latitude={48.47614}
-                longitude={-81.32903}
-                anchor="bottom"
-              >
-                <Pin />
-              </Marker>
-            )}
+            <Marker
+              key={`marker-rocket-default-1`}
+              latitude={48.47614}
+              longitude={-81.32903}
+              anchor="bottom"
+            >
+              <Pin color="#ef4444" />
+            </Marker>
+          )}
 
           {(values[pairedLongitude] && values[pairedLatitude]) ? (
             <Marker
@@ -176,15 +272,15 @@ export const MapCard = ({
               <Pin color="#0ea5e9" />
             </Marker>
           ) : (
-              <Marker
-                key={`marker-rocket-default-2`}
-                latitude={48.47614}
-                longitude={-81.32903}
-                anchor="bottom"
-              >
-                <Pin color="#0ea5e9" size={30} />
-              </Marker>
-            )}
+            <Marker
+              key={`marker-rocket-default-2`}
+              latitude={48.47614}
+              longitude={-81.32903}
+              anchor="bottom"
+            >
+              <Pin color="#0ea5e9" size={30} />
+            </Marker>
+          )}
         </Map>
       </div>
     </>

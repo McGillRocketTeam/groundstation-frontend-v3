@@ -93,7 +93,7 @@ export const CommandCard = () => {
       <TooltipProvider>
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="sticky top-0 bg-background z-30">
               <TableHead>Name</TableHead>
               <TableHead className="w-10 text-center">Q</TableHead>
               <TableHead className="w-10 text-center">R</TableHead>
