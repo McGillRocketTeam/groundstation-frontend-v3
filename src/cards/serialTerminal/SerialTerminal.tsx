@@ -106,7 +106,7 @@ export const SerialTerminalCard = ({
   useEffect(() => {
     if (autoScroll && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
+        // behavior: "smooth",
         block: "end",
       });
     }
@@ -222,7 +222,7 @@ const TerminalLine = memo(function TerminalLine({
       <span
         className={cn(message.source === "user" ? "text-blue-700" : "text-mrt")}
       >{`[${message.source.toLocaleUpperCase()}]`}</span>
-      <span className="flex-1"> {message.id}</span>
+      <span className="flex-1"> {message.text}</span>
       <button
         onClick={async () => {
           await navigator.clipboard.writeText(message.text);
