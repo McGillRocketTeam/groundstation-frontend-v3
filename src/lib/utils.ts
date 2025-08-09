@@ -51,7 +51,8 @@ export function extractValue(value: Value) {
   }
 }
 
-export function extractNumberValue(value: Value) {
+export function extractNumberValue(value?: Value) {
+  if (!value) return null;
   switch (value.type) {
     case "AGGREGATE":
       return null;
