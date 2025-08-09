@@ -112,11 +112,11 @@ export const MapCard = ({
     setMouseLocation(e.lngLat)
   }
 
-  const copyMouseCoordinates = async () => {
+  const copyMouseCoordinates = async (latitude: number, longitude: number) => {
     if (mouseLocation) {
       const type = "text/plain";
       const clipboardItemData = {
-        [type]: `${mouseLocation.lat}, ${mouseLocation.lng}`,
+        [type]: `${latitude}, ${longitude}`,
       };
       const clipboardItem = new ClipboardItem(clipboardItemData);
       await navigator.clipboard.write([clipboardItem])
@@ -124,8 +124,12 @@ export const MapCard = ({
   }
 
   const zoomTo = (latitude: number | null | undefined, longitude?: number | null | undefined) => {
-    if (!latitude || !longitude) return;
-    mapRef?.current?.flyTo({ center: [latitude, longitude], duration: 1000 })
+    if ((latitude === undefined || latitude === null) || (longitude === undefined || latitude === null)) {
+      console.warn("Didn't zoom because lat and log was not defined");
+      return
+    };
+    copyMouseCoordinates(latitude, longitude)
+    mapRef?.current?.flyTo({ center: [longitude, latitude], duration: 1000 })
   }
 
   return (
@@ -139,7 +143,7 @@ export const MapCard = ({
           </div>
 
           {/* Ground Station */}
-          <button className="size-4 bg-[#ef4444] mr-2" onClick={() =>
+          <button className="size-4 mr-2" onClick={() =>
             zoomTo(
               params.groundStationLatitude, params.groundStationLongitude
             )

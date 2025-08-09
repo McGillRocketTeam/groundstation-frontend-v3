@@ -88,7 +88,7 @@ export function ParameterTableCardRow({
 
   return (
     <div className="grid grid-cols-subgrid col-span-full hover:bg-muted items-center not-last:border-b">
-      <div className="p-2">{friendlyName ?? qualifiedName}</div>
+      <div className="p-2 text-nowrap">{friendlyName ?? qualifiedName}</div>
       <div className="p-2">
         {(() => {
           const value = originalParameterFC === "433" ? values[originalParameter] : values[pairedParameter]
@@ -116,7 +116,7 @@ function ParameterValueDisplay({ value, info }: { value?: ParameterValue, info?:
 
   if (value.engValue.type === "ENUMERATED") {
     return (
-      <span>
+      <span className="text-balance">
         {info?.enumValues
           ?.find((v) => v.value === extractValue(value.rawValue)?.toString())
           ?.label.toLocaleUpperCase() ??
