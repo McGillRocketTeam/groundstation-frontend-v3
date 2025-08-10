@@ -18,6 +18,7 @@ import House from "./House";
 import { useTheme } from "@/components/ThemeProvider";
 import { QualifiedParameterNameType } from "@/lib/schemas";
 import { useEffect, useRef, useState } from "react";
+import { customMapStyle } from "./style";
 
 interface Coordinate {
   longitude: number;
@@ -189,7 +190,8 @@ export const MapCard = ({
             zoom: 12,
           }}
           maxPitch={85}
-          mapStyle={theme === "dark" ? "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" : "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"}
+          mapStyle={customMapStyle}
+          // mapStyle={theme === "dark" ? "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" : "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"}
           onMouseMove={handleMouseMove}
         >
 
