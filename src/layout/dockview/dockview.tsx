@@ -6,7 +6,7 @@ import tabComponents from "./tab";
 import RightComponent from "./right-component";
 import { useEffect, useState } from "react";
 import { initDockviewContainer } from "./initDockviewContainer";
-import { useLocation, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { useUserSettingsStore } from "@/lib/dashboard-persistance";
 
 export default function DockviewLayout() {
@@ -34,11 +34,6 @@ export default function DockviewLayout() {
     if (dashboard?.dockview) {
       api.fromJSON(dashboard.dockview);
     } else {
-      api.clear();
-      api.addPanel({
-        id: "default",
-        component: "pid",
-      });
       console.error(`Dashboard not found for slug ${params.slug}`);
     }
 
@@ -82,10 +77,6 @@ export default function DockviewLayout() {
     if (dashboard?.dockview) {
       event.api.fromJSON(dashboard.dockview);
     } else {
-      event.api.addPanel({
-        id: "default",
-        component: "pid",
-      });
       console.error(`Dashboard not found for slug ${params.slug}`);
     }
   };
@@ -94,14 +85,26 @@ export default function DockviewLayout() {
     <>
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <div id="dockview-container">
-          <DockviewReact
-            className="dockview-theme-custom"
-            onReady={onReady}
-            components={components}
-            rightHeaderActionsComponent={RightComponent}
-            defaultTabComponent={tabComponents.default}
-            tabComponents={tabComponents}
-          />
+          {api?.panels.length === 0 ? (
+            <div className="grid w-full h-full place-items-center">
+              <div className="text-center space-y-2">
+                <div className="text-error text-xl">No Dashboard Found</div>
+                <p className="max-w-[65ch] text-balance">
+                  You can import a dashboard from <Link className="underline" to="/settings">settings</Link>
+                  {" "}or create a new one from the sidebar.
+                </p>
+              </div>
+            </div>
+          ) : (
+              <DockviewReact
+                className="dockview-theme-custom"
+                onReady={onReady}
+                components={components}
+                rightHeaderActionsComponent={RightComponent}
+                defaultTabComponent={tabComponents.default}
+                tabComponents={tabComponents}
+              />
+            )}
         </div>
       </div>
     </>

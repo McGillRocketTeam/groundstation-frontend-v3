@@ -13,6 +13,7 @@ interface UserSettings {
 
 interface UserSettingsState {
   settings: UserSettings;
+  overwriteSettings: (settings: UserSettings) => void;
   updateDashboardDockView: (props: {
     slug: string;
     dockview: SerializedDockview;
@@ -62,6 +63,10 @@ const getInitialSettings = (): UserSettings => {
 
 export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
   settings: getInitialSettings(),
+  overwriteSettings: (settings) => {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings))
+    set(({ settings }))
+  },
   updateDashboardDockView: (props) => {
     set((state) => {
       const newSettings = { ...state.settings };
