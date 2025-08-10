@@ -24,7 +24,7 @@ type ParameterSelectorProps = {
   filterOut?: string[];
   filter?: (value: Parameter, index: number, array: Parameter[]) => unknown;
   asChild?: boolean;
-  disablePairs?: boolean
+  disablePairs?: boolean;
 };
 
 export function ParameterSelector({
@@ -33,18 +33,20 @@ export function ParameterSelector({
   filterOut = [],
   filter,
   asChild,
-  disablePairs = true
+  disablePairs = true,
 }: ParameterSelectorProps) {
   const [open, setOpen] = useState(false);
   const { data } = useQuery({
     queryKey: ["parameters"],
     queryFn: async () => {
-     const params = await yamcs.getParameters("gs_backend", { limit: 1000 })
+      const params = await yamcs.getParameters("gs_backend", { limit: 1000 });
 
-    if (disablePairs) {
-        return params.parameters?.filter((p) => !p.qualifiedName.includes("433"));
+      if (disablePairs) {
+        return params.parameters?.filter(
+          (p) => !p.qualifiedName.includes("433"),
+        );
       } else {
-        return params.parameters
+        return params.parameters;
       }
     },
   });
@@ -77,7 +79,9 @@ export function ParameterSelector({
                     setOpen(false);
                   }}
                 >
-                  {disablePairs ? anonymizeParameter(parameter.qualifiedName) : parameter.qualifiedName}
+                  {disablePairs
+                    ? anonymizeParameter(parameter.qualifiedName)
+                    : parameter.qualifiedName}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -389,7 +389,6 @@ export function useDygraphs(
     }
 
     const listener = (data: SubscribeParametersData) => {
-
       if (data.mapping) {
         idMapping.current = {
           ...idMapping.current,
@@ -405,7 +404,7 @@ export function useDygraphs(
       }
 
       try {
-        processRealtimeDelivery(data.values)
+        processRealtimeDelivery(data.values);
         // debouncedProcessRealtimeDelivery(data.values);
       } catch (error) {
         console.error("Error in processRealtimeDelivery:", error);

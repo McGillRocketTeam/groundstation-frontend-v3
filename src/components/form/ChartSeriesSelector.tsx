@@ -90,18 +90,20 @@ export function ChartSeriesSelector({
         {series.map((seriesRow, index) => (
           <TableRow key={seriesRow.parameter}>
             <TableCell>
-                  <input
-                    className="focus:outline-none w-full "
-                    value={seriesRow.name}
-                    onChange={(e) => {
-                      const newLabel = e.target.value;
-                      const updatedSeries = series.map((seriesItem, i) =>
-                        i === index ? { ...seriesItem, name: newLabel } : seriesItem,
-                      );
-                      onSeriesChange(updatedSeries);
-                    }}
-                    // ref={isLastRow ? lastInputRef : null}
-                  />
+              <input
+                className="focus:outline-none w-full "
+                value={seriesRow.name}
+                onChange={(e) => {
+                  const newLabel = e.target.value;
+                  const updatedSeries = series.map((seriesItem, i) =>
+                    i === index
+                      ? { ...seriesItem, name: newLabel }
+                      : seriesItem,
+                  );
+                  onSeriesChange(updatedSeries);
+                }}
+                // ref={isLastRow ? lastInputRef : null}
+              />
             </TableCell>
             <TableCell>{seriesRow.parameter}</TableCell>
             <TableCell>{capitalize(seriesRow.type)}</TableCell>

@@ -64,8 +64,8 @@ const getInitialSettings = (): UserSettings => {
 export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
   settings: getInitialSettings(),
   overwriteSettings: (settings) => {
-    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings))
-    set(({ settings }))
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    set({ settings });
   },
   updateDashboardDockView: (props) => {
     set((state) => {
@@ -77,10 +77,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
           `Couldn't update dashboard because dashboard with slug "${props.slug}" could not be found.`,
         );
       }
-      localStorage.setItem(
-        SETTINGS_STORAGE_KEY,
-        JSON.stringify(newSettings),
-      );
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
       return { settings: newSettings };
     });
   },
@@ -88,10 +85,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
     set((state) => {
       const newSettings = { ...state.settings };
       newSettings.dashboards[dashboard.slug] = dashboard;
-      localStorage.setItem(
-        SETTINGS_STORAGE_KEY,
-        JSON.stringify(newSettings),
-      );
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
       return { settings: newSettings };
     });
   },
@@ -100,10 +94,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
       const newSettings = { ...state.settings };
       if (newSettings.dashboards[slug]) {
         delete newSettings.dashboards[slug];
-        localStorage.setItem(
-          SETTINGS_STORAGE_KEY,
-          JSON.stringify(newSettings),
-        );
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
       } else {
         console.warn(`Dashboard with slug "${slug}" not found for deletion.`);
       }
@@ -132,10 +123,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
             newSettings.dashboards[oldSlug].name = newName;
           }
         }
-        localStorage.setItem(
-          SETTINGS_STORAGE_KEY,
-          JSON.stringify(newSettings),
-        );
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
       } else {
         console.warn(
           `Dashboard with slug "${oldSlug}" not found for metadata update.`,

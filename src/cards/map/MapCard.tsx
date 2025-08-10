@@ -7,13 +7,17 @@ import {
   Marker,
   Source,
 } from "@vis.gl/react-maplibre";
-import "maplibre-gl/dist/maplibre-gl.css"
+import "maplibre-gl/dist/maplibre-gl.css";
 
 import Pin from "./Pin";
 import { useParameterSubscription } from "@/hooks/use-parameter";
 import type { IDockviewPanelProps } from "dockview-react";
 import { MapCardParams } from "./schema";
-import { convertLatLngToUserReadableString, extractNumberValue, getPairedQualifiedName, } from "@/lib/utils";
+import {
+  convertLatLngToUserReadableString,
+  extractNumberValue,
+  getPairedQualifiedName,
+} from "@/lib/utils";
 import House from "./House";
 import { useTheme } from "@/components/ThemeProvider";
 import { QualifiedParameterNameType } from "@/lib/schemas";
@@ -25,20 +29,21 @@ interface Coordinate {
   latitude: number;
 }
 
-export const MapCard = ({
-  params,
-}: IDockviewPanelProps<MapCardParams>) => {
-  const pairedLatitude = getPairedQualifiedName(params.latitudeParameter) as QualifiedParameterNameType
-  const pairedLongitude = getPairedQualifiedName(params.longitudeParameter) as QualifiedParameterNameType
-
+export const MapCard = ({ params }: IDockviewPanelProps<MapCardParams>) => {
+  const pairedLatitude = getPairedQualifiedName(
+    params.latitudeParameter,
+  ) as QualifiedParameterNameType;
+  const pairedLongitude = getPairedQualifiedName(
+    params.longitudeParameter,
+  ) as QualifiedParameterNameType;
 
   const { values } = useParameterSubscription([
     params.latitudeParameter,
     params.longitudeParameter,
     pairedLatitude,
     pairedLongitude,
-  ])
-  const { theme } = useTheme()
+  ]);
+  const { theme } = useTheme();
 
   const mapRef = useRef<MapRef>(null);
 
@@ -93,7 +98,10 @@ export const MapCard = ({
     properties: {},
     geometry: {
       type: "LineString",
-      coordinates: pin1History.map((coord) => [coord.longitude, coord.latitude]),
+      coordinates: pin1History.map((coord) => [
+        coord.longitude,
+        coord.latitude,
+      ]),
     },
   };
 
@@ -103,15 +111,18 @@ export const MapCard = ({
     properties: {},
     geometry: {
       type: "LineString",
-      coordinates: pin2History.map((coord) => [coord.longitude, coord.latitude]),
+      coordinates: pin2History.map((coord) => [
+        coord.longitude,
+        coord.latitude,
+      ]),
     },
   };
 
-  const [mouseLocation, setMouseLocation] = useState<LngLat>()
+  const [mouseLocation, setMouseLocation] = useState<LngLat>();
 
   const handleMouseMove = (e: MapLayerMouseEvent) => {
-    setMouseLocation(e.lngLat)
-  }
+    setMouseLocation(e.lngLat);
+  };
 
   const copyMouseCoordinates = async (latitude: number, longitude: number) => {
     if (mouseLocation) {
@@ -120,18 +131,26 @@ export const MapCard = ({
         [type]: `${latitude}, ${longitude}`,
       };
       const clipboardItem = new ClipboardItem(clipboardItemData);
-      await navigator.clipboard.write([clipboardItem])
+      await navigator.clipboard.write([clipboardItem]);
     }
-  }
+  };
 
-  const zoomTo = (latitude: number | null | undefined, longitude?: number | null | undefined) => {
-    if ((latitude === undefined || latitude === null) || (longitude === undefined || latitude === null)) {
+  const zoomTo = (
+    latitude: number | null | undefined,
+    longitude?: number | null | undefined,
+  ) => {
+    if (
+      latitude === undefined ||
+      latitude === null ||
+      longitude === undefined ||
+      latitude === null
+    ) {
       console.warn("Didn't zoom because lat and log was not defined");
-      return
-    };
-    copyMouseCoordinates(latitude, longitude)
-    mapRef?.current?.flyTo({ center: [longitude, latitude], duration: 1000 })
-  }
+      return;
+    }
+    copyMouseCoordinates(latitude, longitude);
+    mapRef?.current?.flyTo({ center: [longitude, latitude], duration: 1000 });
+  };
 
   return (
     <>
@@ -144,42 +163,63 @@ export const MapCard = ({
           </div>
 
           {/* Ground Station */}
-          <button className="size-4 mr-2" onClick={() =>
-            zoomTo(
-              params.groundStationLatitude, params.groundStationLongitude
-            )
-          }>
+          <button
+            className="size-4 mr-2"
+            onClick={() =>
+              zoomTo(
+                params.groundStationLatitude,
+                params.groundStationLongitude,
+              )
+            }
+          >
             <House />
           </button>
           <div>{params.groundStationLatitude ?? "UNDEF"}</div>
           <div>{params.groundStationLongitude ?? "UNDEF"}</div>
 
           {/* Primary Parameter */}
-          <button className="size-4 bg-[#ef4444] mr-2" onClick={() =>
-            zoomTo(
-              extractNumberValue(values[params.latitudeParameter]?.engValue),
-              extractNumberValue(values[params.longitudeParameter]?.engValue)
-            )
-          }
+          <button
+            className="size-4 bg-[#ef4444] mr-2"
+            onClick={() =>
+              zoomTo(
+                extractNumberValue(values[params.latitudeParameter]?.engValue),
+                extractNumberValue(values[params.longitudeParameter]?.engValue),
+              )
+            }
           />
-          <div>{extractNumberValue(values[params.latitudeParameter]?.engValue) ?? "UNDEF"}</div>
-          <div>{extractNumberValue(values[params.longitudeParameter]?.engValue) ?? "UNDEF"}</div>
+          <div>
+            {extractNumberValue(values[params.latitudeParameter]?.engValue) ??
+              "UNDEF"}
+          </div>
+          <div>
+            {extractNumberValue(values[params.longitudeParameter]?.engValue) ??
+              "UNDEF"}
+          </div>
 
           {/* Alternate Parameter */}
-          <button className="size-4 bg-[#0ea5e9] mr-2" onClick={() =>
-            zoomTo(
-              extractNumberValue(values[pairedLatitude]?.engValue),
-              extractNumberValue(values[pairedLongitude]?.engValue)
-            )
-          }
+          <button
+            className="size-4 bg-[#0ea5e9] mr-2"
+            onClick={() =>
+              zoomTo(
+                extractNumberValue(values[pairedLatitude]?.engValue),
+                extractNumberValue(values[pairedLongitude]?.engValue),
+              )
+            }
           />
-          <div>{extractNumberValue(values[pairedLatitude]?.engValue) ?? "UNDEF"}</div>
-          <div>{extractNumberValue(values[pairedLongitude]?.engValue) ?? "UNDEF"}</div>
+          <div>
+            {extractNumberValue(values[pairedLatitude]?.engValue) ?? "UNDEF"}
+          </div>
+          <div>
+            {extractNumberValue(values[pairedLongitude]?.engValue) ?? "UNDEF"}
+          </div>
         </div>
         {mouseLocation && (
           <div className="absolute top-4 left-4 bg-background z-50 p-2 border text-sm">
             <div className="text-muted-foreground text-xs">Mouse Location</div>
-            {convertLatLngToUserReadableString(mouseLocation.lat, mouseLocation.lng)}
+            {convertLatLngToUserReadableString(
+              mouseLocation.lat,
+              mouseLocation.lng,
+            )}
           </div>
         )}
         <Map
@@ -194,7 +234,6 @@ export const MapCard = ({
           // mapStyle={theme === "dark" ? "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" : "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"}
           onMouseMove={handleMouseMove}
         >
-
           {pin1History.length > 1 && (
             <>
               <Source
@@ -248,11 +287,20 @@ export const MapCard = ({
               <House />
             </Marker>
           )}
-          {(values[params.longitudeParameter] && values[params.latitudeParameter]) ? (
+          {values[params.longitudeParameter] &&
+          values[params.latitudeParameter] ? (
             <Marker
               key={`marker-rocket-1`}
-              latitude={extractNumberValue(values[params.latitudeParameter]!.engValue) ?? 48.47614}
-              longitude={extractNumberValue(values[params.longitudeParameter]!.engValue) ?? -81.32903}
+              latitude={
+                extractNumberValue(
+                  values[params.latitudeParameter]!.engValue,
+                ) ?? 48.47614
+              }
+              longitude={
+                extractNumberValue(
+                  values[params.longitudeParameter]!.engValue,
+                ) ?? -81.32903
+              }
               anchor="bottom"
             >
               <Pin color="#ef4444" />
@@ -268,11 +316,16 @@ export const MapCard = ({
             </Marker>
           )}
 
-          {(values[pairedLongitude] && values[pairedLatitude]) ? (
+          {values[pairedLongitude] && values[pairedLatitude] ? (
             <Marker
               key={`marker-rocket-2`}
-              latitude={extractNumberValue(values[pairedLatitude]!.engValue) ?? 48.47614}
-              longitude={extractNumberValue(values[pairedLongitude]!.engValue) ?? -81.32903}
+              latitude={
+                extractNumberValue(values[pairedLatitude]!.engValue) ?? 48.47614
+              }
+              longitude={
+                extractNumberValue(values[pairedLongitude]!.engValue) ??
+                -81.32903
+              }
               anchor="bottom"
             >
               <Pin color="#0ea5e9" />

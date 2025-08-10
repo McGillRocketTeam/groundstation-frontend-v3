@@ -15,21 +15,33 @@ import { ParameterSelector } from "./ParameterSelector";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { LegacyParameterType } from "@/cards/parameterTable/schema";
 
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core"
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
 import {
   arrayMove,
   useSortable,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   SortableContext,
-} from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
-import { restrictToFirstScrollableAncestor, restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers"
+import {
+  restrictToFirstScrollableAncestor,
+  restrictToVerticalAxis,
+  restrictToWindowEdges,
+} from "@dnd-kit/modifiers";
 
-type UserModifiedParameter = { 
-  friendlyName: string, 
-  parameter: Parameter 
+type UserModifiedParameter = {
+  friendlyName: string;
+  parameter: Parameter;
 };
 
 export function ParameterArraySelector({
@@ -39,10 +51,12 @@ export function ParameterArraySelector({
   value: LegacyParameterType[];
   onValueChange: (value: UserModifiedParameter[]) => void;
 }) {
-  const [selectedParameters, setSelectedParameters] = useState<UserModifiedParameter[]>([]);
+  const [selectedParameters, setSelectedParameters] = useState<
+    UserModifiedParameter[]
+  >([]);
 
   // Parameters are not stored locally with meta information.
-  // If there is existing parameters we must their fetch this 
+  // If there is existing parameters we must their fetch this
   // metadata on load from the api.
   useEffect(() => {
     async function fetchOriginalParams() {
@@ -50,16 +64,22 @@ export function ParameterArraySelector({
         const originalParameters = await yamcs.getParametersBatch(
           "gs_backend",
           {
-            id: value.map((param) => ({ name: typeof param === "string" ? param : param.qualifiedName })),
+            id: value.map((param) => ({
+              name: typeof param === "string" ? param : param.qualifiedName,
+            })),
           },
         );
 
         // If the initial data is empty but we know it can be updated
         if (selectedParameters.length == 0) {
-          const newSelectedParameters: UserModifiedParameter[] = originalParameters.map((obj, index) => ({
-            friendlyName: typeof value[index] === "string" ? value[index] : value[index].friendlyName,
-            parameter: obj.parameter
-          }))
+          const newSelectedParameters: UserModifiedParameter[] =
+            originalParameters.map((obj, index) => ({
+              friendlyName:
+                typeof value[index] === "string"
+                  ? value[index]
+                  : value[index].friendlyName,
+              parameter: obj.parameter,
+            }));
           setSelectedParameters(newSelectedParameters);
         }
       }
@@ -77,24 +97,34 @@ export function ParameterArraySelector({
     useSensor(PointerSensor, {
       activationConstraint: { distance: 4 }, // small drag threshold
     }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  )
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
-    const oldIndex = selectedParameters.findIndex((r) => r.parameter.qualifiedName === String(active.id))
-    const newIndex = selectedParameters.findIndex((r) => r.parameter.qualifiedName === String(over.id))
+    const oldIndex = selectedParameters.findIndex(
+      (r) => r.parameter.qualifiedName === String(active.id),
+    );
+    const newIndex = selectedParameters.findIndex(
+      (r) => r.parameter.qualifiedName === String(over.id),
+    );
 
-    setSelectedParameters((items) => arrayMove(items, oldIndex, newIndex))
+    setSelectedParameters((items) => arrayMove(items, oldIndex, newIndex));
   }
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor, restrictToWindowEdges]}
+      modifiers={[
+        restrictToVerticalAxis,
+        restrictToFirstScrollableAncestor,
+        restrictToWindowEdges,
+      ]}
       onDragEnd={handleDragEnd}
     >
       <Table className="border">
@@ -110,23 +140,30 @@ export function ParameterArraySelector({
           </TableHeader>
         )}
         <TableBody>
-          <SortableContext items={selectedParameters.map((r) => r.parameter.qualifiedName)} strategy={verticalListSortingStrategy}>
+          <SortableContext
+            items={selectedParameters.map((r) => r.parameter.qualifiedName)}
+            strategy={verticalListSortingStrategy}
+          >
             {selectedParameters.map((param, index) => (
-              <CustomTableRow 
+              <CustomTableRow
                 key={param.parameter.qualifiedName}
-                param={param} 
-                index={index} 
+                param={param}
+                index={index}
                 onUpdateName={(newName) => {
                   const updatedParams = selectedParameters.map((param, i) =>
                     i === index ? { ...param, friendlyName: newName } : param,
                   );
                   setSelectedParameters(updatedParams);
                 }}
-                onDelete={() => setSelectedParameters((prior) =>
-                  prior.filter(
-                    (p) => p.parameter.qualifiedName !== param.parameter.qualifiedName,
-                  ),
-                )}
+                onDelete={() =>
+                  setSelectedParameters((prior) =>
+                    prior.filter(
+                      (p) =>
+                        p.parameter.qualifiedName !==
+                        param.parameter.qualifiedName,
+                    ),
+                  )
+                }
               />
             ))}
           </SortableContext>
@@ -137,13 +174,18 @@ export function ParameterArraySelector({
           <TableRow>
             <TableCell className="p-0" colSpan={5}>
               <ParameterSelector
-                filterOut={selectedParameters.map((p) => p.parameter.qualifiedName)}
-                onSelect={(p) => setSelectedParameters((prior) => [
-                  ...prior, {
-                    friendlyName: p.qualifiedName,
-                    parameter: p
-                  }]
+                filterOut={selectedParameters.map(
+                  (p) => p.parameter.qualifiedName,
                 )}
+                onSelect={(p) =>
+                  setSelectedParameters((prior) => [
+                    ...prior,
+                    {
+                      friendlyName: p.qualifiedName,
+                      parameter: p,
+                    },
+                  ])
+                }
                 asChild
               >
                 <button
@@ -161,16 +203,16 @@ export function ParameterArraySelector({
   );
 }
 
-function CustomTableRow({ 
-  param, 
+function CustomTableRow({
+  param,
   index,
   onUpdateName,
-  onDelete
-}: { 
-  param: UserModifiedParameter, 
-  index: number ,
-  onUpdateName: (newName: string) => void
-  onDelete: () => void
+  onDelete,
+}: {
+  param: UserModifiedParameter;
+  index: number;
+  onUpdateName: (newName: string) => void;
+  onDelete: () => void;
 }) {
   const {
     attributes,
@@ -179,12 +221,12 @@ function CustomTableRow({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: param.parameter.qualifiedName })
+  } = useSortable({ id: param.parameter.qualifiedName });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-  }
+  };
 
   return (
     <TableRow
@@ -209,7 +251,7 @@ function CustomTableRow({
           value={param.friendlyName}
           onChange={(e) => {
             const newLabel = e.target.value;
-            onUpdateName(newLabel)
+            onUpdateName(newLabel);
           }}
           // ref={isLastRow ? lastInputRef : null}
         />
@@ -228,5 +270,5 @@ function CustomTableRow({
         </button>
       </TableCell>
     </TableRow>
-  )
+  );
 }

@@ -152,7 +152,7 @@ export function AddCardForm<K extends ComponentKey>({
                   // Parameter Array Selector
                   else if (
                     value instanceof z.ZodArray &&
-                    value.element instanceof z.ZodUnion  &&
+                    value.element instanceof z.ZodUnion &&
                     value.element.description === "LocalParameter"
                   ) {
                     return (
@@ -162,27 +162,35 @@ export function AddCardForm<K extends ComponentKey>({
                           field.onChange(
                             value.map((v) => ({
                               friendlyName: v.friendlyName,
-                              qualifiedName: v.parameter.qualifiedName
-                            })
-                            ),
+                              qualifiedName: v.parameter.qualifiedName,
+                            })),
                           );
                         }}
                       />
                     );
                   } else if (
-                    value instanceof z.ZodBranded && 
+                    value instanceof z.ZodBranded &&
                     value.description === "QualifiedParameterName"
                   ) {
                     return (
-                      <ParameterSelector 
+                      <ParameterSelector
                         filterOut={[field.value] as string[]}
-                        onSelect={(selection) => field.onChange(selection.qualifiedName)}
+                        onSelect={(selection) =>
+                          field.onChange(selection.qualifiedName)
+                        }
                       >
-                        <div className={cn(buttonVariants({ variant: "outline" }), "w-full justify-start")}>
-                          {field.value ? anonymizeParameter(field.value) : "Nothing Selected"}
+                        <div
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "w-full justify-start",
+                          )}
+                        >
+                          {field.value
+                            ? anonymizeParameter(field.value)
+                            : "Nothing Selected"}
                         </div>
                       </ParameterSelector>
-                    )
+                    );
                   } else if (
                     value instanceof z.ZodArray &&
                     value.element.description === "ChartSeries"

@@ -8,7 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 
 // Helper function to get the paired parameter
 export function getPairedQualifiedName(param: string): string | null {
-  if (!param.includes("/FlightComputer/") && !param.includes("/GSRadio/")) return null;
+  if (!param.includes("/FlightComputer/") && !param.includes("/GSRadio/"))
+    return null;
 
   if (param.includes("433")) {
     return param.replace("433", "903");

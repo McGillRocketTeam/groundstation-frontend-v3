@@ -13,30 +13,30 @@ export const customMapStyle = {
   name: "OSM + Sattelite",
   version: 8,
   sources: {
-    "satellite": {
-      "type": "raster",
-      "tiles": [
-        "http://localhost:8080/services/satellite-2017-11-02_canada_montreal/tiles/{z}/{x}/{y}.jpg"
+    satellite: {
+      type: "raster",
+      tiles: [
+        "http://localhost:8080/services/satellite-2017-11-02_canada_montreal/tiles/{z}/{x}/{y}.jpg",
       ],
-      "tileSize": 256,
-      "bounds": [-73.7299243282283, 45.0341840286281, -72.2895137142146, 46.046265455836]
-    }
+      tileSize: 256,
+      bounds: [
+        -73.7299243282283, 45.0341840286281, -72.2895137142146, 46.046265455836,
+      ],
+    },
   },
   layers: [
     {
-      "id": "Satellite",
-      "type": "raster",
-      "source": "satellite",
-      "minzoom": 0,
-      "layout": {
-        "visibility": "visible"
+      id: "Satellite",
+      type: "raster",
+      source: "satellite",
+      minzoom: 0,
+      layout: {
+        visibility: "visible",
       },
-      "paint": {
-        "raster-opacity": 1
+      paint: {
+        "raster-opacity": 1,
       },
-      "filter": [
-        "all"
-      ]
+      filter: ["all"],
     },
-  ]
-} satisfies StyleSpecification
+  ],
+} satisfies StyleSpecification;

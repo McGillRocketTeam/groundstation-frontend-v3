@@ -57,28 +57,37 @@ export const ParameterTableCard = ({
           <div className="p-2">FC903</div>
         </div>
 
-        {params.parameters.map((parameter) => (
+        {params.parameters.map((parameter) =>
           // Allowing for legacy string only parameters
-          typeof parameter === "string" ? 
-            <ParameterTableCardRow key={parameter} qualifiedName={parameter} /> :
-            <ParameterTableCardRow key={parameter.qualifiedName+parameter.friendlyName} {...parameter} />
-        ))}
+          typeof parameter === "string" ? (
+            <ParameterTableCardRow key={parameter} qualifiedName={parameter} />
+          ) : (
+            <ParameterTableCardRow
+              key={parameter.qualifiedName + parameter.friendlyName}
+              {...parameter}
+            />
+          ),
+        )}
       </div>
     </div>
   );
 };
 
 export function ParameterTableCardRow({
-  friendlyName, 
-  qualifiedName
-}: { 
-  friendlyName?: string, 
-  qualifiedName: string 
+  friendlyName,
+  qualifiedName,
+}: {
+  friendlyName?: string;
+  qualifiedName: string;
 }) {
-  const originalParameterFC = qualifiedName.startsWith("/FC433") ? "433" : "903";
+  const originalParameterFC = qualifiedName.startsWith("/FC433")
+    ? "433"
+    : "903";
 
-  const originalParameter = qualifiedName as QualifiedParameterNameType
-  const pairedParameter = getPairedQualifiedName(qualifiedName) as QualifiedParameterNameType;
+  const originalParameter = qualifiedName as QualifiedParameterNameType;
+  const pairedParameter = getPairedQualifiedName(
+    qualifiedName,
+  ) as QualifiedParameterNameType;
 
   const parameterList = [qualifiedName] as QualifiedParameterNameType[];
   if (pairedParameter !== null) {
@@ -91,25 +100,43 @@ export function ParameterTableCardRow({
       <div className="p-2 text-nowrap">{friendlyName ?? qualifiedName}</div>
       <div className="p-2">
         {(() => {
-          const value = originalParameterFC === "433" ? values[originalParameter] : values[pairedParameter]
-          const paramInfo = originalParameterFC === "433" ? info[originalParameter] : info[pairedParameter]
+          const value =
+            originalParameterFC === "433"
+              ? values[originalParameter]
+              : values[pairedParameter];
+          const paramInfo =
+            originalParameterFC === "433"
+              ? info[originalParameter]
+              : info[pairedParameter];
 
-          return <ParameterValueDisplay value={value} info={paramInfo} />
+          return <ParameterValueDisplay value={value} info={paramInfo} />;
         })()}
       </div>
       <div className="p-2 pr-4">
         {(() => {
-          const value = originalParameterFC === "903" ? values[originalParameter] : values[pairedParameter]
-          const paramInfo = originalParameterFC === "903" ? info[originalParameter] : info[pairedParameter]
+          const value =
+            originalParameterFC === "903"
+              ? values[originalParameter]
+              : values[pairedParameter];
+          const paramInfo =
+            originalParameterFC === "903"
+              ? info[originalParameter]
+              : info[pairedParameter];
 
-          return <ParameterValueDisplay value={value} info={paramInfo} />
+          return <ParameterValueDisplay value={value} info={paramInfo} />;
         })()}
       </div>
     </div>
-  )
+  );
 }
 
-function ParameterValueDisplay({ value, info }: { value?: ParameterValue, info?: SubscribedParameterInfo }) {
+function ParameterValueDisplay({
+  value,
+  info,
+}: {
+  value?: ParameterValue;
+  info?: SubscribedParameterInfo;
+}) {
   if (!value) {
     return <span className={"text-muted-foreground"}>N/A</span>;
   }
@@ -126,7 +153,7 @@ function ParameterValueDisplay({ value, info }: { value?: ParameterValue, info?:
   }
 
   if (value.engValue.type === "BOOLEAN") {
-    return <BoolValue value={value} /> 
+    return <BoolValue value={value} />;
   }
 
   return (
@@ -135,7 +162,6 @@ function ParameterValueDisplay({ value, info }: { value?: ParameterValue, info?:
       {info?.units}
     </span>
   );
-
 }
 
 // export const OldParameterTableCard = ({

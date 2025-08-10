@@ -90,21 +90,24 @@ export default function DockviewLayout() {
               <div className="text-center space-y-2">
                 <div className="text-error text-xl">No Dashboard Found</div>
                 <p className="max-w-[65ch] text-balance">
-                  You can import a dashboard from <Link className="underline" to="/settings">settings</Link>
-                  {" "}or create a new one from the sidebar.
+                  You can import a dashboard from{" "}
+                  <Link className="underline" to="/settings">
+                    settings
+                  </Link>{" "}
+                  or create a new one from the sidebar.
                 </p>
               </div>
             </div>
           ) : (
-              <DockviewReact
-                className="dockview-theme-custom"
-                onReady={onReady}
-                components={components}
-                rightHeaderActionsComponent={RightComponent}
-                defaultTabComponent={tabComponents.default}
-                tabComponents={tabComponents}
-              />
-            )}
+            <DockviewReact
+              className="dockview-theme-custom"
+              onReady={onReady}
+              components={components}
+              rightHeaderActionsComponent={RightComponent}
+              defaultTabComponent={tabComponents.default}
+              tabComponents={tabComponents}
+            />
+          )}
         </div>
       </div>
     </>

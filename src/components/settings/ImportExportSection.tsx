@@ -1,22 +1,35 @@
-
 import { useUserSettingsStore } from "@/lib/dashboard-persistance";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { Button } from "../ui/button";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 import { ChangeEvent, Fragment, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 export default function SettingsImportExportSection() {
-  const { 
-    getDashboardList,
-    settings,
-    overwriteSettings
-  } = useUserSettingsStore()
+  const { getDashboardList, settings, overwriteSettings } =
+    useUserSettingsStore();
 
-  const inputFile = useRef<HTMLInputElement>(null)
+  const inputFile = useRef<HTMLInputElement>(null);
 
   function pickFile() {
-    inputFile.current?.click()
+    inputFile.current?.click();
   }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -31,17 +44,17 @@ export default function SettingsImportExportSection() {
         if (!text) throw new Error("File text was empty");
 
         const parsedData = JSON.parse(text as string);
-        if (parsedData.dashboards === undefined) 
+        if (parsedData.dashboards === undefined)
           throw new Error("Unexpected JSON format (didn't find dashboards)");
 
-        overwriteSettings(parsedData)
+        overwriteSettings(parsedData);
       } catch (err) {
-        console.error('Error parsing JSON:', err);
+        console.error("Error parsing JSON:", err);
       }
     };
 
     reader.onerror = (e) => {
-      console.error('Error reading file:', e);
+      console.error("Error reading file:", e);
     };
 
     // Read the file as text
@@ -80,18 +93,18 @@ export default function SettingsImportExportSection() {
     // 6. Revoke the Blob URL to free up resources
     document.body.removeChild(a); // Clean up the temporary element
     URL.revokeObjectURL(url);
-  }
+  };
 
-  return(
+  return (
     <section className="space-y-4">
       <div className="flex flex-row justify-between">
         <h2>Import/Export Settings</h2>
-        <input 
-          type='file' 
-          accept=".json,application/json" 
+        <input
+          type="file"
+          accept=".json,application/json"
           onChange={handleFileChange}
-          ref={inputFile} 
-          className="hidden" 
+          ref={inputFile}
+          className="hidden"
         />
         <div className="flex flex-row gap-2">
           <AlertDialog>
@@ -104,12 +117,16 @@ export default function SettingsImportExportSection() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete any existing configuration you have. All settings will be replaced with the imported versions.
+                  This action cannot be undone. This will permanently delete any
+                  existing configuration you have. All settings will be replaced
+                  with the imported versions.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={pickFile}>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={pickFile}>
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -123,24 +140,29 @@ export default function SettingsImportExportSection() {
         {getDashboardList().map((dashboard) => (
           <div className="p-4 " key={dashboard.slug}>
             <span>{dashboard.name}</span>
-            {Object.entries(dashboard.dockview!.panels!).map(([id, panel], index, list) => (
-              <div key={id} className="relative pl-4 text-muted-foreground text-light">
-                {/* Vertical Marker */}
+            {Object.entries(dashboard.dockview!.panels!).map(
+              ([id, panel], index, list) => (
                 <div
-                  className={cn(
-                    "bg-border absolute top-0 left-0 h-full w-px",
-                    // make the last vertical marker half height
-                    index === list.length - 1 && "h-1/2",
-                  )}
-                ></div>
-                {/* Horizontal Marker */}
-                <div className="bg-border absolute bottom-1/2 left-0 h-px w-3"></div>
-                <div className="pl-0">{panel.title}</div>
-              </div>
-            ))}
+                  key={id}
+                  className="relative pl-4 text-muted-foreground text-light"
+                >
+                  {/* Vertical Marker */}
+                  <div
+                    className={cn(
+                      "bg-border absolute top-0 left-0 h-full w-px",
+                      // make the last vertical marker half height
+                      index === list.length - 1 && "h-1/2",
+                    )}
+                  ></div>
+                  {/* Horizontal Marker */}
+                  <div className="bg-border absolute bottom-1/2 left-0 h-px w-3"></div>
+                  <div className="pl-0">{panel.title}</div>
+                </div>
+              ),
+            )}
           </div>
         ))}
       </div>
     </section>
-  )
-} 
+  );
+}
