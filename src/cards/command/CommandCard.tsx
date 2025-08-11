@@ -193,7 +193,7 @@ export const CommandCard = () => {
                   </PopoverTrigger>
                   <PopoverContent
                     onOpenAutoFocus={(e) => e.preventDefault()}
-                    className="p-0"
+                    className="p-1"
                   >
                     <ScrollArea className="">
                       <div className="p-2">

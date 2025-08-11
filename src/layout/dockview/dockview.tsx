@@ -34,6 +34,11 @@ export default function DockviewLayout() {
     if (dashboard?.dockview) {
       api.fromJSON(dashboard.dockview);
     } else {
+      api.addPanel({
+        id: crypto.randomUUID(),
+        component: "pid",
+        title: "New Panel",
+      });
       console.error(`Dashboard not found for slug ${params.slug}`);
     }
 
@@ -85,29 +90,29 @@ export default function DockviewLayout() {
     <>
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <div id="dockview-container">
-          {api?.panels.length === 0 ? (
-            <div className="grid w-full h-full place-items-center">
-              <div className="text-center space-y-2">
-                <div className="text-error text-xl">No Dashboard Found</div>
-                <p className="max-w-[65ch] text-balance">
-                  You can import a dashboard from{" "}
-                  <Link className="underline" to="/settings">
-                    settings
-                  </Link>{" "}
-                  or create a new one from the sidebar.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <DockviewReact
-              className="dockview-theme-custom"
-              onReady={onReady}
-              components={components}
-              rightHeaderActionsComponent={RightComponent}
-              defaultTabComponent={tabComponents.default}
-              tabComponents={tabComponents}
-            />
-          )}
+          {/* {api?.panels.length === 0 ? ( */}
+          {/*   <div className="grid w-full h-full place-items-center"> */}
+          {/*     <div className="text-center space-y-2"> */}
+          {/*       <div className="text-error text-xl">No Dashboard Found</div> */}
+          {/*       <p className="max-w-[65ch] text-balance"> */}
+          {/*         You can import a dashboard from{" "} */}
+          {/*         <Link className="underline" to="/settings"> */}
+          {/*           settings */}
+          {/*         </Link>{" "} */}
+          {/*         or create a new one from the sidebar. */}
+          {/*       </p> */}
+          {/*     </div> */}
+          {/*   </div> */}
+          {/* ) : ( */}
+          <DockviewReact
+            className="dockview-theme-custom"
+            onReady={onReady}
+            components={components}
+            rightHeaderActionsComponent={RightComponent}
+            defaultTabComponent={tabComponents.default}
+            tabComponents={tabComponents}
+          />
+          {/* )} */}
         </div>
       </div>
     </>

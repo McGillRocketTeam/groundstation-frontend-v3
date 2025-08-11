@@ -507,6 +507,7 @@ export function useDygraphs(
   }, [resetSignal]);
 
   function processRealtimeDelivery(pvals: ParameterValue[]) {
+    console.log(pvals)
     if (!Array.isArray(pvals) || pvals.length === 0) {
       console.error("Invalid or empty pvals:", pvals);
       return;

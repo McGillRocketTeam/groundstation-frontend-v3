@@ -6,17 +6,15 @@ import {
 } from "@/lib/yamcsClient/api";
 import { AcknowledgementIcon } from "./AcknowledgementIcon";
 import { cn, extractValue } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import CommandName from "@/components/command/CommandName";
 
 export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
   // const [showDialog, setShowDialog] = useState(false);
-  const commandQuery = useQuery({
-    queryKey: [cmd.commandName],
-    queryFn: () => yamcs.getCommand("gs_backend", cmd.commandName),
-  });
+  // const commandQuery = useQuery({
+  //   queryKey: [cmd.commandName],
+  //   queryFn: () => yamcs.getCommand("gs_backend", cmd.commandName),
+  // });
 
   // const { addNotification } = useNotifications();
 
@@ -77,6 +75,12 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
           </div>
         )}
       </div>
+      {cmd.comment && (
+        <div>
+          <div className="font-semibold">Comment</div>
+          <div>{cmd.comment}</div>
+        </div>
+      )}
       <hr />
       <div>
         <div className="font-semibold">Generation Time</div>
@@ -95,7 +99,7 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
       <hr />
       <div>
         <div className="pb-1 font-semibold">Yamcs Acknowledgments</div>
-        <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-x-2 gap-y-1">
+        <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-x-2 gap-y-1 items-center">
           <GridRow
             name="Queued"
             time={cmd.generationTime}
@@ -128,15 +132,13 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
           </div>
         </div>
       )}
-      <hr />
-      <Button
-        disabled={commandQuery.isLoading || !commandQuery.data}
-        variant="destructive"
-        size="sm"
-        // onClick={() => setShowDialog(true)}
-      >
-        Resend Command (TODO)
-      </Button>
+      {cmd.completed?.message && 
+      <div>
+        <div>
+          <div className="font-semibold">Completion Message</div>
+          <div className={cn(cmd.completed.status === "NOK" && "text-error")}>{cmd.completed.status === "NOK" && "FAILURE: "}{cmd.completed.message}</div>
+        </div>
+      </div>}
     </div>
   );
 }
