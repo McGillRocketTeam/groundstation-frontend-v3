@@ -1,4 +1,4 @@
-import { IDockviewPanelHeaderProps } from "dockview";
+import { AddPanelOptions, IDockviewPanelHeaderProps } from "dockview";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -8,6 +8,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
+    CopyIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   Pencil1Icon,
@@ -16,12 +17,14 @@ import {
 import { useEffect, useState } from "react";
 import AddCardDialog from "@/components/AddCardDialog";
 import { ComponentKey } from "@/cards";
+import { usePanelClipboardStore } from "@/stores/clipboard";
 
 const tabComponents = {
   default: DefaultTab,
 };
 
 function DefaultTab(props: IDockviewPanelHeaderProps) {
+  const { value, copy, paste } = usePanelClipboardStore()
   const [maximized, setMaximized] = useState(false);
 
   useEffect(() => {
@@ -59,6 +62,29 @@ function DefaultTab(props: IDockviewPanelHeaderProps) {
           </ContextMenuItem>
         )}
         <ContextMenuSeparator />
+        <ContextMenuItem onClick={
+          () => {
+            copy({
+              id: crypto.randomUUID(),
+              title: props.api.title,
+              component: props.api.component,
+              params: props.containerApi.getPanel(props.api.id)?.params,
+            })
+          }
+        }>
+          Copy<ContextMenuShortcut>
+            <CopyIcon />
+          </ContextMenuShortcut>
+        </ContextMenuItem>
+        {value && (
+          <ContextMenuItem onClick={() => {
+            const panel = paste()
+            if (panel)
+              props.containerApi.addPanel({...panel, position: { referenceGroup: props.api.group }})
+          }}>
+            Paste
+          </ContextMenuItem>
+        )}
         <AddCardDialog
           asChild
           defaultValues={{

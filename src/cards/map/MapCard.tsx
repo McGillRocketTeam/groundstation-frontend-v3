@@ -155,7 +155,7 @@ export const MapCard = ({ params }: IDockviewPanelProps<MapCardParams>) => {
   return (
     <>
       <div className="relative grid w-full h-full">
-        <div className="absolute top-4 right-4 bg-background z-50 p-2 border grid grid-cols-[auto_1fr_1fr] gap-2 gap-x-4 items-center">
+        <div className="absolute top-3 right-3 bg-background z-50 p-2 border grid grid-cols-[auto_1fr_1fr] gap-2 gap-x-4 items-center">
           <div className="grid grid-cols-subgrid col-span-full border-b text-xs text-muted-foreground">
             <button className="w-4" />
             <div>Latitude</div>
@@ -214,7 +214,7 @@ export const MapCard = ({ params }: IDockviewPanelProps<MapCardParams>) => {
           </div>
         </div>
         {mouseLocation && (
-          <div className="absolute top-4 left-4 bg-background z-50 p-2 border text-sm">
+          <div className="absolute bottom-3 right-3 bg-background z-50 p-2 border text-sm">
             <div className="text-muted-foreground text-xs">Mouse Location</div>
             {convertLatLngToUserReadableString(
               mouseLocation.lat,

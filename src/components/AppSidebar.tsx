@@ -16,8 +16,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useLocation, useNavigate } from "react-router";
 import {
+    CopyIcon,
   DotsHorizontalIcon,
   LayersIcon,
+  Pencil1Icon,
   PlusIcon,
 } from "@radix-ui/react-icons";
 import { useUserSettingsStore } from "@/lib/dashboard-persistance";
@@ -26,6 +28,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -87,7 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     >
                       <>
                         {dashboard.name}
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger asChild>
                           <DotsHorizontalIcon className="absolute right-0 top-1/2 -translate-y-1/2" />
                         </DropdownMenuTrigger>
                       </>
@@ -105,6 +108,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         }}
                       >
                         Rename
+                        <DropdownMenuShortcut>
+                          <Pencil1Icon />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => {
+                        saveDashboard({
+                          slug: crypto.randomUUID(),
+                          name: `${dashboard.name} Copy`,
+                          dockview: dashboard.dockview
+                        })
+                      }}>
+                        Duplicate <DropdownMenuShortcut><CopyIcon /></DropdownMenuShortcut>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
