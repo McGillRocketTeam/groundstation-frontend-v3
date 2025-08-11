@@ -72,14 +72,14 @@ export function AsyncMultiSelect({
                     className={cn(
                       "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                       selected.includes(option)
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-primary text-black opacity-100 text-red-500"
                         : "opacity-50 [&_svg]:invisible",
                     )}
                   >
                     <Check
                       strokeWidth={3}
-                      stroke="white"
-                      className="size-4 p-0.5"
+                      stroke="currentColor"
+                      className="size-3 p-0.25 text-primary-foreground"
                     />
                   </div>
                   {option}

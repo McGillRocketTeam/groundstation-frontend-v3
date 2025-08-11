@@ -38,8 +38,22 @@ import { ChartSeriesSelector } from "@/components/form/ChartSeriesSelector";
 import { Switch } from "@/components/ui/switch";
 import { ParameterSelector } from "@/components/form/ParameterSelector";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { anonymizeParameter } from "@/lib/yamcsCommands/format-command-name";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 // Create a schema for the base panel configuration
 const basePanelSchema = z.object({
@@ -97,6 +111,8 @@ export function AddCardForm<K extends ComponentKey>({
       params: { ...defaultValues?.values },
     } as any as z.infer<ReturnType<typeof getFormSchema>>,
   });
+
+  const [showComponentPopover, setShowComponentPopover] = useState(false);
 
   // Render form fields based on the schema
   const renderSchemaFields = (
@@ -187,7 +203,7 @@ export function AddCardForm<K extends ComponentKey>({
                         >
                           {field.value
                             ? anonymizeParameter(field.value)
-                            : "Nothing Selected"}
+                            : "Select Parameter..."}
                         </div>
                       </ParameterSelector>
                     );
@@ -327,31 +343,80 @@ export function AddCardForm<K extends ComponentKey>({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Component Type</FormLabel>
-              <Select
-                value={field.value}
-                onValueChange={(value: ComponentKey) => {
-                  field.onChange(value);
-                  setSelectedComponent(value);
-                  form.reset({ id: crypto.randomUUID(), component: value });
-                }}
+              <Popover
+                open={showComponentPopover}
+                onOpenChange={setShowComponentPopover}
+                modal={true}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select component type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(componentSchemas)
-                    .sort(([key1, schema1], [key2, schema2]) =>
-                      (schema1.description ?? key1).localeCompare(
-                        schema2.description ?? key2,
-                      ),
-                    )
-                    .map(([key, schema]) => (
-                      <SelectItem key={key} value={key}>
-                        {schema.description ?? key}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between",
+                        !field.value && "text-muted-foreground",
+                      )}
+                      variant="outline"
+                    >
+                      {field.value
+                        ? Object.entries(componentSchemas)
+                            .find(
+                              ([key]) => key === field.value,
+                              // @ts-expect-error hacky
+                            )
+                            ?.at(1)?.description
+                        : "Select component type"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder="Search components..."
+                      className="h-9"
+                    />
+                    <CommandList>
+                      <CommandEmpty>No component found.</CommandEmpty>
+                      <CommandGroup>
+                        {Object.entries(componentSchemas)
+                          .sort(([key1, schema1], [key2, schema2]) =>
+                            (schema1.description ?? key1).localeCompare(
+                              schema2.description ?? key2,
+                            ),
+                          )
+                          .map(([key, schema]) => (
+                            <CommandItem
+                              value={key}
+                              key={key}
+                              onSelect={() => {
+                                setShowComponentPopover(false);
+                                field.onChange(key);
+                                // @ts-expect-error we know key is type safe here
+                                setSelectedComponent(key);
+                                // @ts-expect-error we know key is type safe here
+                                form.reset({
+                                  id: crypto.randomUUID(),
+                                  component: key,
+                                });
+                              }}
+                            >
+                              {schema.description ?? key}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  key === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

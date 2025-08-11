@@ -66,6 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel>Dashboards</SidebarGroupLabel>
           <SidebarGroupAction asChild>
             <button
+              className=" -translate-x-2"
               onClick={() => {
                 saveDashboard({
                   slug: crypto.randomUUID(),
@@ -91,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <>
                         {dashboard.name}
                         <DropdownMenuTrigger asChild>
-                          <DotsHorizontalIcon className="absolute right-0 top-1/2 -translate-y-1/2" />
+                          <DotsHorizontalIcon className="absolute right-2 top-1/2 -translate-y-1/2" />
                         </DropdownMenuTrigger>
                       </>
                     </SidebarMenuButton>
