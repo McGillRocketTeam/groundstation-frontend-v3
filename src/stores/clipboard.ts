@@ -1,14 +1,12 @@
- 
-import { DockviewPanelRenderer } from 'dockview-react'
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-
+import { DockviewPanelRenderer } from "dockview-react";
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 type ClipboardStore<T> = {
-  value: T | null,
-  copy: (value: T | null) => void
-  paste: () => T | null
-}
+  value: T | null;
+  copy: (value: T | null) => void;
+  paste: () => T | null;
+};
 
 type PanelCipboardItem = {
   id: string;
@@ -18,29 +16,32 @@ type PanelCipboardItem = {
   params?: any;
   tabComponent?: string;
   renderer?: DockviewPanelRenderer;
-}
+};
 
-const createClipboardStore = <T>(key: string) => create<ClipboardStore<T>>()(
-  persist(
-    (set, get) => ({
-      value: null,
-      copy: (value) => {
-        set({ value })
+const createClipboardStore = <T>(key: string) =>
+  create<ClipboardStore<T>>()(
+    persist(
+      (set, get) => ({
+        value: null,
+        copy: (value) => {
+          set({ value });
+        },
+        paste: () => {
+          const value = get().value;
+          set({ value: null });
+          return value;
+        },
+      }),
+      {
+        name: key,
+        storage: createJSONStorage(() => sessionStorage),
       },
-      paste: () => {
-        const value = get().value
-        set({ value: null })
-        return value
-      } 
-    }),
-    {
-      name: key,
-      storage: createJSONStorage(() => sessionStorage),
-    },
-  ),
-)
+    ),
+  );
 
-export const usePanelClipboardStore = createClipboardStore<PanelCipboardItem>("mrt_panel_clipboard")
+export const usePanelClipboardStore = createClipboardStore<PanelCipboardItem>(
+  "mrt_panel_clipboard",
+);
 
 // export const usePanelCipboardStore = create<ClipboardStore<PanelCipboardItem>>()(
 //   persist(
@@ -67,7 +68,7 @@ export const usePanelClipboardStore = createClipboardStore<PanelCipboardItem>("m
 //         const value = get().value
 //         set({ value: null })
 //         return value
-//       } 
+//       }
 //     }),
 //     {
 //       name: 'mrt_panel_clipboard',

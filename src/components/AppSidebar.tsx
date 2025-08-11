@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useLocation, useNavigate } from "react-router";
 import {
-    CopyIcon,
+  CopyIcon,
   DotsHorizontalIcon,
   LayersIcon,
   Pencil1Icon,
@@ -112,14 +112,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           <Pencil1Icon />
                         </DropdownMenuShortcut>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => {
-                        saveDashboard({
-                          slug: crypto.randomUUID(),
-                          name: `${dashboard.name} Copy`,
-                          dockview: dashboard.dockview
-                        })
-                      }}>
-                        Duplicate <DropdownMenuShortcut><CopyIcon /></DropdownMenuShortcut>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          saveDashboard({
+                            slug: crypto.randomUUID(),
+                            name: `${dashboard.name} Copy`,
+                            dockview: dashboard.dockview,
+                          });
+                        }}
+                      >
+                        Duplicate{" "}
+                        <DropdownMenuShortcut>
+                          <CopyIcon />
+                        </DropdownMenuShortcut>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
