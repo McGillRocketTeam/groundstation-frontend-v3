@@ -284,7 +284,7 @@ export const MapCard = ({ params }: IDockviewPanelProps<MapCardParams>) => {
               longitude={params.groundStationLongitude}
               anchor="bottom"
             >
-              <House />
+              <House className="size-10 text-white p-2 rounded-full bg-black" />
             </Marker>
           )}
           {values[params.longitudeParameter] &&
@@ -315,7 +315,6 @@ export const MapCard = ({ params }: IDockviewPanelProps<MapCardParams>) => {
               <Pin color="#ef4444" />
             </Marker>
           )}
-
           {values[pairedLongitude] && values[pairedLatitude] ? (
             <Marker
               key={`marker-rocket-2`}

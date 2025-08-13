@@ -1,11 +1,11 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
-const House = ({ size }: { size?: number }) => (
+const House = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height={size}
     viewBox="0 0 56 56"
-    className="h-4"
+    className={cn("h-4", className)}
   >
     <path
       fill="currentColor"
