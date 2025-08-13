@@ -12,6 +12,7 @@ import { StyleSpecification } from "@vis.gl/react-maplibre";
 export const customMapStyle = {
   name: "OSM + Sattelite",
   version: 8,
+  glyphs: "http://localhost:5173/{fontstack}/{range}.pbf",
   sources: {
     worldLowQuality: {
       type: "raster",
@@ -87,7 +88,7 @@ export const customMapStyle = {
       type: "raster",
       source: "ontarioFull",
       minzoom: 4,
-      maxzoom: 13,
+      maxzoom: 22,
       layout: {
         visibility: "visible",
       },
