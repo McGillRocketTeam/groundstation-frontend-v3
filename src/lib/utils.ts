@@ -11,10 +11,10 @@ export function getPairedQualifiedName(param: string): string | null {
   if (!param.includes("/FlightComputer/") && !param.includes("/GSRadio/"))
     return null;
 
-  if (param.includes("433")) {
-    return param.replace("433", "903");
+  if (param.includes("435")) {
+    return param.replace("435", "903");
   } else if (param.includes("903")) {
-    return param.replace("903", "433");
+    return param.replace("903", "435");
   }
   return null;
 }

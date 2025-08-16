@@ -16,7 +16,7 @@ type ParameterResult<T extends string> =
   IsFlightComputerParam<T> extends true
     ? {
         type: "flightComputer";
-        fc433?: ParameterValue;
+        fc435?: ParameterValue;
         fc903?: ParameterValue;
       }
     : {
@@ -28,7 +28,7 @@ type ParameterInfoResult<T extends string> =
   IsFlightComputerParam<T> extends true
     ? {
         type: "flightComputer";
-        fc433?: SubscribedParameterInfo;
+        fc435?: SubscribedParameterInfo;
         fc903?: SubscribedParameterInfo;
       }
     : {
@@ -81,29 +81,29 @@ export function useDoubleParameterSubscription<
       const paramKey = param as T[number];
 
       if (param.includes("/FlightComputer/")) {
-        // FlightComputer parameter - group FC433/FC903
-        const fc433Param = param.includes("/FC433/")
+        // FlightComputer parameter - group FC435/FC903
+        const fc435Param = param.includes("/FC435/")
           ? param
-          : param.replace("/FC903/", "/FC433/");
+          : param.replace("/FC903/", "/FC435/");
         const fc903Param = param.includes("/FC903/")
           ? param
-          : param.replace("/FC433/", "/FC903/");
+          : param.replace("/FC435/", "/FC903/");
 
         // Check if both are explicitly requested
         const bothExplicit =
-          inputParams.has(fc433Param as QualifiedParameterNameType) &&
+          inputParams.has(fc435Param as QualifiedParameterNameType) &&
           inputParams.has(fc903Param as QualifiedParameterNameType);
 
         if (bothExplicit) {
           // If both are explicit, only populate the one that matches the current param
-          if (param.includes("/FC433/")) {
+          if (param.includes("/FC435/")) {
             values[paramKey] = {
               type: "flightComputer",
-              fc433: allValues[param],
+              fc435: allValues[param],
             } as ParameterResult<T[number]>;
             info[paramKey] = {
               type: "flightComputer",
-              fc433: allInfo[param],
+              fc435: allInfo[param],
             } as ParameterInfoResult<T[number]>;
           } else {
             values[paramKey] = {
@@ -116,16 +116,16 @@ export function useDoubleParameterSubscription<
             } as ParameterInfoResult<T[number]>;
           }
         } else {
-          // Single param requested, provide both FC433 and FC903
+          // Single param requested, provide both FC435 and FC903
           values[paramKey] = {
             type: "flightComputer",
-            fc433: allValues[fc433Param as QualifiedParameterNameType],
+            fc435: allValues[fc435Param as QualifiedParameterNameType],
             fc903: allValues[fc903Param as QualifiedParameterNameType],
           } as ParameterResult<T[number]>;
 
           info[paramKey] = {
             type: "flightComputer",
-            fc433: allInfo[fc433Param as QualifiedParameterNameType],
+            fc435: allInfo[fc435Param as QualifiedParameterNameType],
             fc903: allInfo[fc903Param as QualifiedParameterNameType],
           } as ParameterInfoResult<T[number]>;
         }
