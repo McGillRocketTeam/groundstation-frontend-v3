@@ -119,7 +119,8 @@ export class StackFormatter {
   }
 
   private getExtraOptionsJSON(extra: { [key: string]: Value }): any {
-    const extraOptions: { id: string; value?: string | number | boolean }[] = [];
+    const extraOptions: { id: string; value?: string | number | boolean }[] =
+      [];
     for (const id in extra) {
       const value = this.getValue(extra[id]);
       extraOptions.push({

@@ -13,7 +13,6 @@ import {
 import { CustomBarsValue, DySample, DySeries } from "./dygraphs";
 import { extractNumberValue } from "@/lib/utils";
 import { chartStore } from "@/stores/chart";
-import { debounce } from "lodash";
 
 const YAMCS_INSTANCE = "gs_backend";
 
@@ -56,10 +55,10 @@ export function useDygraphs(
   //const subscription = useRef<ParameterSubscription | null>(null);
   const realtimeView = useRef<boolean>(true);
 
-  const debouncedProcessRealtimeDelivery = debounce(
-    processRealtimeDelivery,
-    10,
-  );
+  // const debouncedProcessRealtimeDelivery = debounce(
+  //   processRealtimeDelivery,
+  //   10,
+  // );
 
   /**
    *  Adjusts x by zoomInPercentage
@@ -390,7 +389,6 @@ export function useDygraphs(
     }
 
     const listener = (data: SubscribeParametersData) => {
-
       if (data.mapping) {
         idMapping.current = {
           ...idMapping.current,
@@ -406,7 +404,7 @@ export function useDygraphs(
       }
 
       try {
-        processRealtimeDelivery(data.values)
+        processRealtimeDelivery(data.values);
         // debouncedProcessRealtimeDelivery(data.values);
       } catch (error) {
         console.error("Error in processRealtimeDelivery:", error);
@@ -509,6 +507,7 @@ export function useDygraphs(
   }, [resetSignal]);
 
   function processRealtimeDelivery(pvals: ParameterValue[]) {
+    console.log(pvals)
     if (!Array.isArray(pvals) || pvals.length === 0) {
       console.error("Invalid or empty pvals:", pvals);
       return;

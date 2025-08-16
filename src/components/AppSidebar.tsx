@@ -14,19 +14,34 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import {
+  CopyIcon,
   DotsHorizontalIcon,
   LayersIcon,
+  Pencil1Icon,
   PlusIcon,
 } from "@radix-ui/react-icons";
-import { getDashboardList, saveDashboard } from "@/lib/dashboard-persistance";
-import { Dialog } from "./ui/dialog";
-import { Orientation } from "dockview-react";
+import { useUserSettingsStore } from "@/lib/dashboard-persistance";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
+  const {
+    getDashboardList,
+    saveDashboard,
+    deleteDashboard,
+    updateDashboardMetadata,
+  } = useUserSettingsStore();
   const dashboards = getDashboardList();
+  const navigate = useNavigate();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -49,29 +64,78 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Dashboards</SidebarGroupLabel>
-          <SidebarGroupAction>
-            <button onClick={() => {}}>
+          <SidebarGroupAction asChild>
+            <button
+              className=" -translate-x-2"
+              onClick={() => {
+                saveDashboard({
+                  slug: crypto.randomUUID(),
+                  name: "New Dashboard",
+                });
+              }}
+            >
               <PlusIcon className="size-3" />
             </button>
           </SidebarGroupAction>
           <SidebarGroupContent>
             <SidebarMenu>
               {dashboards?.map((dashboard) => (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location.pathname == "/"}
-                  >
-                    <Link
-                      className="flex flex-row justify-between items-center"
-                      to={`/${dashboard.slug}`}
+                <SidebarMenuItem key={dashboard.slug}>
+                  <DropdownMenu>
+                    <SidebarMenuButton
+                      isActive={location.pathname == `/${dashboard.slug}`}
+                      onClick={() => {
+                        navigate(`/${dashboard.slug}`);
+                      }}
+                      className="py-2"
                     >
-                      <div className="flex flex-row items-center gap-2">
+                      <>
                         {dashboard.name}
-                      </div>
-                      <DotsHorizontalIcon />
-                    </Link>
-                  </SidebarMenuButton>
+                        <DropdownMenuTrigger asChild>
+                          <DotsHorizontalIcon className="absolute right-2 top-1/2 -translate-y-1/2" />
+                        </DropdownMenuTrigger>
+                      </>
+                    </SidebarMenuButton>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          const newName = prompt("Enter a new name:");
+                          if (newName) {
+                            updateDashboardMetadata({
+                              oldSlug: dashboard.slug,
+                              newName,
+                            });
+                          }
+                        }}
+                      >
+                        Rename
+                        <DropdownMenuShortcut>
+                          <Pencil1Icon />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          saveDashboard({
+                            slug: crypto.randomUUID(),
+                            name: `${dashboard.name} Copy`,
+                            dockview: dashboard.dockview,
+                          });
+                        }}
+                      >
+                        Duplicate{" "}
+                        <DropdownMenuShortcut>
+                          <CopyIcon />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => deleteDashboard(dashboard.slug)}
+                        variant="destructive"
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

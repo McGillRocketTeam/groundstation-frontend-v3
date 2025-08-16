@@ -8,12 +8,13 @@ export function cn(...inputs: ClassValue[]) {
 
 // Helper function to get the paired parameter
 export function getPairedQualifiedName(param: string): string | null {
-  if (!param.includes("/FlightComputer/")) return null;
+  if (!param.includes("/FlightComputer/") && !param.includes("/GSRadio/"))
+    return null;
 
-  if (param.includes("/FC433/")) {
-    return param.replace("/FC433/", "/FC903/");
-  } else if (param.includes("/FC903/")) {
-    return param.replace("/FC903/", "/FC433/");
+  if (param.includes("435")) {
+    return param.replace("435", "903");
+  } else if (param.includes("903")) {
+    return param.replace("903", "435");
   }
   return null;
 }
@@ -51,7 +52,8 @@ export function extractValue(value: Value) {
   }
 }
 
-export function extractNumberValue(value: Value) {
+export function extractNumberValue(value?: Value) {
+  if (!value) return null;
   switch (value.type) {
     case "AGGREGATE":
       return null;
@@ -82,4 +84,30 @@ export function extractNumberValue(value: Value) {
     case "UINT64":
       return value.uint64Value;
   }
+}
+
+export function convertLatLngToUserReadableString(
+  latitude: number,
+  longitude: number,
+): string {
+  const toDegreesMinutesSeconds = (
+    decimal: number,
+    isLatitude: boolean,
+  ): string => {
+    const absolute = Math.abs(decimal);
+    const degrees = Math.floor(absolute);
+    const minutesDecimal = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesDecimal);
+    const seconds = (minutesDecimal - minutes) * 60;
+    let direction = "";
+    if (isLatitude) {
+      direction = decimal >= 0 ? "N" : "S";
+    } else {
+      direction = decimal >= 0 ? "E" : "W";
+    }
+    return `${degrees}° ${minutes}' ${seconds.toFixed(2)}“${direction}`;
+  };
+  const latString = toDegreesMinutesSeconds(latitude, true);
+  const lonString = toDegreesMinutesSeconds(longitude, false);
+  return `${latString}, ${lonString}`;
 }

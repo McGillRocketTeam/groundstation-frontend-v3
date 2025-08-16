@@ -1,4 +1,3 @@
-import { CommandConfiguration } from "@/lib/schemas";
 import { Combobox } from "@/form/components/combobox";
 import { yamcs } from "@/lib/yamcsClient/api";
 import { useQuery } from "@tanstack/react-query";
@@ -7,13 +6,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Command } from "@/lib/yamcsClient/lib/client";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
-export function CommandButtonSelector({
-  // children,
-  onSelection,
-}: {
-  // children: ReactNode;
-  onSelection: (selection: CommandConfiguration) => void;
-}) {
+export function CommandButtonSelector() {
+  // {
+  //   // children,
+  //   // onSelection,
+  // }: {
+  //   // children: ReactNode;
+  //   onSelection: (selection: CommandConfiguration) => void;
+  // },
   const { data: commands } = useQuery({
     queryKey: ["yamcs:getCommands"],
     queryFn: async () => await yamcs.getCommands("gs_backend"),

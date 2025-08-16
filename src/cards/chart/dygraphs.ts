@@ -93,7 +93,6 @@ export function analyzeStaticValueRanges(parameter: NamedParameterType) {
             y1IsLimit: false,
             color: colorForLevel(range.level) || "black",
           };
-          // @ts-expect-error - from yamcs
           staticAlarmZones.push(zone);
           last_y = zone.y2;
 
@@ -116,7 +115,6 @@ export function analyzeStaticValueRanges(parameter: NamedParameterType) {
             y1IsLimit: true,
             color: colorForLevel(range.level) || "black",
           };
-          // @ts-expect-error - from yamcs
           staticAlarmZones.push(zone);
           last_y = zone.y1;
 

@@ -23,7 +23,7 @@ export function anonymizeParameter(name: string) {
 export function getSiblingParameter(name: string) {
   if (!name.includes("/FlightComputer/")) return undefined;
 
-  return name.includes("FC433")
-    ? name.replace("433", "903")
-    : name.replace("903", "433");
+  return name.includes("FC435")
+    ? name.replace("435", "903")
+    : name.replace("903", "435");
 }

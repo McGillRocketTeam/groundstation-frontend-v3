@@ -79,13 +79,7 @@ function YAMCSIndicator() {
       {time && (
         <div className="text-right text-xs">
           <div>{new Date(time.value).toLocaleString()}</div>
-          {connected === false ? (
-            <div className="text-destructive text-xs">
-              {"YAMCS Disconnected"}
-            </div>
-          ) : (
-            <div className="text-success">{"YAMCS Connected"}</div>
-          )}
+          <div className="text-success">{"YAMCS Connected"}</div>
         </div>
       )}
     </>

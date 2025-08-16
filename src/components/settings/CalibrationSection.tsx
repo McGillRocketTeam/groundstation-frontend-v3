@@ -18,7 +18,6 @@ import { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ParameterSelector } from "../form/ParameterSelector";
 import { QualifiedParameterNameType } from "@/lib/schemas";
-import ParameterName from "../parameter/ParameterName";
 import {
   anonymizeParameter,
   getSiblingParameter,
@@ -84,7 +83,7 @@ export default function CalibrationSection() {
                     {parameters
                       .filter((p) =>
                         p.includes("/FlightComputer/")
-                          ? p.includes("433")
+                          ? p.includes("435")
                           : true,
                       )
                       .map((parameter) => (

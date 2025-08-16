@@ -93,7 +93,7 @@ export const CommandCard = () => {
       <TooltipProvider>
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="sticky top-0 bg-background z-30">
               <TableHead>Name</TableHead>
               <TableHead className="w-10 text-center">Q</TableHead>
               <TableHead className="w-10 text-center">R</TableHead>
@@ -113,7 +113,7 @@ export const CommandCard = () => {
                   <PopoverTrigger asChild>
                     <TableRow
                       data-new={newRowIds.has(cmd.id)}
-                      className="data-[state=open]:bg-background-tertiary cursor-pointer text-sm data-[new=true]:animate-pulse data-[new=true]:bg-amber-200"
+                      className="data-[state=open]:bg-background-tertiary cursor-pointer text-sm data-[new=true]:animate-pulse data-[new=true]:bg-amber-200 dark:data-[new=true]:bg-amber-800/75"
                     >
                       <TableCell className="space-y-1">
                         <div className="text-muted-foreground">
@@ -193,7 +193,7 @@ export const CommandCard = () => {
                   </PopoverTrigger>
                   <PopoverContent
                     onOpenAutoFocus={(e) => e.preventDefault()}
-                    className="p-0"
+                    className="p-1"
                   >
                     <ScrollArea className="">
                       <div className="p-2">

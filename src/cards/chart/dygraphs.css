@@ -3,5 +3,5 @@
  */
 
 .dygraph-legend {
-	@apply pointer-events-none w-full h-full flex flex-row items-end justify-start translate-y-8 gap-3 pl-3;
+  @apply pointer-events-none w-full h-full flex flex-row items-end justify-start translate-y-8 gap-3 pl-3;
 }

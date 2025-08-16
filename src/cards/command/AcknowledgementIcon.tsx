@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   CheckCircledIcon,
   CircleIcon,
@@ -7,17 +8,22 @@ import {
 
 export function AcknowledgementIcon({
   status,
+  className
 }: {
   status: string | undefined;
+    className?: string
 }) {
   if (status) {
-    if (status === "OK") return <CheckCircledIcon className="text-success" />;
+    if (status === "OK")
+      return (
+        <CheckCircledIcon className={cn("text-green-700 dark:text-green-500", className)} />
+      );
     else if (status === "none") {
-      return <CircleIcon className="text-muted-foreground" />;
+      return <CircleIcon className={cn("text-muted-foreground", className)} />;
     } else {
-      return <CrossCircledIcon className="text-error" />;
+      return <CrossCircledIcon className={cn("text-red-700 dark:text-red-500", className)} />;
     }
   } else {
-    return <MinusIcon className="text-muted-foreground" />;
+    return <MinusIcon className={cn("text-muted-foreground", className)} />;
   }
 }

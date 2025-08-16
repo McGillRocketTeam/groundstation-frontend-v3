@@ -1,7 +1,7 @@
 import { IDockviewPanelProps } from "dockview-react";
 import { SerialTerminalCardParams } from "./schema";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -106,7 +106,7 @@ export const SerialTerminalCard = ({
   useEffect(() => {
     if (autoScroll && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
+        // behavior: "smooth",
         block: "end",
       });
     }
@@ -164,6 +164,7 @@ export const SerialTerminalCard = ({
         ref={scrollAreaRef}
         className="grow overflow-scroll border-y relative"
       >
+        <ScrollBar orientation="horizontal" />
         {output.map((line) => (
           <TerminalLine key={line.id} message={line} />
         ))}
@@ -215,14 +216,20 @@ const TerminalLine = memo(function TerminalLine({
   };
 
   return (
-    <div className="px-2 group text-sm flex items-start space-x-2 hover:bg-muted">
+    <div className="px-2 group text-sm flex flex-row items-start space-x-2 hover:bg-muted">
       <span className="text-gray-500 text-xs min-w-[60px]">
         {formatTimestamp(message.timestamp)}
       </span>
       <span
-        className={cn(message.source === "user" ? "text-blue-700" : "text-mrt")}
+        className={cn(
+          message.source === "user"
+            ? "text-yellow-700"
+            : message.source.includes("903")
+              ? "text-purple-700"
+              : "text-cyan-700",
+        )}
       >{`[${message.source.toLocaleUpperCase()}]`}</span>
-      <span className="flex-1"> {message.id}</span>
+      <span className="flex-1"> {message.text}</span>
       <button
         onClick={async () => {
           await navigator.clipboard.writeText(message.text);

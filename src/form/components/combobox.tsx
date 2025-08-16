@@ -70,8 +70,8 @@ export function Combobox<T>({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
-        <Command>
+      <PopoverContent className="p-0 max-w-none">
+        <Command className="max-w-none">
           <CommandInput placeholder={searchPlaceholder} className="h-9" />
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
