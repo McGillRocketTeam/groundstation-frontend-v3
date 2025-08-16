@@ -53,7 +53,7 @@ export const ParameterTableCard = ({
         {/* Header row */}
         <div className="grid grid-cols-subgrid col-span-full text-xs text-muted-foreground font-medium border-b sticky top-0 bg-background">
           <div className="p-2">Parameter</div>
-          <div className="p-2">FC433</div>
+          <div className="p-2">FC435</div>
           <div className="p-2">FC903</div>
         </div>
 
