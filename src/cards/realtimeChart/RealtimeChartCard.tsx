@@ -74,6 +74,14 @@ export const RealtimeChartCard = ({
         orient: "horizontal",
         left: "10",
         bottom: "10",
+        formatter: (name: string) => {
+          const series = allSeriesData.current.get(name);
+          if (series && series.length > 0) {
+            const lastPoint = series[series.length - 1];
+            return `${name} (${lastPoint.value[1].toFixed(2)})`;
+          }
+          return name;
+        },
       },
       xAxis: {
         type: "time",
