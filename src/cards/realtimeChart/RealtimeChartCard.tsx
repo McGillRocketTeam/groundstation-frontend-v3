@@ -16,7 +16,7 @@ type SeriesDataMap = Map<string, DataItem[]>;
 export const RealtimeChartCard = ({
   params: config,
 }: IDockviewPanelProps<RealtimeChartCardParams>) => {
-const MAX_TIME_WINDOW_MS = config.timeRange * 1000; // 60 seconds
+  const MAX_TIME_WINDOW_MS = config.timeRange * 1000; // 60 seconds
   const chartInstance = useRef<echarts.ECharts | null>(null);
   const allSeriesData = useRef<SeriesDataMap>(new Map());
   const chartContainerRef = useRef<HTMLDivElement>(null);
@@ -63,6 +63,13 @@ const MAX_TIME_WINDOW_MS = config.timeRange * 1000; // 60 seconds
       //     animation: false,
       //   },
       // },
+      grid: {
+        top: 20,
+        left: 16,
+        right: 16,
+        bottom: 50,
+        containLabel: true,
+      },
       legend: {
         orient: "horizontal",
         left: "10",
@@ -160,7 +167,9 @@ const MAX_TIME_WINDOW_MS = config.timeRange * 1000; // 60 seconds
             );
           }
         } else {
-          console.warn(`Received data for unconfigured parameter: ${paramName}`);
+          console.warn(
+            `Received data for unconfigured parameter: ${paramName}`,
+          );
         }
       });
       // --- Throttling ECharts update ---
