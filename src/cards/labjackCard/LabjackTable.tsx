@@ -1,6 +1,6 @@
 import { IDockviewPanelProps } from "dockview-react";
 import { LabjackTableCardParams } from "./schema";
-import { extractValue, getPairedQualifiedName } from "@/lib/utils";
+import { extractValue } from "@/lib/utils";
 
 import {
   ParameterValue,
@@ -8,7 +8,6 @@ import {
 } from "@/lib/yamcsClient/lib/client";
 import { useParameterSubscription } from "@/hooks/use-parameter";
 import { QualifiedParameterNameType } from "@/lib/schemas";
-import { BoolValue } from "../booleanTable/BooleanTableCard";
 
 export const LabJackTableCard = ({
   params,
