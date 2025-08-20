@@ -8,6 +8,7 @@ import {
 } from "@/lib/yamcsClient/lib/client";
 import { extractNumberValue } from "@/lib/utils";
 import { yamcs } from "@/lib/yamcsClient/api";
+import { useTheme } from "@/components/ThemeProvider";
 interface DataItem {
   name: string; // The time string (for tooltip)
   value: [number, number]; // [timestamp, actual_value]
@@ -24,6 +25,9 @@ export const RealtimeChartCard = ({
   // Refs for throttling chart updates
   const animationFrameId = useRef<number | null>(null);
   const lastUpdateTime = useRef<number>(0);
+
+  const { theme } = useTheme()
+
   useEffect(() => {
     const chartDom = chartContainerRef.current;
     if (!chartDom) {
@@ -31,7 +35,7 @@ export const RealtimeChartCard = ({
       return;
     }
     if (!chartInstance.current) {
-      chartInstance.current = echarts.init(chartDom, null, {
+      chartInstance.current = echarts.init(chartDom, theme, {
         renderer: "canvas",
       });
     }
@@ -70,6 +74,7 @@ export const RealtimeChartCard = ({
         bottom: 50,
         containLabel: true,
       },
+      animation: false,
       legend: {
         orient: "horizontal",
         left: "10",
@@ -218,7 +223,7 @@ export const RealtimeChartCard = ({
         chartInstance.current = null;
       }
     };
-  }, [config.series]);
+  }, [config.series, theme]);
   return (
     <div id="my_dataviz" className="w-full h-full">
       <div ref={chartContainerRef} id="main" className="w-full h-full"></div>

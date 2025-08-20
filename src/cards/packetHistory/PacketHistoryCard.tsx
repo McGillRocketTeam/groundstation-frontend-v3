@@ -11,7 +11,7 @@
 // } from "@/components/ui/table";
 //
 export const PacketHistoryCard = () => {
-  return <div className="grid place-items-center h-full">Work in Progress</div>;
+  return <div className="grid place-items-center h-full"><video poster=""  src="blob:https://127.0.0.1:7443/be24f2ec-6cad-41ee-ae6e-b8a4ba5b4d39"></video></div>;
 };
 
 /*

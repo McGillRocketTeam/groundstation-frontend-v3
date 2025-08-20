@@ -7,6 +7,7 @@ export const mapSchema = z
     longitudeParameter: QualifiedParameterName,
     groundStationLatitude: z.coerce.number().optional(),
     groundStationLongitude: z.coerce.number().optional(),
+    showHUD: z.boolean().optional(),
   })
   .describe("Map");
 

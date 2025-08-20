@@ -115,7 +115,7 @@ export const customMapStyle = {
       id: "Launch-Canada-2",
       type: "raster",
       source: "launchCanada2",
-      minzoom: 15,
+      minzoom: 0,
       maxzoom: 22,
       layout: {
         visibility: "visible",
@@ -129,7 +129,7 @@ export const customMapStyle = {
       id: "Timmins-City",
       type: "raster",
       source: "timminsCity",
-      minzoom: 12,
+      minzoom: 0,
       maxzoom: 22,
       layout: {
         visibility: "visible",
