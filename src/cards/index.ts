@@ -11,6 +11,7 @@ import { SerialTerminalCard } from "./serialTerminal/SerialTerminal";
 import { CommandButtonTableCard } from "./commandButtonTable/CommandButtonTable";
 import { MapCard } from "./map/MapCard";
 import { RealtimeChartCard } from "./realtimeChart/RealtimeChartCard";
+import { LabJackTableCard } from "./labjackCard/LabjackTable";
 
 export * from "./types";
 export * from "./schemas";
@@ -27,6 +28,7 @@ const internalComponents: ComponentMap = {
   pid: PIDCard,
   connectedDevices: ConnectedDevicesCard,
   serialTerminal: SerialTerminalCard,
+  labjackTable: LabJackTableCard,
 };
 
 export const components = Object.fromEntries(

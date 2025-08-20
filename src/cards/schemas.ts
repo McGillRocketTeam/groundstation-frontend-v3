@@ -9,6 +9,7 @@ import { serialTerminalSchema } from "./serialTerminal/schema";
 import { commandButtonTableSchema } from "./commandButtonTable/schema";
 import { mapSchema } from "./map/schema";
 import { realtimeChartSchema } from "./realtimeChart/schema";
+import { labjackTableSchema } from "./labjackCard/schema";
 
 export const componentSchemas = {
   booleanTable: booleanTableSchema,
@@ -22,4 +23,5 @@ export const componentSchemas = {
   pid: pidSchema,
   connectedDevices: connectedDevicesSchema,
   serialTerminal: serialTerminalSchema,
+  labjackTable: labjackTableSchema
 } as const;
