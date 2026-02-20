@@ -14,7 +14,7 @@ import { CustomBarsValue, DySample, DySeries } from "./dygraphs";
 import { extractNumberValue } from "@/lib/utils";
 import { chartStore } from "@/stores/chart";
 
-const YAMCS_INSTANCE = "gs_backend";
+const YAMCS_INSTANCE = "ground_station";
 
 interface Legend {
   date: Date;

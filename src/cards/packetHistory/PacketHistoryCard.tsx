@@ -24,7 +24,7 @@ export const PacketHistoryCard = () => {
   useEffect(() => {
     const subscription = yamcs.createTMStatisticsSubscription(
       {
-        instance: "gs_backend",
+        instance: "ground_station",
         processor: "realtime",
       },
       listener,

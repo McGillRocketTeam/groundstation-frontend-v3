@@ -13,7 +13,7 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
   // const [showDialog, setShowDialog] = useState(false);
   // const commandQuery = useQuery({
   //   queryKey: [cmd.commandName],
-  //   queryFn: () => yamcs.getCommand("gs_backend", cmd.commandName),
+  //   queryFn: () => yamcs.getCommand("ground_station", cmd.commandName),
   // });
 
   // const { addNotification } = useNotifications();
@@ -25,7 +25,7 @@ export default function CommandDetail({ cmd }: { cmd: CommandHistoryRecord }) {
     cmdArgs: { [key: string]: string },
   ) => {
     try {
-      await yamcs.issueCommand("gs_backend", "realtime", cmdName, {
+      await yamcs.issueCommand("ground_station", "realtime", cmdName, {
         args: cmdArgs,
       });
       toast.success("Command sent successfully");

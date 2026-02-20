@@ -21,12 +21,12 @@ export const CommandButtonTableCard = ({
     const pairedComamnd = getPairedQualifiedName(command.qualifiedName);
     console.log("Paired Command", pairedComamnd);
     if (pairedComamnd) {
-      await yamcs.issueCommand("gs_backend", "realtime", pairedComamnd, {
+      await yamcs.issueCommand("ground_station", "realtime", pairedComamnd, {
         args: command.arguments,
       });
     }
 
-    yamcs.issueCommand("gs_backend", "realtime", command.qualifiedName, {
+    yamcs.issueCommand("ground_station", "realtime", command.qualifiedName, {
       args: command.arguments,
     });
   }

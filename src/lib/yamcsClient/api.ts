@@ -19,7 +19,7 @@ function onSessionEnd() {
 }
 
 export const yamcs = new YAMCS.YamcsClient(
-  `http://${window.location.hostname}:8090/yamcs/`,
+  `http://${window.location.hostname}:8090/`,
   { onFrameLoss },
   { onSessionEnd },
 );

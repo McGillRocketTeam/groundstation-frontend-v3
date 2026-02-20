@@ -20,7 +20,7 @@ export const BooleanTableCard = (
   const { data } = useQuery({
     queryKey: props.params.parameters,
     queryFn: async () => {
-      const parameterResponse = await yamcs.getParameters("gs_backend", {
+      const parameterResponse = await yamcs.getParameters("ground_station", {
         limit: 200,
       });
 

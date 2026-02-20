@@ -62,7 +62,7 @@ export function ParameterArraySelector({
     async function fetchOriginalParams() {
       if (value !== undefined && value.length > 0) {
         const originalParameters = await yamcs.getParametersBatch(
-          "gs_backend",
+          "ground_station",
           {
             id: value.map((param) => ({
               name: typeof param === "string" ? param : param.qualifiedName,

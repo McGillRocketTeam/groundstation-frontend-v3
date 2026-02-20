@@ -64,7 +64,7 @@ function YAMCSIndicator() {
 
     const subscription = yamcs.createTimeSubscription(
       {
-        instance: "gs_backend",
+        instance: "ground_station",
       },
       listener,
     );

@@ -44,7 +44,7 @@ export default function CmdSelector({
 
   useEffect(() => {
     // Fetch available commands from the backend
-    yamcs.getCommands("gs_backend").then((data) => {
+    yamcs.getCommands("ground_station").then((data) => {
       setAvailableCommands(data.commands!);
       setCommandTree(buildCommandTree(data.commands!));
     });

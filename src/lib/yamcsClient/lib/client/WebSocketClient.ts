@@ -40,7 +40,7 @@ export class WebSocketClient {
     if (currentLocation.protocol === "https:") {
       url = "wss://";
     }
-    url += `${currentLocation.hostname}:8090/yamcs/api/websocket`;
+    url += `${currentLocation.hostname}:8090/api/websocket`;
 
     this.webSocket$ = webSocket({
       url,

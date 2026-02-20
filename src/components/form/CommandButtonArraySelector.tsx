@@ -40,7 +40,7 @@ export function CommandButtonArraySelector({
 
   const { data: allCommands } = useQuery({
     queryKey: ["yamcs:getCommands"],
-    queryFn: async () => await yamcs.getCommands("gs_backend"),
+    queryFn: async () => await yamcs.getCommands("ground_station"),
   });
 
   const [dialogCommand, setDialogCommand] = useState<Command | undefined>();

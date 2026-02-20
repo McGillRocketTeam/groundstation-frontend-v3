@@ -60,7 +60,7 @@ export function ChartSeriesSelector({
     if (parameter.type?.engType === "enumeration") {
       newSeries.type = "enumeration";
       const parameterType = await yamcs.getParameterType(
-        "gs_backend",
+        "ground_station",
         parameter.type?.qualifiedName,
       );
 

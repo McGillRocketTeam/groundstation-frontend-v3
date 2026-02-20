@@ -68,7 +68,7 @@ export function useParameterSubscription<
 
     const subscription = yamcs.createParameterSubscription(
       {
-        instance: "gs_backend",
+        instance: "ground_station",
         processor: "realtime",
         id: parameters.map((p) => ({ name: p })),
         abortOnInvalid: false,

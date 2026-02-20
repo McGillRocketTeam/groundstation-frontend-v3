@@ -16,7 +16,7 @@ export function CommandButtonSelector() {
   // },
   const { data: commands } = useQuery({
     queryKey: ["yamcs:getCommands"],
-    queryFn: async () => await yamcs.getCommands("gs_backend"),
+    queryFn: async () => await yamcs.getCommands("ground_station"),
   });
   const [currentSelection, setCurrentSelection] = useState<
     Command | undefined

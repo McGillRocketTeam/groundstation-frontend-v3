@@ -180,7 +180,7 @@ const MAX_TIME_WINDOW_MS = config.timeRange * 1000; // 60 seconds
     const subscription = yamcs.createParameterSubscription(
       {
         id: config.series.map((series) => ({ name: series.parameter })), // Subscribe to all parameters
-        instance: "gs_backend",
+        instance: "ground_station",
         processor: "realtime",
         abortOnInvalid: false,
         updateOnExpiration: false,

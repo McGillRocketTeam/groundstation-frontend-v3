@@ -39,7 +39,7 @@ export function ParameterSelector({
   const { data } = useQuery({
     queryKey: ["parameters"],
     queryFn: async () => {
-      const params = await yamcs.getParameters("gs_backend", { limit: 1000 });
+      const params = await yamcs.getParameters("ground_station", { limit: 1000 });
 
       if (disablePairs) {
         return params.parameters?.filter(

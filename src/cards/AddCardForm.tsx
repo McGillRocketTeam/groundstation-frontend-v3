@@ -229,7 +229,7 @@ export function AddCardForm<K extends ComponentKey>({
                     return (
                       <AsyncMultiSelect
                         optionsFn={async () => {
-                          const links = await yamcs.getLinks("gs_backend");
+                          const links = await yamcs.getLinks("ground_station");
                           return links.map((link) => link.name);
                         }}
                         selected={field.value || []}

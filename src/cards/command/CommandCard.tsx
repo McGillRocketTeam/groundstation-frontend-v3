@@ -64,7 +64,7 @@ export const CommandCard = () => {
 
     // populate initial data
     yamcs
-      .getCommandHistoryEntries("gs_backend", {
+      .getCommandHistoryEntries("ground_station", {
         start: new Date(0).toISOString(),
         limit: 100,
       })
@@ -76,7 +76,7 @@ export const CommandCard = () => {
 
     const subscription = yamcs.createCommandSubscription(
       {
-        instance: "gs_backend",
+        instance: "ground_station",
         processor: "realtime",
       },
       listener,

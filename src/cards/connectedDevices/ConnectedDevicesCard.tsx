@@ -27,7 +27,7 @@ export const ConnectedDevicesCard = () => {
 
     const subscription = yamcs.createLinkSubscription(
       {
-        instance: "gs_backend",
+        instance: "ground_station",
       },
       listener,
     );
